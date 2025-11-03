@@ -155,7 +155,7 @@ class Fill(BaseModel):
     side: str  # "yes" or "no"
     action: str  # "buy" or "sell"
     count: int = Field(..., description="Number of contracts filled")
-    price: int = Field(..., description="Fill price in cents", ge=0, le=100)
+    price: float = Field(..., description="Fill price in dollars", ge=0.0, le=1.0)
     created_time: datetime
     trade_id: Optional[str] = None
     is_taker: bool = False
@@ -163,13 +163,13 @@ class Fill(BaseModel):
 
     @property
     def cost_cents(self) -> int:
-        """Total cost in cents (price × count)."""
-        return self.price * self.count
+        """Total cost in cents (price × count × 100)."""
+        return int(self.price * 100 * self.count)
 
     @property
     def cost_dollars(self) -> float:
         """Total cost in dollars."""
-        return self.cost_cents / 100
+        return self.price * self.count
 
     @property
     def fees_dollars(self) -> float:
@@ -243,3 +243,67 @@ class Trade(BaseModel):
             return self.taker_side
         else:
             return "unknown"
+
+
+class BatchOrderRequest(BaseModel):
+    """Single order specification in a batch request."""
+
+    ticker: str
+    client_order_id: Optional[str] = None
+    type: str = Field(..., description="Order type: 'market' or 'limit'")
+    action: str = Field(..., description="Order action: 'buy' or 'sell'")
+    side: str = Field(..., description="Order side: 'yes' or 'no'")
+    count: int = Field(..., ge=1, description="Number of contracts")
+    yes_price: Optional[int] = Field(None, ge=1, le=99, description="YES limit price in cents")
+    no_price: Optional[int] = Field(None, ge=1, le=99, description="NO limit price in cents")
+    expiration_ts: Optional[int] = Field(None, description="Expiration timestamp (Unix seconds)")
+    sell_position_floor: Optional[int] = None
+    buy_max_cost: Optional[int] = None
+
+
+class BatchOrderResponse(BaseModel):
+    """Response for a single order in a batch operation."""
+
+    client_order_id: Optional[str] = None
+    order: Optional[Order] = None
+    error: Optional[dict] = Field(None, description="Error details if order failed")
+
+    @property
+    def is_success(self) -> bool:
+        """Check if order was successfully created."""
+        return self.order is not None and self.error is None
+
+    @property
+    def error_message(self) -> Optional[str]:
+        """Extract error message if present."""
+        if self.error:
+            return self.error.get("message", "Unknown error")
+        return None
+
+
+class OrderGroup(BaseModel):
+    """
+    Order group (minimal info - API doesn't return much).
+
+    Note: The Kalshi API has a design limitation where you SET contracts_limit
+    when creating a group, but it's NEVER returned in any query. This makes it
+    impossible to track progress toward the limit or query the current limit value.
+    """
+
+    # Fields that actually exist in API responses
+    id: Optional[str] = None  # Present in list response
+    order_group_id: Optional[str] = None  # Present in create response
+    is_auto_cancel_enabled: bool = False  # Present in GET and list responses
+    orders: Optional[list[str]] = None  # Only present in GET single response
+
+    # NOTE: These fields are NOT available from the API:
+    # - contracts_limit: Set at creation but never returned
+    # - contracts_filled: Not tracked in responses
+    # - status: No status field exists
+    # - created_time: Not in responses
+    # - reset_time: Not in responses
+
+    @property
+    def group_id(self) -> str:
+        """Get the group ID (handles both field names)."""
+        return self.order_group_id or self.id or ""
