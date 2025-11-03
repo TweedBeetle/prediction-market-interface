@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - api.elections.kalshi.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://api.elections.kalshi.com/trade-api/v2/exchange/status
+  response:
+    body:
+      string: '{"exchange_active":true,"exchange_estimated_resume_time":null,"trading_active":true}'
+    headers:
+      Cache-Control:
+      - public, max-age=1
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '84'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 12:20:40 GMT
+      Via:
+      - 1.1 29473aa9cc185f2a037ec3a7e2ffd74c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 6PnWjiYnYU7mYsd3GlC2qk4AcszoY9OUrFVM643s4Aq5U5bZcWqe_g==
+      X-Amz-Cf-Pop:
+      - MUC50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

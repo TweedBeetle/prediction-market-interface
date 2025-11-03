@@ -1,0 +1,649 @@
+"""Kalshi API client with RSA-PSS authentication."""
+
+import os
+import time
+import base64
+import httpx
+from typing import Optional, Any, Dict, List
+from pathlib import Path
+
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.backends import default_backend
+from loguru import logger
+
+from .models import (
+    Market,
+    Order,
+    Position,
+    Event,
+    Series,
+    Fill,
+    Balance,
+    Candlestick,
+    Trade,
+    Orderbook,
+    Milestone,
+    RFQ,
+    Quote,
+    QueuePosition,
+    ExchangeStatus,
+)
+
+
+class KalshiClient:
+    """Kalshi API client with RSA-PSS signature authentication."""
+
+    BASE_URL = "https://api.elections.kalshi.com/trade-api/v2"
+
+    def __init__(
+        self,
+        api_key_id: Optional[str] = None,
+        private_key_path: Optional[str] = None,
+        timeout: float = 30.0,
+    ):
+        """Initialize Kalshi client.
+
+        Args:
+            api_key_id: API key ID (defaults to KALSHI_API_KEY_ID env var)
+            private_key_path: Path to RSA private key PEM file (defaults to KALSHI_PRIVATE_KEY_PATH env var)
+            timeout: Request timeout in seconds
+        """
+        self.api_key_id = api_key_id or os.getenv("KALSHI_API_KEY_ID")
+        private_key_path = private_key_path or os.getenv("KALSHI_PRIVATE_KEY_PATH")
+
+        if not self.api_key_id:
+            raise ValueError("KALSHI_API_KEY_ID environment variable not set")
+        if not private_key_path:
+            raise ValueError("KALSHI_PRIVATE_KEY_PATH environment variable not set")
+
+        # Load private key
+        self.private_key_path = Path(private_key_path)
+        if not self.private_key_path.exists():
+            raise FileNotFoundError(f"Private key not found: {private_key_path}")
+
+        with open(self.private_key_path, "rb") as f:
+            self.private_key = serialization.load_pem_private_key(
+                f.read(),
+                password=None,
+                backend=default_backend(),
+            )
+
+        self.timeout = timeout
+        self._last_request_time = 0
+        self._signature_cache: Dict[str, tuple[str, int]] = {}  # message -> (signature, timestamp)
+
+    def _generate_signature(self, timestamp: int, method: str, path: str) -> str:
+        """Generate RSA-PSS signature for request authentication.
+
+        Args:
+            timestamp: Unix timestamp in milliseconds
+            method: HTTP method (GET, POST, DELETE, PUT)
+            path: API path (e.g., /markets)
+
+        Returns:
+            Base64-encoded RSA-PSS signature
+        """
+        # Create message: timestamp + method + path
+        message = f"{timestamp}{method}{path}".encode()
+
+        # Sign with RSA-PSS (SHA-256)
+        signature_bytes = self.private_key.sign(
+            message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH,
+            ),
+            hashes.SHA256(),
+        )
+
+        # Return base64-encoded signature
+        return base64.b64encode(signature_bytes).decode()
+
+    def _get_headers(self, method: str, path: str) -> Dict[str, str]:
+        """Get authentication headers for API request.
+
+        Args:
+            method: HTTP method
+            path: API path
+
+        Returns:
+            Dictionary of headers including auth headers
+        """
+        # Timestamp in milliseconds
+        timestamp = int(time.time() * 1000)
+
+        # Generate signature
+        signature = self._generate_signature(timestamp, method, path)
+
+        return {
+            "KALSHI-ACCESS-KEY": self.api_key_id,
+            "KALSHI-ACCESS-SIGNATURE": signature,
+            "KALSHI-ACCESS-TIMESTAMP": str(timestamp),
+            "Content-Type": "application/json",
+        }
+
+    async def _request(
+        self,
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        json: Optional[Dict[str, Any]] = None,
+        authenticated: bool = True,
+    ) -> Dict[str, Any]:
+        """Make authenticated API request.
+
+        Args:
+            method: HTTP method
+            endpoint: API endpoint (e.g., /markets)
+            params: Query parameters
+            json: Request body (JSON)
+            authenticated: Whether to include auth headers
+
+        Returns:
+            Response JSON
+
+        Raises:
+            httpx.HTTPStatusError: If response status is not 2xx
+        """
+        url = f"{self.BASE_URL}{endpoint}"
+
+        headers = {}
+        if authenticated:
+            headers = self._get_headers(method, endpoint)
+
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await client.request(
+                method,
+                url,
+                params=params,
+                json=json,
+                headers=headers,
+            )
+
+            # Log request details for debugging
+            logger.debug(f"{method} {endpoint} -> {response.status_code}")
+
+            response.raise_for_status()
+            return response.json()
+
+    # ========== MARKET ENDPOINTS ==========
+
+    async def search_markets(
+        self,
+        status: Optional[str] = None,
+        series_ticker: Optional[str] = None,
+        max_close_ts: Optional[int] = None,
+        min_close_ts: Optional[int] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Market], Optional[str]]:
+        """Search and filter markets.
+
+        Args:
+            status: Market status filter (unopened, open, closed, settled)
+            series_ticker: Filter by series
+            max_close_ts: Maximum close timestamp (Unix seconds)
+            min_close_ts: Minimum close timestamp (Unix seconds)
+            limit: Number of results (max 1000)
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (markets list, next cursor or None)
+        """
+        params = {"limit": limit}
+        if status:
+            params["status"] = status
+        if series_ticker:
+            params["series_ticker"] = series_ticker
+        if max_close_ts:
+            params["max_close_ts"] = max_close_ts
+        if min_close_ts:
+            params["min_close_ts"] = min_close_ts
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/markets", params=params, authenticated=False)
+        markets = [Market(**m) for m in response.get("markets", [])]
+        return markets, response.get("cursor")
+
+    async def get_market(self, ticker: str) -> Market:
+        """Get market details.
+
+        Args:
+            ticker: Market ticker
+
+        Returns:
+            Market object
+        """
+        response = await self._request("GET", f"/markets/{ticker}", authenticated=False)
+        return Market(**response)
+
+    async def get_orderbook(self, ticker: str, depth: int = 5) -> Orderbook:
+        """Get current order book.
+
+        Args:
+            ticker: Market ticker
+            depth: Order book depth (0/-1 for full, 1-100 for specific depth)
+
+        Returns:
+            Orderbook object
+        """
+        params = {}
+        if depth != -1:
+            params["depth"] = depth
+
+        response = await self._request("GET", f"/markets/{ticker}/orderbook", params=params)
+        return Orderbook(**response)
+
+    async def get_trades(
+        self,
+        ticker: Optional[str] = None,
+        limit: int = 100,
+        before: Optional[int] = None,
+        after: Optional[int] = None,
+    ) -> tuple[List[Trade], Optional[str]]:
+        """Get recent trades.
+
+        Args:
+            ticker: Filter by market ticker
+            limit: Number of results
+            before: Timestamp filter (Unix ms)
+            after: Timestamp filter (Unix ms)
+
+        Returns:
+            Tuple of (trades list, next cursor)
+        """
+        params = {"limit": limit}
+        if ticker:
+            params["ticker"] = ticker
+        if before:
+            params["before"] = before
+        if after:
+            params["after"] = after
+
+        response = await self._request("GET", "/markets/trades", params=params, authenticated=False)
+        trades = [Trade(**t) for t in response.get("trades", [])]
+        return trades, response.get("cursor")
+
+    async def get_candlesticks(
+        self,
+        series_ticker: str,
+        ticker: str,
+        interval: str = "1440min",
+    ) -> List[Candlestick]:
+        """Get historical candlestick (OHLCV) data.
+
+        Args:
+            series_ticker: Series ticker
+            ticker: Market ticker
+            interval: Time interval (1min, 60min, 1440min)
+
+        Returns:
+            List of candlesticks
+        """
+        params = {"interval": interval}
+        response = await self._request(
+            "GET",
+            f"/series/{series_ticker}/markets/{ticker}/candlesticks",
+            params=params,
+            authenticated=False,
+        )
+        return [Candlestick(**c) for c in response.get("candlesticks", [])]
+
+    # ========== EVENT & SERIES ENDPOINTS ==========
+
+    async def get_events(
+        self,
+        status: Optional[str] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Event], Optional[str]]:
+        """Get events.
+
+        Args:
+            status: Event status filter (open, closed, settled)
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (events list, next cursor)
+        """
+        params = {"limit": limit}
+        if status:
+            params["status"] = status
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/events", params=params, authenticated=False)
+        events = [Event(**e) for e in response.get("events", [])]
+        return events, response.get("cursor")
+
+    async def get_event(self, ticker: str, include_markets: bool = False) -> Event:
+        """Get event details.
+
+        Args:
+            ticker: Event ticker
+            include_markets: Include nested markets
+
+        Returns:
+            Event object
+        """
+        params = {}
+        if include_markets:
+            params["include_markets"] = "true"
+
+        response = await self._request("GET", f"/events/{ticker}", params=params, authenticated=False)
+        return Event(**response)
+
+    async def get_series(
+        self,
+        category: Optional[str] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Series], Optional[str]]:
+        """Get series templates.
+
+        Args:
+            category: Filter by category
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (series list, next cursor)
+        """
+        params = {"limit": limit}
+        if category:
+            params["category"] = category
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/series", params=params, authenticated=False)
+        series_list = [Series(**s) for s in response.get("series", [])]
+        return series_list, response.get("cursor")
+
+    async def get_milestones(
+        self,
+        category: Optional[str] = None,
+        source: Optional[str] = None,
+        min_ts: Optional[int] = None,
+        max_ts: Optional[int] = None,
+    ) -> List[Milestone]:
+        """Get milestones.
+
+        Args:
+            category: Filter by category
+            source: Filter by source
+            min_ts: Minimum timestamp (Unix seconds)
+            max_ts: Maximum timestamp (Unix seconds)
+
+        Returns:
+            List of milestones
+        """
+        params = {}
+        if category:
+            params["category"] = category
+        if source:
+            params["source"] = source
+        if min_ts:
+            params["min_ts"] = min_ts
+        if max_ts:
+            params["max_ts"] = max_ts
+
+        response = await self._request("GET", "/milestones", params=params, authenticated=False)
+        return [Milestone(**m) for m in response.get("milestones", [])]
+
+    # ========== PORTFOLIO ENDPOINTS ==========
+
+    async def get_balance(self) -> Balance:
+        """Get account balance and portfolio value.
+
+        Returns:
+            Balance object
+        """
+        response = await self._request("GET", "/portfolio/balance")
+        return Balance(**response)
+
+    async def get_positions(
+        self,
+        ticker: Optional[str] = None,
+        event_ticker: Optional[str] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Position], Optional[str]]:
+        """Get user positions.
+
+        Args:
+            ticker: Filter by market ticker
+            event_ticker: Filter by event ticker
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (positions list, next cursor)
+        """
+        params = {"limit": limit}
+        if ticker:
+            params["ticker"] = ticker
+        if event_ticker:
+            params["event_ticker"] = event_ticker
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/portfolio/positions", params=params)
+        positions = [Position(**p) for p in response.get("positions", [])]
+        return positions, response.get("cursor")
+
+    async def create_order(
+        self,
+        ticker: str,
+        side: str,
+        count: int,
+        type: str = "limit",
+        price: Optional[int] = None,
+        expire_at: Optional[int] = None,
+        order_group_id: Optional[str] = None,
+    ) -> Order:
+        """Create a new order.
+
+        Args:
+            ticker: Market ticker
+            side: "buy" or "sell"
+            count: Number of contracts
+            type: "limit" or "market"
+            price: Limit price in cents (required for limit orders)
+            expire_at: Order expiration timestamp (Unix seconds)
+            order_group_id: Optional order group ID
+
+        Returns:
+            Order object
+        """
+        payload = {
+            "ticker": ticker,
+            "side": side,
+            "type": type,
+            "count": count,
+        }
+        if price is not None:
+            payload["price"] = price
+        if expire_at:
+            payload["expire_at"] = expire_at
+        if order_group_id:
+            payload["order_group_id"] = order_group_id
+
+        response = await self._request("POST", "/portfolio/orders", json=payload)
+        return Order(**response)
+
+    async def get_orders(
+        self,
+        ticker: Optional[str] = None,
+        event_ticker: Optional[str] = None,
+        status: Optional[str] = None,
+        min_ts: Optional[int] = None,
+        max_ts: Optional[int] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Order], Optional[str]]:
+        """Get user orders.
+
+        Args:
+            ticker: Filter by market ticker
+            event_ticker: Filter by event ticker
+            status: Filter by status (resting, canceled, executed)
+            min_ts: Minimum timestamp (Unix seconds)
+            max_ts: Maximum timestamp (Unix seconds)
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (orders list, next cursor)
+        """
+        params = {"limit": limit}
+        if ticker:
+            params["ticker"] = ticker
+        if event_ticker:
+            params["event_ticker"] = event_ticker
+        if status:
+            params["status"] = status
+        if min_ts:
+            params["min_ts"] = min_ts
+        if max_ts:
+            params["max_ts"] = max_ts
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/portfolio/orders", params=params)
+        orders = [Order(**o) for o in response.get("orders", [])]
+        return orders, response.get("cursor")
+
+    async def cancel_order(self, order_id: str) -> Order:
+        """Cancel an order.
+
+        Args:
+            order_id: Order ID
+
+        Returns:
+            Updated order object
+        """
+        response = await self._request("DELETE", f"/portfolio/orders/{order_id}")
+        return Order(**response)
+
+    async def amend_order(
+        self,
+        order_id: str,
+        price: Optional[int] = None,
+        count: Optional[int] = None,
+    ) -> Order:
+        """Modify an order.
+
+        Args:
+            order_id: Order ID
+            price: New limit price (cents)
+            count: New contract count
+
+        Returns:
+            Updated order object
+        """
+        payload = {}
+        if price is not None:
+            payload["price"] = price
+        if count is not None:
+            payload["count"] = count
+
+        response = await self._request("POST", f"/portfolio/orders/{order_id}/amend", json=payload)
+        return Order(**response)
+
+    async def get_fills(
+        self,
+        ticker: Optional[str] = None,
+        order_id: Optional[str] = None,
+        min_ts: Optional[int] = None,
+        max_ts: Optional[int] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Fill], Optional[str]]:
+        """Get executed fills/trades.
+
+        Args:
+            ticker: Filter by market ticker
+            order_id: Filter by order ID
+            min_ts: Minimum timestamp (Unix seconds)
+            max_ts: Maximum timestamp (Unix seconds)
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (fills list, next cursor)
+        """
+        params = {"limit": limit}
+        if ticker:
+            params["ticker"] = ticker
+        if order_id:
+            params["order_id"] = order_id
+        if min_ts:
+            params["min_ts"] = min_ts
+        if max_ts:
+            params["max_ts"] = max_ts
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/portfolio/fills", params=params)
+        fills = [Fill(**f) for f in response.get("fills", [])]
+        return fills, response.get("cursor")
+
+    async def get_queue_position(self, order_id: str) -> QueuePosition:
+        """Get order's queue position.
+
+        Args:
+            order_id: Order ID
+
+        Returns:
+            QueuePosition object
+        """
+        response = await self._request("GET", f"/portfolio/orders/{order_id}/queue_position")
+        return QueuePosition(**response)
+
+    # ========== EXCHANGE ENDPOINTS ==========
+
+    async def get_exchange_status(self) -> ExchangeStatus:
+        """Get exchange status.
+
+        Returns:
+            ExchangeStatus object
+        """
+        response = await self._request("GET", "/exchange/status", authenticated=False)
+        return ExchangeStatus(**response)
+
+    # ========== BATCH OPERATIONS ==========
+
+    async def batch_create_orders(self, orders: List[Dict[str, Any]]) -> List[Order]:
+        """Create multiple orders in a batch (max 20).
+
+        Args:
+            orders: List of order dictionaries
+
+        Returns:
+            List of created Order objects
+        """
+        if len(orders) > 20:
+            raise ValueError("Maximum 20 orders per batch")
+
+        payload = {"orders": orders}
+        response = await self._request("POST", "/portfolio/orders/batched", json=payload)
+        return [Order(**o) for o in response.get("orders", [])]
+
+    async def batch_cancel_orders(self, order_ids: List[str]) -> List[Order]:
+        """Cancel multiple orders in a batch (max 20).
+
+        Args:
+            order_ids: List of order IDs
+
+        Returns:
+            List of canceled Order objects
+        """
+        if len(order_ids) > 20:
+            raise ValueError("Maximum 20 orders per batch")
+
+        payload = {"order_ids": order_ids}
+        response = await self._request("DELETE", "/portfolio/orders/batched", json=payload)
+        return [Order(**o) for o in response.get("orders", [])]
