@@ -1,0 +1,64 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - api.elections.kalshi.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://api.elections.kalshi.com/trade-api/v2/events?limit=10
+  response:
+    body:
+      string: '{"cursor":"CgYI8OvP6AgSFktYTkVYVElTUkFFTFBNLTQ1SkFOMDE","events":[{"available_on_brokers":false,"category":"World","collateral_return_type":"","event_ticker":"KXELONMARS-99","mutually_exclusive":false,"series_ticker":"KXELONMARS","strike_period":"","sub_title":"Before
+        2099","title":"Will Elon Musk visit Mars in his lifetime?"},{"available_on_brokers":false,"category":"World","collateral_return_type":"MECNET","event_ticker":"KXNEWPOPE-70","mutually_exclusive":true,"series_ticker":"KXNEWPOPE","strike_period":"","sub_title":"Before
+        2070","title":"Who will the next Pope be?"},{"available_on_brokers":false,"category":"Climate
+        and Weather","collateral_return_type":"","event_ticker":"KXWARMING-50","mutually_exclusive":false,"series_ticker":"KXWARMING","strike_period":"","sub_title":"Before
+        2050","title":"Will the world pass 2 degrees Celsius over pre-industrial levels
+        before 2050?"},{"available_on_brokers":false,"category":"Science and Technology","collateral_return_type":"","event_ticker":"KXMARSVRAIL-50","mutually_exclusive":false,"series_ticker":"KXMARSVRAIL","strike_period":"","sub_title":"Before
+        2050","title":"Will a human land on Mars before California starts high-speed
+        rail?"},{"available_on_brokers":false,"category":"Climate and Weather","collateral_return_type":"","event_ticker":"KXERUPTSUPER-0","mutually_exclusive":false,"series_ticker":"KXERUPTSUPER","strike_period":"","sub_title":"a
+        supervolcano","title":"Will a supervolcano erupt before 2050?"},{"available_on_brokers":false,"category":"Science
+        and Technology","collateral_return_type":"","event_ticker":"KXCOLONIZEMARS-50","mutually_exclusive":false,"series_ticker":"KXCOLONIZEMARS","strike_period":"","sub_title":"Before
+        2050","title":"Will humans colonize Mars before 2050?"},{"available_on_brokers":false,"category":"Health","collateral_return_type":"","event_ticker":"KXPERSONPRESMAM-45","mutually_exclusive":false,"series_ticker":"KXPERSONPRESMAM","strike_period":"","sub_title":"Before
+        2045","title":"Will Zohran Mamdani become President of the United States before
+        2045?"},{"available_on_brokers":false,"category":"Politics","collateral_return_type":"MECNET","event_ticker":"KXXISUCCESSOR-45JAN01","mutually_exclusive":true,"series_ticker":"KXXISUCCESSOR","strike_period":"","sub_title":"Before
+        Jan 1, 2045","title":"Who will be named as Xi Jinping''s successor?"},{"available_on_brokers":false,"category":"Politics","collateral_return_type":"","event_ticker":"KXPERSONPRESFUENTES-45","mutually_exclusive":false,"series_ticker":"KXPERSONPRESFUENTES","strike_period":"","sub_title":"Before
+        2045","title":"Will Nick Fuentes become President of the United States before
+        2045?"},{"available_on_brokers":false,"category":"Politics","collateral_return_type":"MECNET","event_ticker":"KXNEXTISRAELPM-45JAN01","mutually_exclusive":true,"series_ticker":"KXNEXTISRAELPM","strike_period":"","sub_title":"Before
+        Jan 1, 2045","title":"Who will be the next Prime Minister of Israel?"}],"milestones":[]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 12:20:39 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 355f72364b4c8f8829ae95f886a03f56.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - EZxaJdJi5--BAAlsF_mmPhzcMIHCLillNv9WmCpjqBhFeDdxzUOraA==
+      X-Amz-Cf-Pop:
+      - MUC50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

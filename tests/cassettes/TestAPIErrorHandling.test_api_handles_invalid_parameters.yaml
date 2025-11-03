@@ -1,0 +1,88 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - api.elections.kalshi.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://api.elections.kalshi.com/trade-api/v2/markets?limit=5
+  response:
+    body:
+      string: '{"cursor":"CgwI57uiyAYQ4O-lvAMSL0tYTVZFTkZMU0lOR0xFR0FNRS1TMjAyNUQ0NTFCQTkwODU0LTNFOENEMzk3NTRE","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"Associated
+        Events":"KXNFLPASSYDS-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL,KXNFLTOTAL-25NOV03ARIDAL","Associated
+        Market Sides":"yes,yes,yes","Associated Markets":"KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-225,KXNFLRECYDS-25NOV03ARIDAL-ARITMCBRIDE85-50,KXNFLTOTAL-25NOV03ARIDAL-46","Multivariate
+        Event Ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL"},"event_ticker":"KXMVENFLSINGLEGAME-S20250387BA544F7","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":38301,"liquidity_dollars":"383.0100","market_type":"binary","mve_collection_ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL","mve_selected_legs":[{"event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","market_ticker":"KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-225","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-ARITMCBRIDE85-50","side":"yes"},{"event_ticker":"KXNFLTOTAL-25NOV03ARIDAL","market_ticker":"KXNFLTOTAL-25NOV03ARIDAL-46","side":"yes"}],"no_ask":99,"no_ask_dollars":"0.9900","no_bid":15,"no_bid_dollars":"0.1500","no_sub_title":"yes
+        Dak Prescott: 225+,yes Trey McBride: 50+,yes Over 46.5 points scored","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T12:20:33.731114Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"deci_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0010"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"","rules_secondary":"","settlement_timer_seconds":600,"status":"active","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXMVENFLSINGLEGAME-S20250387BA544F7-1A7764DA87E","title":"yes
+        Dak Prescott: 225+,yes Trey McBride: 50+,yes Over 46.5 points scored","volume":0,"volume_24h":0,"yes_ask":85,"yes_ask_dollars":"0.8500","yes_bid":1,"yes_bid_dollars":"0.0100","yes_sub_title":"yes
+        Dak Prescott: 225+,yes Trey McBride: 50+,yes Over 46.5 points scored"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"Associated
+        Events":"KXNFLANYTD-25NOV03ARIDAL,KXNFLPASSYDS-25NOV03ARIDAL,KXNFLTOTAL-25NOV03ARIDAL","Associated
+        Market Sides":"yes,yes,no","Associated Markets":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33,KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-350,KXNFLTOTAL-25NOV03ARIDAL-60","Multivariate
+        Event Ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL"},"event_ticker":"KXMVENFLSINGLEGAME-S2025BF71CBFE563","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":12384,"liquidity_dollars":"123.8400","market_type":"binary","mve_collection_ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL","mve_selected_legs":[{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33","side":"yes"},{"event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","market_ticker":"KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-350","side":"yes"},{"event_ticker":"KXNFLTOTAL-25NOV03ARIDAL","market_ticker":"KXNFLTOTAL-25NOV03ARIDAL-60","side":"no"}],"no_ask":100,"no_ask_dollars":"1.0000","no_bid":28,"no_bid_dollars":"0.2800","no_sub_title":"yes
+        Javonte Williams,yes Dak Prescott: 350+,no Over 60.5 points scored","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T12:20:32.263231Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"deci_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0010"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"","rules_secondary":"","settlement_timer_seconds":600,"status":"active","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXMVENFLSINGLEGAME-S2025BF71CBFE563-29A3C4EE15A","title":"yes
+        Javonte Williams,yes Dak Prescott: 350+,no Over 60.5 points scored","volume":0,"volume_24h":0,"yes_ask":72,"yes_ask_dollars":"0.7200","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"yes
+        Javonte Williams,yes Dak Prescott: 350+,no Over 60.5 points scored"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"Associated
+        Events":"KXNFLANYTD-25NOV03ARIDAL,KXNFLPASSYDS-25NOV03ARIDAL,KXNFLTOTAL-25NOV03ARIDAL","Associated
+        Market Sides":"yes,yes,no","Associated Markets":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33,KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-175,KXNFLTOTAL-25NOV03ARIDAL-60","Multivariate
+        Event Ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL"},"event_ticker":"KXMVENFLSINGLEGAME-S2025BF71CBFE563","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":36455,"liquidity_dollars":"364.5500","market_type":"binary","mve_collection_ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL","mve_selected_legs":[{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33","side":"yes"},{"event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","market_ticker":"KXNFLPASSYDS-25NOV03ARIDAL-DALDPRESCOTT4-175","side":"yes"},{"event_ticker":"KXNFLTOTAL-25NOV03ARIDAL","market_ticker":"KXNFLTOTAL-25NOV03ARIDAL-60","side":"no"}],"no_ask":99,"no_ask_dollars":"0.9900","no_bid":17,"no_bid_dollars":"0.1700","no_sub_title":"yes
+        Javonte Williams,yes Dak Prescott: 175+,no Over 60.5 points scored","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T12:20:25.032156Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"deci_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0010"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"","rules_secondary":"","settlement_timer_seconds":600,"status":"active","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXMVENFLSINGLEGAME-S2025BF71CBFE563-C1E0D5B8EF7","title":"yes
+        Javonte Williams,yes Dak Prescott: 175+,no Over 60.5 points scored","volume":0,"volume_24h":0,"yes_ask":83,"yes_ask_dollars":"0.8300","yes_bid":1,"yes_bid_dollars":"0.0100","yes_sub_title":"yes
+        Javonte Williams,yes Dak Prescott: 175+,no Over 60.5 points scored"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"Associated
+        Events":"KXNFLANYTD-25NOV03ARIDAL,KXNFLANYTD-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL","Associated
+        Market Sides":"yes,yes,yes,yes,yes","Associated Markets":"KXNFLANYTD-25NOV03ARIDAL-ARITMCBRIDE85,KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33,KXNFLRECYDS-25NOV03ARIDAL-ARITMCBRIDE85-50,KXNFLRECYDS-25NOV03ARIDAL-DALCLAMB88-80,KXNFLRECYDS-25NOV03ARIDAL-DALGPICKENS3-60","Multivariate
+        Event Ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL"},"event_ticker":"KXMVENFLSINGLEGAME-S20256F6A12436E1","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":13690,"liquidity_dollars":"136.9000","market_type":"binary","mve_collection_ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL","mve_selected_legs":[{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-ARITMCBRIDE85","side":"yes"},{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-ARITMCBRIDE85-50","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-DALCLAMB88-80","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-DALGPICKENS3-60","side":"yes"}],"no_ask":100,"no_ask_dollars":"1.0000","no_bid":26,"no_bid_dollars":"0.2600","no_sub_title":"yes
+        Trey McBride,yes Javonte Williams,yes Trey McBride: 50+,yes CeeDee Lamb: 80+,yes
+        George Pickens: 60+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T12:19:54.387909Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"deci_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0010"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"","rules_secondary":"","settlement_timer_seconds":600,"status":"active","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXMVENFLSINGLEGAME-S20256F6A12436E1-1E05359CADB","title":"yes
+        Trey McBride,yes Javonte Williams,yes Trey McBride: 50+,yes CeeDee Lamb: 80+,yes
+        George Pickens: 60+","volume":0,"volume_24h":0,"yes_ask":74,"yes_ask_dollars":"0.7400","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"yes
+        Trey McBride,yes Javonte Williams,yes Trey McBride: 50+,yes CeeDee Lamb: 80+,yes
+        George Pickens: 60+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"Associated
+        Events":"KXNFLANYTD-25NOV03ARIDAL,KXNFLANYTD-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL,KXNFLRECYDS-25NOV03ARIDAL","Associated
+        Market Sides":"yes,yes,yes,yes","Associated Markets":"KXNFLANYTD-25NOV03ARIDAL-ARITMCBRIDE85,KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33,KXNFLRECYDS-25NOV03ARIDAL-DALCLAMB88-80,KXNFLRECYDS-25NOV03ARIDAL-DALGPICKENS3-60","Multivariate
+        Event Ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL"},"event_ticker":"KXMVENFLSINGLEGAME-S2025D451BA90854","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":12384,"liquidity_dollars":"123.8400","market_type":"binary","mve_collection_ticker":"KXMVENFLSINGLEGAME-25NOV03ARIDAL","mve_selected_legs":[{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-ARITMCBRIDE85","side":"yes"},{"event_ticker":"KXNFLANYTD-25NOV03ARIDAL","market_ticker":"KXNFLANYTD-25NOV03ARIDAL-DALJWILLIAMS33","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-DALCLAMB88-80","side":"yes"},{"event_ticker":"KXNFLRECYDS-25NOV03ARIDAL","market_ticker":"KXNFLRECYDS-25NOV03ARIDAL-DALGPICKENS3-60","side":"yes"}],"no_ask":100,"no_ask_dollars":"1.0000","no_bid":28,"no_bid_dollars":"0.2800","no_sub_title":"yes
+        Trey McBride,yes Javonte Williams,yes CeeDee Lamb: 80+,yes George Pickens:
+        60+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T12:19:51.890211Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"deci_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0010"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"","rules_secondary":"","settlement_timer_seconds":600,"status":"active","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXMVENFLSINGLEGAME-S2025D451BA90854-3E8CD39754D","title":"yes
+        Trey McBride,yes Javonte Williams,yes CeeDee Lamb: 80+,yes George Pickens:
+        60+","volume":0,"volume_24h":0,"yes_ask":72,"yes_ask_dollars":"0.7200","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"yes
+        Trey McBride,yes Javonte Williams,yes CeeDee Lamb: 80+,yes George Pickens:
+        60+"}]}
+
+        '
+    headers:
+      Age:
+      - '2'
+      Cache-Control:
+      - public, max-age=5
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 12:20:39 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 c3f546c2f6132a41e608317139aa8faa.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - jLCYGJDJ3_mf0Eliu5UKJaqc0qPQbsyYse3IZBbSAXmogZ1HSfIY3A==
+      X-Amz-Cf-Pop:
+      - MUC50-P1
+      X-Cache:
+      - Hit from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

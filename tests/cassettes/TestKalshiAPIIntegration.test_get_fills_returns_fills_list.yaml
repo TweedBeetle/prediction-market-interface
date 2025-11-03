@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - api.elections.kalshi.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://api.elections.kalshi.com/trade-api/v2/portfolio/fills?limit=100
+  response:
+    body:
+      string: '{"error":{"code":"authentication_error","message":"authentication_error","details":"rpc
+        error: code = InvalidArgument desc = INVALID_PARAMETER"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '145'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 12:20:40 GMT
+      Via:
+      - 1.1 66ce4848bcf993e3c57b596461cd0b82.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - rmxCdw0X7bEws0bGBaiSO-Kzu6XEhXzhi1ZX-Hi0tsM9ZVNeniYAvA==
+      X-Amz-Cf-Pop:
+      - MUC50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 401
+      message: Unauthorized
+version: 1
