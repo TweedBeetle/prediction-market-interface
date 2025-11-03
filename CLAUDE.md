@@ -451,11 +451,12 @@ load_dotenv(".env.kalshi.demo", override=True)
 
 **Prevention checklist:**
 
-- [ ] Audit VCR cassettes for realistic data (not just nulls/empty responses)
-- [ ] Periodically re-record cassettes to catch API changes
-- [ ] Add tests with real API responses, not just null data
-- [ ] Test MCP tools via `@kalshi_demo` in addition to running `uv run pytest`
-- [ ] When auth works in tests but fails in MCP, check env loading in wrapper scripts
+- [x] Audit VCR cassettes for realistic data (not just nulls/empty responses)
+- [x] Periodically re-record cassettes to catch API changes
+- [x] Add tests with real API responses, not just null data
+- [x] Test MCP tools via `@kalshi_demo` in addition to running `uv run pytest`
+- [x] When auth works in tests but fails in MCP, check env loading in wrapper scripts
+- [x] **Add E2E tests that bypass VCR** (see E2E Testing Strategy below)
 
 **Pattern from this project:**
 
@@ -568,6 +569,88 @@ During Phase 2 demonstration, order groups immediately failed with `KeyError: 'o
 - Model fix: `src/kalshi/models.py:284-310` (OrderGroup rewrite)
 - Client fixes: `src/kalshi/client.py:740-817` (all order group methods)
 - Test updates: `tests/kalshi/integration/test_order_groups.py`
+
+---
+
+### E2E Testing Strategy (Bypassing VCR)
+
+**Problem Solved**: VCR-based integration tests can pass while code is broken against real API.
+
+**Solution**: E2E tests that explicitly bypass VCR cassettes and always hit real demo API.
+
+**Pattern**:
+```python
+# tests/kalshi/integration/test_e2e_*.py
+
+# Disable VCR for all E2E tests
+pytestmark = [pytest.mark.asyncio, pytest.mark.disable_recording]
+
+class TestOrderGroupsE2E:
+    async def test_order_group_create_and_retrieve(self, demo_env):
+        """
+        Test against REAL API - no cassettes.
+        This would have caught the KeyError: 'order_group' immediately.
+        """
+        # ... test implementation ...
+```
+
+**When to Add E2E Tests**:
+
+1. **New Phase 2 features** - Order groups, advanced parameters, batch operations
+2. **Critical workflows** - Complete order lifecycle (create → verify → cancel)
+3. **Cross-feature integration** - OCO strategies combining groups + advanced params
+4. **After finding cassette-masked bugs** - Convert to E2E test
+
+**Test Files**:
+- `test_e2e_order_lifecycle.py` - Basic order operations (Phase 1)
+- `test_e2e_phase2_workflows.py` - Order groups, advanced params, OCO strategies (Phase 2)
+
+**Coverage**:
+
+| Feature | Integration Tests (VCR) | E2E Tests (Real API) |
+|---------|------------------------|----------------------|
+| Phase 1: Basic orders | ✅ 53 tests | ✅ 5 tests |
+| Phase 2: Order groups | ✅ 8 tests | ✅ 4 tests |
+| Phase 2: Advanced params | ✅ 9 tests | ✅ 3 tests |
+| Phase 2: Integration | ✅ 5 tests | ✅ 1 test |
+
+**Key Differences**:
+
+**Integration Tests (VCR)**:
+- ✅ Fast (replay cached responses)
+- ✅ Deterministic (same every time)
+- ✅ Test consistency (regression)
+- ❌ Can pass with wrong code (fictional cassettes)
+- ❌ Don't catch API changes
+
+**E2E Tests (Real API)**:
+- ✅ Test correctness (actual API behavior)
+- ✅ Catch API changes immediately
+- ✅ Would have caught order groups bug
+- ⚠️ Slower (~15s vs 2s)
+- ⚠️ May fail due to demo API reliability
+
+**Best Practice**: **Both are needed!**
+- Integration tests for fast feedback and regression protection
+- E2E tests for correctness verification and API change detection
+
+**Running E2E Tests**:
+```bash
+# Run all E2E tests (bypasses VCR)
+uv run pytest tests/kalshi/integration/test_e2e_*.py -v
+
+# Run Phase 2 E2E tests only
+uv run pytest tests/kalshi/integration/test_e2e_phase2_workflows.py -v
+```
+
+**E2E Test Resilience**:
+
+E2E tests are designed to handle demo API flakiness:
+- Eventual consistency (groups may not appear in list immediately)
+- 404 errors on recently created resources
+- 503 service unavailable errors
+
+Tests log warnings but continue when encountering known demo API issues.
 
 ---
 
