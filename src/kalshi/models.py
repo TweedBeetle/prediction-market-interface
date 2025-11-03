@@ -1,10 +1,10 @@
 """Pydantic models for Kalshi API data structures."""
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Union
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class MarketStatus(str, Enum):
@@ -117,10 +117,12 @@ class Orderbook(BaseModel):
 class Trade(BaseModel):
     """Executed trade."""
 
-    market_ticker: str = Field(..., description="Market ticker")
+    model_config = ConfigDict(populate_by_name=True)
+
+    market_ticker: str = Field(..., alias="ticker", description="Market ticker")
     price: float = Field(..., description="Execution price (cents)")
-    size: int = Field(..., description="Number of contracts traded")
-    timestamp: int = Field(..., description="Trade timestamp (Unix ms)")
+    size: int = Field(..., alias="count", description="Number of contracts traded")
+    timestamp: int = Field(..., alias="created_at", description="Trade timestamp (Unix ms)")
 
 
 class Order(BaseModel):
@@ -205,7 +207,7 @@ class Event(BaseModel):
     # Event properties
     strike_period: Optional[str] = Field(None, description="Strike period information")
     mutually_exclusive: Optional[bool] = Field(None, description="Whether markets are mutually exclusive")
-    available_on_brokers: Optional[List[str]] = Field(None, description="Brokers where available")
+    available_on_brokers: Optional[Union[bool, List[str]]] = Field(None, description="Brokers where available (bool or list)")
     collateral_return_type: Optional[str] = Field(None, description="Collateral return type")
 
     # For compatibility with old code that uses 'ticker'
@@ -220,15 +222,25 @@ class Event(BaseModel):
     status: Optional[EventStatus] = Field(None, description="Event status")
     markets: Optional[List[Market]] = Field(None, description="Nested markets (optional)")
 
+    @field_validator("available_on_brokers", mode="before")
+    @classmethod
+    def normalize_available_on_brokers(cls, v):
+        """Normalize available_on_brokers to handle both bool and list.
+
+        The API sometimes returns this as a boolean flag, sometimes as a list.
+        We keep it as-is to maintain fidelity with the API response.
+        """
+        return v
+
 
 class Series(BaseModel):
     """Kalshi series template."""
 
     ticker: str = Field(..., description="Series identifier")
     title: str = Field(..., description="Series name")
-    description: str = Field(..., description="Series details")
-    category: str = Field(..., description="Series category")
-    created_at: str = Field(..., description="ISO timestamp")
+    description: Optional[str] = Field(None, description="Series details")
+    category: Optional[str] = Field(None, description="Series category")
+    created_at: Optional[str] = Field(None, description="ISO timestamp")
 
 
 class OrderGroup(BaseModel):
@@ -285,6 +297,25 @@ class QueuePosition(BaseModel):
     order_id: str = Field(..., description="Order identifier")
     position: int = Field(..., description="Position in queue (0 = next to execute)")
     timestamp: int = Field(..., description="Timestamp when order entered queue")
+
+
+class Settlement(BaseModel):
+    """Settlement record - historical P&L tracking."""
+
+    order_id: str = Field(..., description="Associated order ID")
+    ticker: str = Field(..., description="Market ticker")
+    side: OrderSide = Field(..., description="Buy or sell side")
+    count: int = Field(..., description="Number of contracts")
+    price: int = Field(..., description="Settlement price (cents)")
+    payout: int = Field(..., description="Total payout (cents)")
+    created_at: int = Field(..., description="Settlement timestamp (Unix milliseconds)")
+    market_title: Optional[str] = Field(None, description="Market title")
+
+
+class TotalRestingOrderValue(BaseModel):
+    """Total value of all resting orders."""
+
+    total_resting_order_value: int = Field(..., description="Total value of resting orders (cents)")
 
 
 class ExchangeStatus(BaseModel):

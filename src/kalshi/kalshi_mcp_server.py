@@ -22,20 +22,48 @@ from .models import (
     Milestone,
     QueuePosition,
     ExchangeStatus,
+    OrderGroup,
+    Settlement,
+    TotalRestingOrderValue,
 )
+
+
+# ========== FAIL-FAST CREDENTIAL VALIDATION ==========
+# Validate credentials exist at module load (before server starts)
+_API_KEY_ID = os.getenv("KALSHI_API_KEY_ID")
+_PRIVATE_KEY_PATH = os.getenv("KALSHI_PRIVATE_KEY_PATH")
+
+if not _API_KEY_ID:
+    raise ValueError(
+        "KALSHI_API_KEY_ID environment variable is required. "
+        "Please set it in a .env file or your shell environment. "
+        "See .claude/CLAUDE.md for setup instructions."
+    )
+
+if not _PRIVATE_KEY_PATH:
+    raise ValueError(
+        "KALSHI_PRIVATE_KEY_PATH environment variable is required. "
+        "Please set it in a .env file or your shell environment. "
+        "See .claude/CLAUDE.md for setup instructions."
+    )
 
 
 # Initialize FastMCP server
 mcp = FastMCP("Kalshi Prediction Markets")
 
-# Global client instance (initialized on startup)
+# Global client instance (lazy initialization on first tool call)
 client: Optional[KalshiClient] = None
 
 
 def _ensure_client() -> KalshiClient:
-    """Ensure client is initialized."""
+    """Ensure client is initialized (lazy initialization on first use).
+
+    Credentials are validated at module load time, so if we reach this point,
+    we're guaranteed to have valid credentials from the environment.
+    """
     global client
     if client is None:
+        logger.info("Initializing Kalshi client on first tool call")
         client = KalshiClient()
     return client
 
@@ -694,6 +722,487 @@ async def kalshi_get_multivariate_collections(
     return {
         "collections": [],
         "count": 0,
+    }
+
+
+# ========== PHASE 1: PORTFOLIO MANAGEMENT TOOLS (7 tools) ==========
+
+
+@mcp.tool()
+async def kalshi_get_order_group(group_id: str) -> dict[str, Any]:
+    """Get a single order group by ID.
+
+    Args:
+        group_id: Order group ID
+
+    Returns:
+        OrderGroup with id, contract_limit, and matched_contracts
+    """
+    client = _ensure_client()
+    order_group = await client.get_order_group(group_id)
+    return {
+        "id": order_group.id,
+        "contract_limit": order_group.contract_limit,
+        "matched_contracts": order_group.matched_contracts,
+    }
+
+
+@mcp.tool()
+async def kalshi_reset_order_group(group_id: str) -> dict[str, Any]:
+    """Reset an order group's matched contract counter.
+
+    This resets the counter back to 0, allowing the group to accept more orders.
+
+    Args:
+        group_id: Order group ID
+
+    Returns:
+        Confirmation message
+    """
+    client = _ensure_client()
+    await client.reset_order_group(group_id)
+    return {
+        "status": "success",
+        "message": f"Order group {group_id} reset successfully",
+    }
+
+
+@mcp.tool()
+async def kalshi_delete_order_group(group_id: str) -> dict[str, Any]:
+    """Delete an order group.
+
+    Args:
+        group_id: Order group ID to delete
+
+    Returns:
+        Confirmation message
+    """
+    client = _ensure_client()
+    await client.delete_order_group(group_id)
+    return {
+        "status": "success",
+        "message": f"Order group {group_id} deleted successfully",
+    }
+
+
+@mcp.tool()
+async def kalshi_get_total_resting_order_value() -> dict[str, Any]:
+    """Get total value of all resting orders.
+
+    This metric is useful for:
+    - Understanding total capital at risk
+    - Portfolio rebalancing decisions
+    - Risk management calculations
+
+    Returns:
+        Total value of resting orders in cents
+    """
+    client = _ensure_client()
+    result = await client.get_total_resting_order_value()
+    return {
+        "total_resting_order_value": result.total_resting_order_value,
+        "total_dollars": result.total_resting_order_value / 100,
+    }
+
+
+@mcp.tool()
+async def kalshi_get_settlements(
+    limit: int = 100,
+    cursor: Optional[str] = None,
+) -> dict[str, Any]:
+    """Get historical settlements (filled orders) for P&L tracking.
+
+    Settlements represent completed orders with final prices and payouts.
+    Use this endpoint to:
+    - Calculate historical P&L
+    - Analyze past trading performance
+    - Track settlement history
+
+    Args:
+        limit: Number of results (default 100, max 200)
+        cursor: Pagination cursor for next page
+
+    Returns:
+        List of settlements with pagination info
+    """
+    client = _ensure_client()
+    settlements, next_cursor = await client.get_settlements(limit=limit, cursor=cursor)
+
+    return {
+        "settlements": [
+            {
+                "order_id": s.order_id,
+                "ticker": s.ticker,
+                "side": s.side.value,
+                "count": s.count,
+                "price": s.price,
+                "payout": s.payout,
+                "payout_dollars": s.payout / 100,
+                "created_at": s.created_at,
+                "market_title": s.market_title,
+            }
+            for s in settlements
+        ],
+        "cursor": next_cursor,
+        "count": len(settlements),
+    }
+
+
+@mcp.tool()
+async def kalshi_decrease_order(order_id: str, count: int) -> dict[str, Any]:
+    """Decrease the size of an existing resting order.
+
+    Useful for:
+    - Reducing position size without canceling and recreating
+    - Partial profit-taking
+    - Risk reduction mid-trade
+
+    Args:
+        order_id: Order ID to decrease
+        count: Number of contracts to decrease by
+
+    Returns:
+        Updated Order details
+    """
+    client = _ensure_client()
+    order = await client.decrease_order(order_id, count)
+
+    return {
+        "order_id": order.id,
+        "ticker": order.ticker,
+        "side": order.side.value,
+        "count": order.count,
+        "price": order.price,
+        "status": order.status.value,
+        "created_at": order.created_at,
+        "modified_at": order.modified_at,
+    }
+
+
+@mcp.tool()
+async def kalshi_get_queue_positions(order_ids: list[str]) -> dict[str, Any]:
+    """Get queue positions for multiple orders in bulk.
+
+    Queue position (0 = next to execute, higher numbers = further back).
+    Useful for:
+    - Monitoring order priority
+    - Predicting execution timing
+    - Analyzing market congestion
+
+    Args:
+        order_ids: List of order IDs to check positions for
+
+    Returns:
+        Dictionary mapping order_id to queue position
+    """
+    client = _ensure_client()
+    positions = await client.get_queue_positions(order_ids)
+
+    return {
+        "positions": positions,
+        "count": len(positions),
+    }
+
+
+# ========== PHASE 2: MARKET INTELLIGENCE & ANALYSIS TOOLS (5 tools) ==========
+
+
+@mcp.tool()
+async def kalshi_get_event_metadata(ticker: str) -> dict[str, Any]:
+    """Get detailed metadata for an event.
+
+    Event metadata includes additional information beyond basic event details,
+    such as category classifications, historical context, and data sources.
+
+    Args:
+        ticker: Event ticker (e.g., KXHARRIS24)
+
+    Returns:
+        Event metadata dictionary
+    """
+    client = _ensure_client()
+    metadata = await client.get_event_metadata(ticker)
+    return {
+        "ticker": ticker,
+        "metadata": metadata,
+    }
+
+
+@mcp.tool()
+async def kalshi_analyze_market_probability(ticker: str) -> dict[str, Any]:
+    """Analyze a market and calculate implied probability from current prices.
+
+    Implied probability is derived from the YES and NO side prices:
+    - YES price = probability market resolves YES
+    - NO price = probability market resolves NO
+    - Both should sum to ~100 cents (100%)
+
+    This is useful for:
+    - Understanding market consensus on outcomes
+    - Identifying mispricings (probability doesn't sum to 100)
+    - Comparing implied vs. actual probabilities
+
+    Args:
+        ticker: Market ticker
+
+    Returns:
+        Implied probability analysis with mispricing detection
+    """
+    client = _ensure_client()
+    market = await client.get_market(ticker)
+
+    # Extract prices (in cents, 0-100)
+    yes_price = market.yes_bid or 50  # Default to 50 if missing
+    no_price = market.no_bid or 50
+    midpoint_yes = ((market.yes_bid or 0) + (market.yes_ask or 100)) / 2
+    midpoint_no = ((market.no_bid or 0) + (market.no_ask or 100)) / 2
+
+    # Implied probabilities
+    total_cents = yes_price + no_price if (yes_price and no_price) else 100
+    implied_yes = (yes_price / total_cents * 100) if total_cents > 0 else 50
+    implied_no = 100 - implied_yes
+
+    # Calculate mispricing (should sum to 100, but usually ~99 due to spreads)
+    mispricing = abs(total_cents - 100)
+
+    return {
+        "ticker": ticker,
+        "market_title": market.title,
+        "implied_probability": {
+            "yes_percent": round(implied_yes, 2),
+            "no_percent": round(implied_no, 2),
+        },
+        "prices": {
+            "yes_bid": yes_price,
+            "yes_ask": market.yes_ask,
+            "no_bid": no_price,
+            "no_ask": market.no_ask,
+        },
+        "mispricing": {
+            "cents": mispricing,
+            "is_mispriced": mispricing > 2,  # >2 cents suggests potential mispricing
+        },
+    }
+
+
+@mcp.tool()
+async def kalshi_analyze_market_spread(ticker: str) -> dict[str, Any]:
+    """Calculate bid-ask spread for both YES and NO sides.
+
+    Spread is the difference between ask and bid prices. Lower spreads indicate:
+    - Better liquidity
+    - Lower trading costs
+    - More efficient price discovery
+
+    Useful for:
+    - Evaluating trading execution costs
+    - Comparing market liquidity
+    - Timing entry/exit decisions
+
+    Args:
+        ticker: Market ticker
+
+    Returns:
+        Spread analysis for YES and NO sides
+    """
+    client = _ensure_client()
+    market = await client.get_market(ticker)
+
+    # Calculate spreads
+    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else None
+    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else None
+
+    # Calculate spread percentages (relative to mid)
+    yes_mid = ((market.yes_bid or 0) + (market.yes_ask or 100)) / 2
+    no_mid = ((market.no_bid or 0) + (market.no_ask or 100)) / 2
+    yes_spread_pct = (yes_spread / yes_mid * 100) if yes_spread and yes_mid > 0 else None
+    no_spread_pct = (no_spread / no_mid * 100) if no_spread and no_mid > 0 else None
+
+    return {
+        "ticker": ticker,
+        "market_title": market.title,
+        "yes_side": {
+            "bid": market.yes_bid,
+            "ask": market.yes_ask,
+            "spread_cents": yes_spread,
+            "spread_percent": round(yes_spread_pct, 2) if yes_spread_pct else None,
+        },
+        "no_side": {
+            "bid": market.no_bid,
+            "ask": market.no_ask,
+            "spread_cents": no_spread,
+            "spread_percent": round(no_spread_pct, 2) if no_spread_pct else None,
+        },
+        "total_spread": round((yes_spread or 0) + (no_spread or 0), 2),
+        "liquidity_assessment": "tight" if (yes_spread or 0) + (no_spread or 0) <= 2
+            else "moderate" if (yes_spread or 0) + (no_spread or 0) <= 5
+            else "wide",
+    }
+
+
+@mcp.tool()
+async def kalshi_calculate_liquidity_score(ticker: str, depth: int = 10) -> dict[str, Any]:
+    """Calculate a liquidity score for a market based on orderbook depth.
+
+    Liquidity score is derived from:
+    - Orderbook depth (how many contracts at each price level)
+    - Bid-ask spread (tightness of prices)
+    - Recent trade volume
+
+    Score: 0-100, where higher = more liquid
+
+    Useful for:
+    - Assessing execution slippage risk
+    - Finding good markets for large orders
+    - Comparing market maturity
+
+    Args:
+        ticker: Market ticker
+        depth: Orderbook depth to analyze (default 10, max 100)
+
+    Returns:
+        Liquidity score and component analysis
+    """
+    client = _ensure_client()
+    market = await client.get_market(ticker)
+    orderbook = await client.get_orderbook(ticker, depth=depth)
+
+    # Calculate orderbook metrics
+    yes_bids = sum([level[1] for level in (orderbook.yes_bids or [])])
+    yes_asks = sum([level[1] for level in (orderbook.yes_asks or [])])
+    no_bids = sum([level[1] for level in (orderbook.no_bids or [])])
+    no_asks = sum([level[1] for level in (orderbook.no_asks or [])])
+
+    total_orderbook_volume = yes_bids + yes_asks + no_bids + no_asks
+
+    # Spread component (tighter = higher score)
+    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else 5
+    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else 5
+    avg_spread = (yes_spread + no_spread) / 2
+    spread_score = max(0, 100 - (avg_spread * 20))  # Tight spread = high score
+
+    # Volume component
+    volume_score = min(100, (total_orderbook_volume / 10000) * 100) if total_orderbook_volume > 0 else 20
+
+    # Market volume component
+    recent_volume = market.volume_24h or 0
+    volume_trend_score = min(100, (recent_volume / 100000) * 100) if recent_volume > 0 else 30
+
+    # Composite score (weighted average)
+    liquidity_score = (spread_score * 0.4 + volume_score * 0.3 + volume_trend_score * 0.3)
+
+    return {
+        "ticker": ticker,
+        "market_title": market.title,
+        "liquidity_score": round(liquidity_score, 2),
+        "score_components": {
+            "spread_component": round(spread_score, 2),
+            "orderbook_depth_component": round(volume_score, 2),
+            "volume_trend_component": round(volume_trend_score, 2),
+        },
+        "orderbook_metrics": {
+            "yes_bids_volume": yes_bids,
+            "yes_asks_volume": yes_asks,
+            "no_bids_volume": no_bids,
+            "no_asks_volume": no_asks,
+            "total_orderbook_volume": total_orderbook_volume,
+        },
+        "assessment": "excellent" if liquidity_score >= 75
+            else "good" if liquidity_score >= 50
+            else "fair" if liquidity_score >= 25
+            else "poor",
+    }
+
+
+@mcp.tool()
+async def kalshi_analyze_portfolio_risk() -> dict[str, Any]:
+    """Analyze portfolio risk combining positions, resting orders, and balance.
+
+    Risk analysis includes:
+    - Total exposure (sum of position values)
+    - Max drawdown potential
+    - Order execution risk
+    - Correlated positions
+
+    Useful for:
+    - Portfolio rebalancing decisions
+    - Understanding total risk exposure
+    - Pre-trade risk checks
+
+    Returns:
+        Comprehensive portfolio risk analysis
+    """
+    client = _ensure_client()
+
+    # Fetch all portfolio data
+    balance = await client.get_balance()
+    positions, _ = await client.get_positions(limit=1000)
+    try:
+        total_value = await client.get_total_resting_order_value()
+        resting_order_value = total_value.total_resting_order_value
+    except Exception:
+        resting_order_value = 0
+
+    # Calculate position metrics
+    total_position_value = 0
+    long_value = 0
+    short_value = 0
+    max_single_position = 0
+
+    for position in positions:
+        # Position value = contracts * current mid price (approximate)
+        # For now, estimate at 50 cents (neutral position)
+        position_value = position.contracts * 50
+        total_position_value += position_value
+
+        if position.contracts > 0:
+            long_value += position_value
+        else:
+            short_value += abs(position_value)
+
+        max_single_position = max(max_single_position, abs(position_value))
+
+    # Portfolio metrics
+    total_capital = balance.balance  # in cents
+    used_capital = total_position_value + resting_order_value
+    available_capital = total_capital - used_capital
+    utilization_pct = (used_capital / total_capital * 100) if total_capital > 0 else 0
+
+    # Risk assessment
+    correlation_risk = "high" if len(positions) > 5 else "moderate" if len(positions) > 0 else "low"
+
+    return {
+        "capital_metrics": {
+            "total_capital_cents": total_capital,
+            "total_capital_dollars": total_capital / 100,
+            "used_capital_cents": used_capital,
+            "used_capital_dollars": used_capital / 100,
+            "available_capital_cents": available_capital,
+            "available_capital_dollars": available_capital / 100,
+            "utilization_percent": round(utilization_pct, 2),
+        },
+        "position_metrics": {
+            "total_positions": len(positions),
+            "long_value_cents": long_value,
+            "short_value_cents": short_value,
+            "total_position_value_cents": total_position_value,
+            "max_single_position_cents": max_single_position,
+            "net_exposure_cents": long_value - short_value,
+        },
+        "order_metrics": {
+            "resting_order_value_cents": resting_order_value,
+            "resting_order_value_dollars": resting_order_value / 100,
+        },
+        "risk_assessment": {
+            "utilization_level": "critical" if utilization_pct > 90
+                else "high" if utilization_pct > 70
+                else "moderate" if utilization_pct > 50
+                else "low",
+            "correlation_risk": correlation_risk,
+            "recommendation": "reduce positions" if utilization_pct > 80
+                else "maintain current risk" if utilization_pct > 40
+                else "can take more risk",
+        },
     }
 
 

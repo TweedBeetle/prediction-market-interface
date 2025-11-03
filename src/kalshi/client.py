@@ -28,6 +28,9 @@ from .models import (
     Quote,
     QueuePosition,
     ExchangeStatus,
+    OrderGroup,
+    Settlement,
+    TotalRestingOrderValue,
 )
 
 
@@ -217,7 +220,9 @@ class KalshiClient:
             Market object
         """
         response = await self._request("GET", f"/markets/{ticker}", authenticated=False)
-        return Market(**response)
+        # API wraps response in "market" key
+        market_data = response.get("market", response)
+        return Market(**market_data)
 
     async def get_orderbook(self, ticker: str, depth: int = 5) -> Orderbook:
         """Get current order book.
@@ -234,7 +239,13 @@ class KalshiClient:
             params["depth"] = depth
 
         response = await self._request("GET", f"/markets/{ticker}/orderbook", params=params)
-        return Orderbook(**response)
+        # API wraps response in "orderbook" key, need to add ticker
+        orderbook_data = response.get("orderbook", response)
+        orderbook_data["ticker"] = ticker
+        # Ensure timestamp is present
+        if "timestamp" not in orderbook_data:
+            orderbook_data["timestamp"] = response.get("timestamp", int(time.time() * 1000))
+        return Orderbook(**orderbook_data)
 
     async def get_trades(
         self,
@@ -334,7 +345,22 @@ class KalshiClient:
             params["include_markets"] = "true"
 
         response = await self._request("GET", f"/events/{ticker}", params=params, authenticated=False)
-        return Event(**response)
+        # API wraps response in "event" key
+        event_data = response.get("event", response)
+        return Event(**event_data)
+
+    async def get_event_metadata(self, ticker: str) -> Dict[str, Any]:
+        """Get event metadata - additional event details.
+
+        Args:
+            ticker: Event ticker
+
+        Returns:
+            Dictionary of event metadata
+        """
+        response = await self._request("GET", f"/events/{ticker}/metadata", authenticated=False)
+        # API wraps response in "metadata" key
+        return response.get("metadata", response)
 
     async def get_series(
         self,
@@ -402,6 +428,7 @@ class KalshiClient:
             Balance object
         """
         response = await self._request("GET", "/portfolio/balance")
+        # Balance response is flat: {"balance": int, "portfolio_value": int}
         return Balance(**response)
 
     async def get_positions(
@@ -472,6 +499,7 @@ class KalshiClient:
             payload["order_group_id"] = order_group_id
 
         response = await self._request("POST", "/portfolio/orders", json=payload)
+        # Order responses are typically flat
         return Order(**response)
 
     async def get_orders(
@@ -526,6 +554,7 @@ class KalshiClient:
             Updated order object
         """
         response = await self._request("DELETE", f"/portfolio/orders/{order_id}")
+        # Order responses are typically flat
         return Order(**response)
 
     async def amend_order(
@@ -551,6 +580,7 @@ class KalshiClient:
             payload["count"] = count
 
         response = await self._request("POST", f"/portfolio/orders/{order_id}/amend", json=payload)
+        # Order responses are typically flat
         return Order(**response)
 
     async def get_fills(
@@ -601,7 +631,10 @@ class KalshiClient:
             QueuePosition object
         """
         response = await self._request("GET", f"/portfolio/orders/{order_id}/queue_position")
-        return QueuePosition(**response)
+        # API may wrap response in "queue_position" key, ensure order_id is present
+        queue_data = response.get("queue_position", response)
+        queue_data["order_id"] = order_id
+        return QueuePosition(**queue_data)
 
     # ========== EXCHANGE ENDPOINTS ==========
 
@@ -612,7 +645,9 @@ class KalshiClient:
             ExchangeStatus object
         """
         response = await self._request("GET", "/exchange/status", authenticated=False)
-        return ExchangeStatus(**response)
+        # API may wrap response in "status" key
+        status_data = response.get("status", response)
+        return ExchangeStatus(**status_data)
 
     # ========== BATCH OPERATIONS ==========
 
@@ -647,3 +682,105 @@ class KalshiClient:
         payload = {"order_ids": order_ids}
         response = await self._request("DELETE", "/portfolio/orders/batched", json=payload)
         return [Order(**o) for o in response.get("orders", [])]
+
+    # ========== ORDER GROUP MANAGEMENT ==========
+
+    async def get_order_group(self, group_id: str) -> OrderGroup:
+        """Get a single order group by ID.
+
+        Args:
+            group_id: Order group ID
+
+        Returns:
+            OrderGroup object
+        """
+        response = await self._request("GET", f"/portfolio/order_groups/{group_id}")
+        return OrderGroup(**response)
+
+    async def reset_order_group(self, group_id: str) -> None:
+        """Reset an order group's matched contract counter.
+
+        Args:
+            group_id: Order group ID
+        """
+        await self._request("PUT", f"/portfolio/order_groups/{group_id}/reset")
+
+    async def delete_order_group(self, group_id: str) -> None:
+        """Delete an order group.
+
+        Args:
+            group_id: Order group ID
+        """
+        await self._request("DELETE", f"/portfolio/order_groups/{group_id}")
+
+    # ========== PORTFOLIO METRICS ==========
+
+    async def get_total_resting_order_value(self) -> TotalRestingOrderValue:
+        """Get total value of all resting orders.
+
+        Returns:
+            TotalRestingOrderValue object with total in cents
+        """
+        response = await self._request("GET", "/portfolio/summary/total_resting_order_value")
+        return TotalRestingOrderValue(**response)
+
+    async def get_settlements(
+        self,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Settlement], Optional[str]]:
+        """Get historical settlements (filled orders).
+
+        Args:
+            limit: Number of results (default 100, max 200)
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (list of Settlement objects, next cursor)
+        """
+        params: Dict[str, Any] = {"limit": limit}
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/portfolio/settlements", params=params)
+        settlements = [Settlement(**s) for s in response.get("settlements", [])]
+        return settlements, response.get("cursor")
+
+    # ========== ORDER MODIFICATIONS ==========
+
+    async def decrease_order(self, order_id: str, count: int) -> Order:
+        """Decrease the size of an existing order.
+
+        Args:
+            order_id: Order ID to decrease
+            count: Number of contracts to decrease by
+
+        Returns:
+            Updated Order object
+        """
+        payload = {"count": count}
+        response = await self._request("POST", f"/portfolio/orders/{order_id}/decrease", json=payload)
+        return Order(**response.get("order", response))
+
+    async def get_queue_positions(self, order_ids: List[str]) -> Dict[str, int]:
+        """Get queue positions for multiple orders in bulk.
+
+        Args:
+            order_ids: List of order IDs to check
+
+        Returns:
+            Dictionary mapping order_id to queue position
+        """
+        payload = {"order_ids": order_ids}
+        response = await self._request("POST", "/portfolio/orders/queue_positions", json=payload)
+
+        # API returns dict with order_id -> QueuePosition mapping
+        # Extract just the position numbers
+        positions = {}
+        queue_positions_data = response.get("queue_positions", {})
+        for order_id, pos_data in queue_positions_data.items():
+            if isinstance(pos_data, dict):
+                positions[order_id] = pos_data.get("position", 0)
+            else:
+                positions[order_id] = pos_data
+        return positions
