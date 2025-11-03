@@ -112,10 +112,21 @@ class TestMCPToolsRegistered:
             assert tool_name in tool_names, f"Missing tool: {tool_name}"
 
     def test_total_tool_count(self, kalshi_mcp_server):
-        """Test that all 41 tools are registered (29 original + 7 Phase 1 + 5 Phase 2)."""
+        """Test that all 53 tools are registered.
+
+        Breakdown:
+        - 29 original Tier 1-3 tools
+        - 7 Phase 1 portfolio management tools
+        - 5 Phase 2 market intelligence tools
+        - 4 Phase 3 WebSocket streaming tools
+        - 4 Phase 4.3 multivariate collection tools
+        - 4 Phase 4.4 RFQ management tools
+        - 5 Phase 4.4 Quote management tools
+        - 2 Phase 4.5 market maker analysis tools
+        """
         tools_dict = kalshi_mcp_server._tool_manager._tools
-        # Should have exactly 41 tools (29 original + 7 Phase 1 portfolio + 5 Phase 2 analysis)
-        assert len(tools_dict) == 41, f"Expected 41 tools, got {len(tools_dict)}"
+        # Should have exactly 53 tools
+        assert len(tools_dict) == 53, f"Expected 53 tools, got {len(tools_dict)}"
 
 
 @pytest.mark.integration
