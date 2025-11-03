@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=10&status=open&event_ticker=KXBTC
+  response:
+    body:
+      string: '{"cursor":"","markets":[]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:02:33 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Vs0Ei4NowPjXj9P9Y9MJlJSiLqiH9JGPwFd-Loc1aWBc244WJgDoiA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

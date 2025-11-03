@@ -1,1774 +1,946 @@
-"""FastMCP server for Kalshi prediction market API."""
+"""Kalshi MCP Server - FastMCP-based prediction market trading interface."""
 
 import os
-import json
-from typing import Any, Optional
+from typing import Annotated
 
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
+from pydantic import Field
 from loguru import logger
 
 from .client import KalshiClient
-from .websocket_client import WebSocketChannel
 from .models import (
+    ExchangeStatus,
+    Balance,
     Market,
+    Event,
     Order,
     Position,
-    Event,
-    Series,
     Fill,
-    Balance,
-    Candlestick,
+    OrderBook,
     Trade,
-    Orderbook,
-    Milestone,
-    QueuePosition,
-    ExchangeStatus,
-    OrderGroup,
-    Settlement,
-    TotalRestingOrderValue,
-    MultivarianateCollection,
-    MarketInCollection,
-    CollectionLookup,
-    RFQ,
-    Quote,
-    MarketMakerMetrics,
 )
 
+# Determine environment from loaded env vars
+# (Wrapper scripts load .env.kalshi.demo or .env.kalshi.prod before importing)
+env = os.getenv("KALSHI_ENVIRONMENT", "unknown")
 
-# ========== FAIL-FAST CREDENTIAL VALIDATION ==========
-# Validate credentials exist at module load (before server starts)
-_API_KEY_ID = os.getenv("KALSHI_API_KEY_ID")
-_PRIVATE_KEY_PATH = os.getenv("KALSHI_PRIVATE_KEY_PATH")
+# Safety limits for order execution
+MAX_ORDER_SIZE = int(os.getenv("KALSHI_MAX_ORDER_SIZE", "100"))
+LARGE_ORDER_THRESHOLD = int(os.getenv("KALSHI_LARGE_ORDER_THRESHOLD", "50"))
 
-if not _API_KEY_ID:
-    raise ValueError(
-        "KALSHI_API_KEY_ID environment variable is required. "
-        "Please set it in a .env file or your shell environment. "
-        "See .claude/CLAUDE.md for setup instructions."
-    )
+# Create FastMCP server with environment-specific name
+mcp = FastMCP(
+    name=f"Kalshi Trading ({env.upper()})",
+    instructions=f"""
+    Kalshi prediction market trading server.
 
-if not _PRIVATE_KEY_PATH:
-    raise ValueError(
-        "KALSHI_PRIVATE_KEY_PATH environment variable is required. "
-        "Please set it in a .env file or your shell environment. "
-        "See .claude/CLAUDE.md for setup instructions."
-    )
+    Environment: {env.upper()}
+    {'⚠️ DEMO MODE - Using test money only, safe for experimentation' if env == 'demo' else '💰 PRODUCTION - Real money trades, use with caution'}
+
+    This server enables you to:
+    - Research prediction markets on current events
+    - View market prices and orderbooks
+    - Get account balance and positions
+    - Execute trades (market and limit orders)
+
+    Always check the environment before placing real orders!
+    """,
+)
+
+logger.info(f"Initializing Kalshi MCP server - Environment: {env}")
 
 
-# Initialize FastMCP server
-mcp = FastMCP("Kalshi Prediction Markets")
-
-# Global client instance (lazy initialization on first tool call)
-client: Optional[KalshiClient] = None
+# ============================================================================
+# TOOLS
+# ============================================================================
 
 
-def _ensure_client() -> KalshiClient:
-    """Ensure client is initialized (lazy initialization on first use).
-
-    Credentials are validated at module load time, so if we reach this point,
-    we're guaranteed to have valid credentials from the environment.
+@mcp.tool
+async def kalshi_get_exchange_status(ctx: Context | None = None) -> ExchangeStatus:
     """
-    global client
-    if client is None:
-        logger.info("Initializing Kalshi client on first tool call")
-        client = KalshiClient()
-    return client
+    Check if the Kalshi exchange is operational and accepting trades.
 
+    Returns:
+        Exchange status including whether trading is active
 
-def _require_confirmation(tool_name: str, description: str) -> None:
-    """Require user confirmation for write operations.
-
-    In FastMCP, this can be implemented by raising a ToolError that the
-    Claude client will present to the user for confirmation.
+    Use this to verify the exchange is online before attempting trades.
     """
-    # TODO: Implement user confirmation dialog
-    # For now, we'll allow operations but log them
-    logger.info(f"Write operation requested: {tool_name} - {description}")
+    if ctx:
+        await ctx.info("Checking Kalshi exchange status...")
+
+    async with KalshiClient.from_env() as client:
+        status = await client.get_exchange_status()
+
+    if ctx:
+        state = "✅ ONLINE" if status.exchange_active else "❌ OFFLINE"
+        trading = "✅ TRADING" if status.trading_active else "⏸️ HALTED"
+        await ctx.info(f"Exchange: {state} | Trading: {trading}")
+
+    return status
 
 
-# ========== TIER 1: READ-ONLY TOOLS (10 tools) ==========
+@mcp.tool
+async def kalshi_get_balance(ctx: Context | None = None) -> Balance:
+    """
+    Get current account balance.
+
+    Returns:
+        Account balance in cents and dollars
+
+    Use this to check available funds before placing orders.
+    """
+    if ctx:
+        await ctx.info("Fetching account balance...")
+
+    async with KalshiClient.from_env() as client:
+        balance = await client.get_balance()
+
+    if ctx:
+        await ctx.info(f"Balance: ${balance.balance_dollars:.2f} (${balance.balance} cents)")
+
+    return balance
 
 
-@mcp.tool()
+@mcp.tool
 async def kalshi_search_markets(
-    status: Optional[str] = None,
-    series_ticker: Optional[str] = None,
-    max_close_ts: Optional[int] = None,
-    min_close_ts: Optional[int] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Search and filter Kalshi markets.
+    query: Annotated[
+        str | None,
+        Field(description="Search query to find markets (e.g., 'Bitcoin', 'election', 'AI')")
+    ] = None,
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of markets to return", ge=1, le=100)
+    ] = 20,
+    status: Annotated[
+        str,
+        Field(description="Filter by market status: 'open', 'closed', or 'settled'")
+    ] = "open",
+    ctx: Context | None = None,
+) -> list[Market]:
+    """
+    Search for prediction markets on Kalshi.
 
     Args:
-        status: Market status (unopened, open, closed, settled)
-        series_ticker: Filter by series template
-        max_close_ts: Maximum close timestamp (Unix seconds)
-        min_close_ts: Minimum close timestamp (Unix seconds)
-        limit: Number of results (max 1000, default 100)
-        cursor: Pagination cursor for next page
+        query: Keywords to search for (e.g., "Bitcoin", "election")
+        limit: Maximum number of results (1-100)
+        status: Filter by status - "open" for active markets, "closed" for settled
 
     Returns:
-        Dictionary with markets list and next cursor for pagination
+        List of matching markets with prices, volume, and details
+
+    Use this to discover markets about topics you're interested in.
+    Perfect for researching opportunities or finding specific markets.
+
+    Examples:
+        - Find Bitcoin markets: kalshi_search_markets("Bitcoin")
+        - Get all open markets: kalshi_search_markets(limit=50)
+        - Find settled election markets: kalshi_search_markets("election", status="settled")
     """
-    client = _ensure_client()
-    markets, next_cursor = await client.search_markets(
-        status=status,
-        series_ticker=series_ticker,
-        max_close_ts=max_close_ts,
-        min_close_ts=min_close_ts,
-        limit=limit,
-        cursor=cursor,
-    )
+    if ctx:
+        search_desc = f"'{query}'" if query else "all markets"
+        await ctx.info(f"Searching for {search_desc} (limit={limit}, status={status})...")
 
-    return {
-        "markets": [m.model_dump() for m in markets],
-        "cursor": next_cursor,
-        "count": len(markets),
-    }
+    async with KalshiClient.from_env() as client:
+        markets = await client.search_markets(query=query, limit=limit, status=status)
+
+    if ctx:
+        await ctx.info(f"Found {len(markets)} markets")
+        if markets:
+            top_market = markets[0]
+            await ctx.info(f"Top result: {top_market.ticker} - {top_market.title}")
+
+    return markets
 
 
-@mcp.tool()
-async def kalshi_get_market(ticker: str) -> dict[str, Any]:
-    """Get detailed information about a specific market.
+@mcp.tool
+async def kalshi_get_market(
+    ticker: Annotated[
+        str,
+        Field(description="Market ticker symbol (e.g., 'KXBTC-23DEC-50K')")
+    ],
+    ctx: Context | None = None,
+) -> Market:
+    """
+    Get detailed information about a specific prediction market.
 
     Args:
-        ticker: Market ticker (e.g., KXHARRIS24-LSV)
+        ticker: The market's ticker symbol (from search results)
 
     Returns:
-        Market details including current prices, volume, and settlement info
+        Complete market details including:
+        - Current bid/ask prices
+        - Trading volume and open interest
+        - Market status and expiration time
+        - Human-readable interpretation
+
+    Use this after searching to get full details about a specific market
+    before deciding whether to trade.
+
+    Example:
+        market = kalshi_get_market("KXBTC-31DEC-50K")
+        # Returns prices, volume, and interpretation like:
+        # "Market implies 42% chance: Bitcoin reaches $50K by Dec 31"
     """
-    client = _ensure_client()
-    market = await client.get_market(ticker)
-    return market.model_dump()
+    if ctx:
+        await ctx.info(f"Fetching market details for {ticker}...")
+
+    async with KalshiClient.from_env() as client:
+        market = await client.get_market(ticker)
+
+    if ctx:
+        await ctx.info(f"Market: {market.title}")
+        if market.yes_ask:
+            await ctx.info(f"YES price: {market.yes_ask}¢ | {market.interpretation}")
+        await ctx.info(f"Status: {market.status} | Volume 24h: {market.volume_24h or 0:,}")
+
+    return market
 
 
-@mcp.tool()
-async def kalshi_get_orderbook(ticker: str, depth: int = 5) -> dict[str, Any]:
-    """Get current order book for a market.
+@mcp.tool
+async def kalshi_create_market_order(
+    ticker: Annotated[
+        str,
+        Field(description="Market ticker symbol (e.g., 'KXBTC-23DEC-50K')")
+    ],
+    side: Annotated[
+        str,
+        Field(description="Order side: 'yes' or 'no'")
+    ],
+    quantity: Annotated[
+        int,
+        Field(description="Number of contracts to buy", ge=1)
+    ],
+    action: Annotated[
+        str,
+        Field(description="Order action: 'buy' or 'sell'")
+    ] = "buy",
+    ctx: Context | None = None,
+) -> Order:
+    """
+    Create a market order (executes immediately at current market price).
 
     Args:
-        ticker: Market ticker
-        depth: Order book depth (0/-1 for full book, 1-100 for specific depth)
+        ticker: Market ticker symbol
+        side: "yes" or "no"
+        quantity: Number of contracts (1-MAX_ORDER_SIZE)
+        action: "buy" or "sell" (default: "buy")
 
     Returns:
-        Order book with bids and asks arrays
+        Order details including fill information
+
+    Market orders execute immediately at the best available price.
+    Use this when you want immediate execution and don't need price control.
+
+    Example:
+        order = kalshi_create_market_order("KXBTC-31DEC-50K", "yes", 10)
+        # Buys 10 YES contracts immediately at market price
     """
-    client = _ensure_client()
-    orderbook = await client.get_orderbook(ticker, depth=depth)
-    return orderbook.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_trades(
-    ticker: Optional[str] = None,
-    limit: int = 100,
-    before: Optional[int] = None,
-    after: Optional[int] = None,
-) -> dict[str, Any]:
-    """Get recent trades across markets.
-
-    Args:
-        ticker: Filter by specific market ticker
-        limit: Number of results (default 100)
-        before: Get trades before timestamp (Unix ms)
-        after: Get trades after timestamp (Unix ms)
-
-    Returns:
-        List of recent trades with prices and execution times
-    """
-    client = _ensure_client()
-    trades, cursor = await client.get_trades(
-        ticker=ticker,
-        limit=limit,
-        before=before,
-        after=after,
-    )
-
-    return {
-        "trades": [t.model_dump() for t in trades],
-        "cursor": cursor,
-        "count": len(trades),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_candlesticks(
-    series_ticker: str,
-    ticker: str,
-    interval: str = "1440min",
-) -> dict[str, Any]:
-    """Get historical OHLCV candlestick data for a market.
-
-    Args:
-        series_ticker: Series identifier
-        ticker: Market ticker
-        interval: Time interval (1min, 60min, 1440min for daily)
-
-    Returns:
-        List of candlesticks with open, high, low, close, volume
-    """
-    client = _ensure_client()
-    candlesticks = await client.get_candlesticks(
-        series_ticker=series_ticker,
-        ticker=ticker,
-        interval=interval,
-    )
-
-    return {
-        "candlesticks": [c.model_dump() for c in candlesticks],
-        "count": len(candlesticks),
-        "interval": interval,
-    }
-
-
-@mcp.tool()
-async def kalshi_get_events(
-    status: Optional[str] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Browse Kalshi events.
-
-    Args:
-        status: Event status filter (open, closed, settled)
-        limit: Number of results (default 100)
-        cursor: Pagination cursor
-
-    Returns:
-        List of events with descriptions and status
-    """
-    client = _ensure_client()
-    events, next_cursor = await client.get_events(
-        status=status,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "events": [e.model_dump() for e in events],
-        "cursor": next_cursor,
-        "count": len(events),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_event(ticker: str, include_markets: bool = False) -> dict[str, Any]:
-    """Get detailed information about a specific event.
-
-    Args:
-        ticker: Event ticker
-        include_markets: Include nested markets for this event
-
-    Returns:
-        Event details with optional nested markets
-    """
-    client = _ensure_client()
-    event = await client.get_event(ticker, include_markets=include_markets)
-    return event.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_series(
-    category: Optional[str] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Browse Kalshi series templates.
-
-    Args:
-        category: Filter by category
-        limit: Number of results (default 100)
-        cursor: Pagination cursor
-
-    Returns:
-        List of series with descriptions
-    """
-    client = _ensure_client()
-    series_list, next_cursor = await client.get_series(
-        category=category,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "series": [s.model_dump() for s in series_list],
-        "cursor": next_cursor,
-        "count": len(series_list),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_exchange_status() -> dict[str, Any]:
-    """Get current exchange status and trading conditions.
-
-    Returns:
-        Exchange status with trading activity and maintenance info
-    """
-    client = _ensure_client()
-    status = await client.get_exchange_status()
-    return status.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_milestones(
-    category: Optional[str] = None,
-    source: Optional[str] = None,
-    min_ts: Optional[int] = None,
-    max_ts: Optional[int] = None,
-) -> dict[str, Any]:
-    """Get event milestones for tracking progress and live data.
-
-    Args:
-        category: Filter by milestone category
-        source: Filter by data source
-        min_ts: Minimum timestamp (Unix seconds)
-        max_ts: Maximum timestamp (Unix seconds)
-
-    Returns:
-        List of milestones with timestamps and descriptions
-    """
-    client = _ensure_client()
-    milestones = await client.get_milestones(
-        category=category,
-        source=source,
-        min_ts=min_ts,
-        max_ts=max_ts,
-    )
-
-    return {
-        "milestones": [m.model_dump() for m in milestones],
-        "count": len(milestones),
-    }
-
-
-# ========== TIER 2: TRADING OPERATIONS (8 tools) ==========
-
-
-@mcp.tool()
-async def kalshi_get_balance() -> dict[str, Any]:
-    """Get current account balance and portfolio value.
-
-    Returns:
-        Balance in cents and total portfolio value
-    """
-    client = _ensure_client()
-    balance = await client.get_balance()
-    return balance.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_positions(
-    ticker: Optional[str] = None,
-    event_ticker: Optional[str] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get user's current positions in markets.
-
-    Args:
-        ticker: Filter by market ticker
-        event_ticker: Filter by event ticker
-        limit: Number of results (default 100)
-        cursor: Pagination cursor
-
-    Returns:
-        List of positions with size, average fill price, and P&L info
-    """
-    client = _ensure_client()
-    positions, next_cursor = await client.get_positions(
-        ticker=ticker,
-        event_ticker=event_ticker,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "positions": [p.model_dump() for p in positions],
-        "cursor": next_cursor,
-        "count": len(positions),
-    }
-
-
-@mcp.tool()
-async def kalshi_create_order(
-    ticker: str,
-    side: str,
-    count: int,
-    type: str = "limit",
-    price: Optional[int] = None,
-    expire_at: Optional[int] = None,
-    order_group_id: Optional[str] = None,
-) -> dict[str, Any]:
-    """Place a new order on a market. **REQUIRES USER CONFIRMATION**.
-
-    Args:
-        ticker: Market ticker
-        side: "buy" or "sell"
-        count: Number of contracts to order
-        type: "limit" (default) or "market"
-        price: Limit price in cents (1-99, required for limit orders)
-        expire_at: Order expiration timestamp (Unix seconds, optional)
-        order_group_id: Optional order group for risk management
-
-    Returns:
-        Order confirmation with order ID and status
-    """
-    _require_confirmation(
-        "kalshi_create_order",
-        f"Place {side} order: {count} contracts of {ticker} at {price or 'market'} cents",
-    )
-
-    client = _ensure_client()
-    order = await client.create_order(
-        ticker=ticker,
-        side=side,
-        count=count,
-        type=type,
-        price=price,
-        expire_at=expire_at,
-        order_group_id=order_group_id,
-    )
-
-    return order.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_orders(
-    ticker: Optional[str] = None,
-    event_ticker: Optional[str] = None,
-    status: Optional[str] = None,
-    min_ts: Optional[int] = None,
-    max_ts: Optional[int] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get user's orders.
-
-    Args:
-        ticker: Filter by market ticker
-        event_ticker: Filter by event ticker
-        status: Filter by status (resting, canceled, executed)
-        min_ts: Minimum timestamp (Unix seconds)
-        max_ts: Maximum timestamp (Unix seconds)
-        limit: Number of results (default 100)
-        cursor: Pagination cursor
-
-    Returns:
-        List of orders with status and fill information
-    """
-    client = _ensure_client()
-    orders, next_cursor = await client.get_orders(
-        ticker=ticker,
-        event_ticker=event_ticker,
-        status=status,
-        min_ts=min_ts,
-        max_ts=max_ts,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "orders": [o.model_dump() for o in orders],
-        "cursor": next_cursor,
-        "count": len(orders),
-    }
-
-
-@mcp.tool()
-async def kalshi_cancel_order(order_id: str) -> dict[str, Any]:
-    """Cancel an existing order. **REQUIRES USER CONFIRMATION**.
-
-    Args:
-        order_id: Order ID to cancel
-
-    Returns:
-        Updated order with canceled status
-    """
-    _require_confirmation("kalshi_cancel_order", f"Cancel order: {order_id}")
-
-    client = _ensure_client()
-    order = await client.cancel_order(order_id)
-    return order.model_dump()
-
-
-@mcp.tool()
-async def kalshi_amend_order(
-    order_id: str,
-    price: Optional[int] = None,
-    count: Optional[int] = None,
-) -> dict[str, Any]:
-    """Modify an existing order. **REQUIRES USER CONFIRMATION**.
-
-    Args:
-        order_id: Order ID to modify
-        price: New limit price in cents (optional)
-        count: New contract count (optional)
-
-    Returns:
-        Updated order with new parameters
-    """
-    _require_confirmation(
-        "kalshi_amend_order",
-        f"Amend order {order_id}: price={price}, count={count}",
-    )
-
-    client = _ensure_client()
-    order = await client.amend_order(order_id, price=price, count=count)
-    return order.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_fills(
-    ticker: Optional[str] = None,
-    order_id: Optional[str] = None,
-    min_ts: Optional[int] = None,
-    max_ts: Optional[int] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get executed fills/trades.
-
-    Args:
-        ticker: Filter by market ticker
-        order_id: Filter by order ID
-        min_ts: Minimum timestamp (Unix seconds)
-        max_ts: Maximum timestamp (Unix seconds)
-        limit: Number of results (default 100)
-        cursor: Pagination cursor
-
-    Returns:
-        List of executed fills with prices and timestamps
-    """
-    client = _ensure_client()
-    fills, next_cursor = await client.get_fills(
-        ticker=ticker,
-        order_id=order_id,
-        min_ts=min_ts,
-        max_ts=max_ts,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "fills": [f.model_dump() for f in fills],
-        "cursor": next_cursor,
-        "count": len(fills),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_queue_position(order_id: str) -> dict[str, Any]:
-    """Get an order's position in the price-time priority queue.
-
-    Args:
-        order_id: Order ID
-
-    Returns:
-        Queue position and priority info
-    """
-    client = _ensure_client()
-    position = await client.get_queue_position(order_id)
-    return position.model_dump()
-
-
-# ========== TIER 3: ADVANCED FEATURES (7 tools) ==========
-
-
-@mcp.tool()
-async def kalshi_batch_create_orders(orders: list[dict[str, Any]]) -> dict[str, Any]:
-    """Create multiple orders in a batch (max 20). **REQUIRES USER CONFIRMATION**.
-
-    Args:
-        orders: List of order dictionaries with ticker, side, count, type, price, etc.
-
-    Returns:
-        List of created orders with confirmation
-    """
-    _require_confirmation(
-        "kalshi_batch_create_orders",
-        f"Create batch of {len(orders)} orders",
-    )
-
-    client = _ensure_client()
-    created_orders = await client.batch_create_orders(orders)
-
-    return {
-        "orders": [o.model_dump() for o in created_orders],
-        "count": len(created_orders),
-    }
-
-
-@mcp.tool()
-async def kalshi_batch_cancel_orders(order_ids: list[str]) -> dict[str, Any]:
-    """Cancel multiple orders in a batch (max 20). **REQUIRES USER CONFIRMATION**.
-
-    Args:
-        order_ids: List of order IDs to cancel
-
-    Returns:
-        List of canceled orders with confirmation
-    """
-    _require_confirmation(
-        "kalshi_batch_cancel_orders",
-        f"Cancel batch of {len(order_ids)} orders",
-    )
-
-    client = _ensure_client()
-    canceled_orders = await client.batch_cancel_orders(order_ids)
-
-    return {
-        "orders": [o.model_dump() for o in canceled_orders],
-        "count": len(canceled_orders),
-    }
-
-
-@mcp.tool()
-async def kalshi_create_order_group(contract_limit: int) -> dict[str, Any]:
-    """Create an order group for risk management.
-
-    An order group automatically cancels all resting orders when a contract
-    limit is reached, providing protection against over-exposure.
-
-    Args:
-        contract_limit: Maximum contracts allowed in this group
-
-    Returns:
-        Created order group with ID
-    """
-    # Note: This requires API endpoint not yet documented in client
-    # Placeholder implementation
-    return {
-        "order_group_id": "placeholder",
-        "contract_limit": contract_limit,
-        "matched_contracts": 0,
-    }
-
-
-@mcp.tool()
-async def kalshi_get_order_groups() -> dict[str, Any]:
-    """Get all user order groups.
-
-    Returns:
-        List of order groups with limits and status
-    """
-    # Note: This requires API endpoint not yet documented in client
-    # Placeholder implementation
-    return {
-        "order_groups": [],
-        "count": 0,
-    }
-
-
-@mcp.tool()
-async def kalshi_create_rfq(
-    ticker: str,
-    side: str,
-    count: int,
-) -> dict[str, Any]:
-    """Create a Request for Quote (RFQ) for market making.
-
-    Args:
-        ticker: Market ticker
-        side: "buy" or "sell"
-        count: Number of contracts
-
-    Returns:
-        Created RFQ with full details
-    """
-    client = _ensure_client()
-    rfq = await client.create_rfq(ticker, side, count)
-    return rfq.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_rfqs(
-    status: Optional[str] = None,
-    ticker: Optional[str] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get user's Requests for Quote (RFQs).
-
-    Args:
-        status: Filter by status (open, filled, expired, accepted, confirmed, rejected)
-        ticker: Filter by market ticker
-        limit: Number of results (max 1000, default 100)
-        cursor: Pagination cursor for next page
-
-    Returns:
-        List of RFQs with pagination info
-    """
-    client = _ensure_client()
-    rfqs, next_cursor = await client.get_rfqs(
-        status=status,
-        ticker=ticker,
-        limit=limit,
-        cursor=cursor,
-    )
-    return {
-        "rfqs": [r.model_dump() for r in rfqs],
-        "cursor": next_cursor,
-        "count": len(rfqs),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_multivariate_collections(
-    status: Optional[str] = None,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get multivariate event collections for related market trading.
-
-    Multivariate collections allow trading on combinations of related markets,
-    useful for capturing correlations and hedging strategies.
-
-    Args:
-        status: Filter by status (open, closed, settled)
-        limit: Number of results (max 1000, default 100)
-        cursor: Pagination cursor for next page
-
-    Returns:
-        List of available multivariate collections with pagination info
-    """
-    client = _ensure_client()
-    collections, next_cursor = await client.get_multivariate_collections(
-        status=status,
-        limit=limit,
-        cursor=cursor,
-    )
-
-    return {
-        "collections": [c.model_dump() for c in collections],
-        "cursor": next_cursor,
-        "count": len(collections),
-    }
-
-
-@mcp.tool()
-async def kalshi_get_multivariate_collection(ticker: str) -> dict[str, Any]:
-    """Get a specific multivariate event collection.
-
-    Args:
-        ticker: Collection ticker (e.g., MVE-PRES-2024)
-
-    Returns:
-        Collection details with markets and event information
-    """
-    client = _ensure_client()
-    collection = await client.get_multivariate_collection(ticker)
-    return collection.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_markets_in_collection(
-    collection_ticker: str,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get markets within a multivariate collection.
-
-    Args:
-        collection_ticker: Collection ticker
-        limit: Number of results (max 1000, default 100)
-        cursor: Pagination cursor for next page
-
-    Returns:
-        List of markets in the collection with pricing
-    """
-    client = _ensure_client()
-    markets, next_cursor = await client.get_markets_in_collection(
-        collection_ticker,
-        limit=limit,
-        cursor=cursor,
-    )
-    return {
-        "markets": [m.model_dump() for m in markets],
-        "cursor": next_cursor,
-        "count": len(markets),
-    }
-
-
-@mcp.tool()
-async def kalshi_lookup_market_in_collection(
-    collection_ticker: str,
-    market_ticker: str,
-) -> dict[str, Any]:
-    """Lookup a specific market within a collection.
-
-    Args:
-        collection_ticker: Collection ticker
-        market_ticker: Market ticker to lookup
-
-    Returns:
-        Market lookup result with related tickers
-    """
-    client = _ensure_client()
-    lookup = await client.lookup_market_in_collection(collection_ticker, market_ticker)
-    return lookup.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_rfq(rfq_id: str) -> dict[str, Any]:
-    """Get a specific RFQ (Request for Quote).
-
-    Args:
-        rfq_id: RFQ identifier
-
-    Returns:
-        RFQ details including status and timestamps
-    """
-    client = _ensure_client()
-    rfq = await client.get_rfq(rfq_id)
-    return rfq.model_dump()
-
-
-@mcp.tool()
-async def kalshi_delete_rfq(rfq_id: str) -> dict[str, Any]:
-    """Delete an RFQ (Request for Quote).
-
-    Args:
-        rfq_id: RFQ identifier to delete
-
-    Returns:
-        Confirmation message
-    """
-    client = _ensure_client()
-    await client.delete_rfq(rfq_id)
-    return {
-        "status": "success",
-        "message": f"RFQ {rfq_id} deleted successfully",
-    }
-
-
-@mcp.tool()
-async def kalshi_create_quote(
-    rfq_id: str,
-    price: int,
-    quantity: int,
-) -> dict[str, Any]:
-    """Create a quote response to an RFQ.
-
-    Args:
-        rfq_id: RFQ identifier
-        price: Quoted price in cents (1-99)
-        quantity: Quoted quantity
-
-    Returns:
-        Created quote with ID and status
-    """
-    client = _ensure_client()
-    quote = await client.create_quote(rfq_id, price, quantity)
-    return quote.model_dump()
-
-
-@mcp.tool()
-async def kalshi_get_quotes(
-    rfq_id: str,
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get quotes for a specific RFQ.
-
-    Args:
-        rfq_id: RFQ identifier
-        limit: Number of results (max 1000, default 100)
-        cursor: Pagination cursor for next page
-
-    Returns:
-        List of quotes with pagination info
-    """
-    client = _ensure_client()
-    quotes, next_cursor = await client.get_quotes(rfq_id, limit=limit, cursor=cursor)
-    return {
-        "quotes": [q.model_dump() for q in quotes],
-        "cursor": next_cursor,
-        "count": len(quotes),
-    }
-
-
-@mcp.tool()
-async def kalshi_accept_quote(quote_id: str) -> dict[str, Any]:
-    """Accept a quote response.
-
-    Args:
-        quote_id: Quote identifier to accept
-
-    Returns:
-        Updated quote with accepted status
-    """
-    client = _ensure_client()
-    quote = await client.accept_quote(quote_id)
-    return quote.model_dump()
-
-
-@mcp.tool()
-async def kalshi_confirm_quote(quote_id: str) -> dict[str, Any]:
-    """Confirm an accepted quote.
-
-    Args:
-        quote_id: Quote identifier to confirm
-
-    Returns:
-        Updated quote with confirmed status
-    """
-    client = _ensure_client()
-    quote = await client.confirm_quote(quote_id)
-    return quote.model_dump()
-
-
-@mcp.tool()
-async def kalshi_delete_quote(quote_id: str) -> dict[str, Any]:
-    """Delete a quote.
-
-    Args:
-        quote_id: Quote identifier to delete
-
-    Returns:
-        Confirmation message
-    """
-    client = _ensure_client()
-    await client.delete_quote(quote_id)
-    return {
-        "status": "success",
-        "message": f"Quote {quote_id} deleted successfully",
-    }
-
-
-# ========== PHASE 4.5: MARKET MAKER ANALYSIS TOOLS (derived) ==========
-
-
-@mcp.tool()
-async def kalshi_analyze_market_maker_opportunity(ticker: str) -> dict[str, Any]:
-    """Analyze market making opportunity for a specific market.
-
-    Combines market data, RFQ activity, and order book metrics to identify
-    attractive market making opportunities.
-
-    Args:
-        ticker: Market ticker to analyze
-
-    Returns:
-        Market making opportunity score and component analysis
-    """
-    client = _ensure_client()
-
-    # Fetch market and orderbook data
-    market = await client.get_market(ticker)
-    orderbook = await client.get_orderbook(ticker, depth=20)
-
-    # Calculate spread metrics
-    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else None
-    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else None
-
-    # Calculate orderbook depth
-    yes_bids = sum([level[1] for level in (orderbook.yes_bids or [])])
-    yes_asks = sum([level[1] for level in (orderbook.yes_asks or [])])
-    no_bids = sum([level[1] for level in (orderbook.no_bids or [])])
-    no_asks = sum([level[1] for level in (orderbook.no_asks or [])])
-
-    total_depth = yes_bids + yes_asks + no_bids + no_asks
-
-    # Calculate opportunity score (0-100)
-    # Wider spreads = higher opportunity (more profit potential)
-    spread_score = 0
-    if yes_spread and no_spread:
-        avg_spread = (yes_spread + no_spread) / 2
-        spread_score = min(100, avg_spread * 10)  # 10-cent spread = 100 score
-
-    # Depth score (more volume = more opportunity to fill)
-    depth_score = min(100, (total_depth / 100) * 100) if total_depth > 0 else 0
-
-    # Volatility score (recent price changes)
-    price_movement = 0
-    if market.last_price and market.previous_price:
-        price_movement = abs(market.last_price - market.previous_price)
-
-    volatility_score = min(100, (price_movement / 10) * 100)
-
-    # Composite opportunity score
-    opportunity_score = (spread_score * 0.5 + depth_score * 0.3 + volatility_score * 0.2)
-
-    return {
-        "ticker": ticker,
-        "market_title": market.title,
-        "opportunity_score": round(opportunity_score, 2),
-        "score_components": {
-            "spread_opportunity": round(spread_score, 2),
-            "depth_opportunity": round(depth_score, 2),
-            "volatility_opportunity": round(volatility_score, 2),
-        },
-        "spread_metrics": {
-            "yes_spread_cents": yes_spread,
-            "no_spread_cents": no_spread,
-            "avg_spread_cents": round((yes_spread + no_spread) / 2, 2) if yes_spread and no_spread else None,
-        },
-        "depth_metrics": {
-            "yes_bids": yes_bids,
-            "yes_asks": yes_asks,
-            "no_bids": no_bids,
-            "no_asks": no_asks,
-            "total_depth": total_depth,
-        },
-        "volatility_metrics": {
-            "last_price_cents": market.last_price,
-            "previous_price_cents": market.previous_price,
-            "price_movement_cents": price_movement,
-            "volume_24h": market.volume_24h,
-        },
-        "recommendation": "excellent" if opportunity_score >= 75
-            else "good" if opportunity_score >= 50
-            else "fair" if opportunity_score >= 25
-            else "poor",
-    }
-
-
-@mcp.tool()
-async def kalshi_assess_rfq_demand(
-    status: Optional[str] = None,
-    limit: int = 100,
-) -> dict[str, Any]:
-    """Assess RFQ demand patterns across markets.
-
-    Analyzes open RFQs to identify which markets have the highest demand
-    for market maker liquidity.
-
-    Args:
-        status: Filter by RFQ status (default: open)
-        limit: Number of RFQs to analyze (max 1000)
-
-    Returns:
-        Demand analysis with top opportunities
-    """
-    client = _ensure_client()
-
-    # Fetch open RFQs
-    rfqs, _ = await client.get_rfqs(
-        status=status or "open",
-        limit=limit,
-    )
-
-    # Aggregate demand by ticker
-    demand_by_ticker: dict[str, dict[str, Any]] = {}
-    total_volume = 0
-
-    for rfq in rfqs:
-        if rfq.ticker not in demand_by_ticker:
-            demand_by_ticker[rfq.ticker] = {
-                "buy_volume": 0,
-                "sell_volume": 0,
-                "total_rfqs": 0,
-                "imbalance": 0,
-            }
-
-        ticker_data = demand_by_ticker[rfq.ticker]
-        ticker_data["total_rfqs"] += 1
-
-        if rfq.side == "buy":
-            ticker_data["buy_volume"] += rfq.count
+    # Validate order size
+    if quantity > MAX_ORDER_SIZE:
+        raise ValueError(f"Order size {quantity} exceeds maximum {MAX_ORDER_SIZE}")
+
+    if ctx:
+        if quantity > LARGE_ORDER_THRESHOLD:
+            await ctx.info(f"⚠️ Large order: {quantity} contracts")
+        await ctx.info(f"Creating market order: {action.upper()} {quantity}x {side.upper()} on {ticker}")
+
+    async with KalshiClient.from_env() as client:
+        # Check balance
+        balance = await client.get_balance()
+        estimated_cost = quantity * 100  # Rough estimate (max is 100¢ per contract)
+        if estimated_cost > balance.balance:
+            raise ValueError(
+                f"Insufficient balance: need ~${estimated_cost/100:.2f}, "
+                f"have ${balance.balance_dollars:.2f}"
+            )
+
+        # Create order
+        order = await client.create_order(
+            ticker=ticker,
+            side=side,
+            count=quantity,
+            action=action,
+            order_type="market"
+        )
+
+    if ctx:
+        if order.is_filled:
+            avg_price = order.average_fill_price or 0
+            await ctx.info(f"✅ Filled {order.fill_count}/{quantity} @ {avg_price}¢ avg")
         else:
-            ticker_data["sell_volume"] += rfq.count
+            await ctx.info(f"⏳ Order created: {order.order_id} (status: {order.status})")
 
-        total_volume += rfq.count
+    return order
 
-    # Calculate imbalance and sort by opportunity
-    opportunities = []
-    for ticker, data in demand_by_ticker.items():
-        total_rfq_volume = data["buy_volume"] + data["sell_volume"]
-        imbalance = abs(data["buy_volume"] - data["sell_volume"]) / total_rfq_volume if total_rfq_volume > 0 else 0
 
-        opportunities.append({
+@mcp.tool
+async def kalshi_create_limit_order(
+    ticker: Annotated[
+        str,
+        Field(description="Market ticker symbol (e.g., 'KXBTC-23DEC-50K')")
+    ],
+    side: Annotated[
+        str,
+        Field(description="Order side: 'yes' or 'no'")
+    ],
+    quantity: Annotated[
+        int,
+        Field(description="Number of contracts to buy", ge=1)
+    ],
+    price: Annotated[
+        int,
+        Field(description="Limit price in cents (1-99)", ge=1, le=99)
+    ],
+    action: Annotated[
+        str,
+        Field(description="Order action: 'buy' or 'sell'")
+    ] = "buy",
+    ctx: Context | None = None,
+) -> Order:
+    """
+    Create a limit order (only executes at specified price or better).
+
+    Args:
+        ticker: Market ticker symbol
+        side: "yes" or "no"
+        quantity: Number of contracts (1-MAX_ORDER_SIZE)
+        price: Limit price in cents (1-99)
+        action: "buy" or "sell" (default: "buy")
+
+    Returns:
+        Order details including resting order information
+
+    Limit orders only execute at your specified price or better.
+    The order will rest on the orderbook until filled or canceled.
+
+    Example:
+        order = kalshi_create_limit_order("KXBTC-31DEC-50K", "yes", 10, 45)
+        # Buys 10 YES contracts only if price is 45¢ or less
+    """
+    # Validate order size
+    if quantity > MAX_ORDER_SIZE:
+        raise ValueError(f"Order size {quantity} exceeds maximum {MAX_ORDER_SIZE}")
+
+    if ctx:
+        if quantity > LARGE_ORDER_THRESHOLD:
+            await ctx.info(f"⚠️ Large order: {quantity} contracts")
+        await ctx.info(
+            f"Creating limit order: {action.upper()} {quantity}x {side.upper()} "
+            f"on {ticker} @ {price}¢"
+        )
+
+    async with KalshiClient.from_env() as client:
+        # Check balance for buy orders
+        if action == "buy":
+            balance = await client.get_balance()
+            estimated_cost = quantity * price
+            if estimated_cost > balance.balance:
+                raise ValueError(
+                    f"Insufficient balance: need ${estimated_cost/100:.2f}, "
+                    f"have ${balance.balance_dollars:.2f}"
+                )
+
+        # Create order
+        kwargs = {
             "ticker": ticker,
-            "total_rfqs": data["total_rfqs"],
-            "buy_volume": data["buy_volume"],
-            "sell_volume": data["sell_volume"],
-            "total_volume": total_rfq_volume,
-            "volume_percent": round((total_rfq_volume / total_volume * 100), 2) if total_volume > 0 else 0,
-            "buy_sell_imbalance": round(imbalance, 3),
-            "opportunity_level": "high" if total_rfq_volume > 50 else "medium" if total_rfq_volume > 10 else "low",
-        })
+            "side": side,
+            "count": quantity,
+            "action": action,
+            "order_type": "limit",
+        }
+        if side == "yes":
+            kwargs["yes_price"] = price
+        else:
+            kwargs["no_price"] = price
 
-    # Sort by total volume
-    opportunities.sort(key=lambda x: x["total_volume"], reverse=True)
+        order = await client.create_order(**kwargs)
 
-    return {
-        "summary": {
-            "total_rfqs": len(rfqs),
-            "total_volume": total_volume,
-            "markets_with_demand": len(demand_by_ticker),
-        },
-        "top_opportunities": opportunities[:10],
-        "all_opportunities": opportunities,
-    }
+    if ctx:
+        if order.is_active:
+            await ctx.info(
+                f"📋 Limit order resting: {order.order_id} "
+                f"(queue position: {order.queue_position or 'N/A'})"
+            )
+        elif order.is_filled:
+            avg_price = order.average_fill_price or price
+            await ctx.info(f"✅ Immediately filled {order.fill_count}/{quantity} @ {avg_price}¢")
+        else:
+            await ctx.info(f"Order created: {order.order_id} (status: {order.status})")
+
+    return order
 
 
-# ========== PHASE 1: PORTFOLIO MANAGEMENT TOOLS (7 tools) ==========
-
-
-@mcp.tool()
-async def kalshi_get_order_group(group_id: str) -> dict[str, Any]:
-    """Get a single order group by ID.
+@mcp.tool
+async def kalshi_cancel_order(
+    order_id: Annotated[
+        str,
+        Field(description="Order ID to cancel")
+    ],
+    ctx: Context | None = None,
+) -> Order:
+    """
+    Cancel a pending order.
 
     Args:
-        group_id: Order group ID
+        order_id: The order ID to cancel
 
     Returns:
-        OrderGroup with id, contract_limit, and matched_contracts
+        Canceled order details
+
+    Cancels a resting limit order. Market orders cannot be canceled
+    as they execute immediately. Only works for orders that haven't
+    been fully filled yet.
+
+    Example:
+        order = kalshi_cancel_order("01234567-89ab-cdef-0123-456789abcdef")
+        # Cancels the specified order
     """
-    client = _ensure_client()
-    order_group = await client.get_order_group(group_id)
-    return {
-        "id": order_group.id,
-        "contract_limit": order_group.contract_limit,
-        "matched_contracts": order_group.matched_contracts,
-    }
+    if ctx:
+        await ctx.info(f"Canceling order: {order_id}")
+
+    async with KalshiClient.from_env() as client:
+        order = await client.cancel_order(order_id)
+
+    if ctx:
+        if order.status == "canceled":
+            await ctx.info(f"✅ Order canceled: {order.remaining_count} unfilled contracts")
+        else:
+            await ctx.info(f"Order status: {order.status}")
+
+    return order
 
 
-@mcp.tool()
-async def kalshi_reset_order_group(group_id: str) -> dict[str, Any]:
-    """Reset an order group's matched contract counter.
-
-    This resets the counter back to 0, allowing the group to accept more orders.
+@mcp.tool
+async def kalshi_amend_order(
+    order_id: Annotated[
+        str,
+        Field(description="Order ID to amend")
+    ],
+    new_quantity: Annotated[
+        int,
+        Field(description="New contract count", ge=1)
+    ],
+    new_price: Annotated[
+        int,
+        Field(description="New price in cents (1-99)", ge=1, le=99)
+    ],
+    ctx: Context | None = None,
+) -> Order:
+    """
+    Amend an order (modify price/quantity without losing queue position).
 
     Args:
-        group_id: Order group ID
+        order_id: Order ID to amend
+        new_quantity: New contract count
+        new_price: New price in cents (1-99)
 
     Returns:
-        Confirmation message
+        Amended order details
+
+    Amending an order modifies it without losing your place in the queue
+    (unlike cancel + create). Only works for resting limit orders.
+
+    Example:
+        order = kalshi_amend_order(
+            "01234567-89ab-cdef-0123-456789abcdef",
+            new_quantity=20,
+            new_price=46
+        )
+        # Changes order to 20 contracts @ 46¢
     """
-    client = _ensure_client()
-    await client.reset_order_group(group_id)
-    return {
-        "status": "success",
-        "message": f"Order group {group_id} reset successfully",
-    }
+    if new_quantity > MAX_ORDER_SIZE:
+        raise ValueError(f"Order size {new_quantity} exceeds maximum {MAX_ORDER_SIZE}")
+
+    if ctx:
+        await ctx.info(f"Amending order {order_id}: {new_quantity} contracts @ {new_price}¢")
+
+    async with KalshiClient.from_env() as client:
+        order = await client.amend_order(order_id, new_quantity, new_price)
+
+    if ctx:
+        await ctx.info(
+            f"✅ Order amended: {order.remaining_count} remaining @ {new_price}¢ "
+            f"(queue: {order.queue_position or 'N/A'})"
+        )
+
+    return order
 
 
-@mcp.tool()
-async def kalshi_delete_order_group(group_id: str) -> dict[str, Any]:
-    """Delete an order group.
-
-    Args:
-        group_id: Order group ID to delete
-
-    Returns:
-        Confirmation message
+@mcp.tool
+async def kalshi_decrease_order(
+    order_id: Annotated[
+        str,
+        Field(description="Order ID to decrease")
+    ],
+    reduce_by: Annotated[
+        int,
+        Field(description="Number of contracts to reduce by", ge=1)
+    ],
+    ctx: Context | None = None,
+) -> Order:
     """
-    client = _ensure_client()
-    await client.delete_order_group(group_id)
-    return {
-        "status": "success",
-        "message": f"Order group {group_id} deleted successfully",
-    }
-
-
-@mcp.tool()
-async def kalshi_get_total_resting_order_value() -> dict[str, Any]:
-    """Get total value of all resting orders.
-
-    This metric is useful for:
-    - Understanding total capital at risk
-    - Portfolio rebalancing decisions
-    - Risk management calculations
-
-    Returns:
-        Total value of resting orders in cents
-    """
-    client = _ensure_client()
-    result = await client.get_total_resting_order_value()
-    return {
-        "total_resting_order_value": result.total_resting_order_value,
-        "total_dollars": result.total_resting_order_value / 100,
-    }
-
-
-@mcp.tool()
-async def kalshi_get_settlements(
-    limit: int = 100,
-    cursor: Optional[str] = None,
-) -> dict[str, Any]:
-    """Get historical settlements (filled orders) for P&L tracking.
-
-    Settlements represent completed orders with final prices and payouts.
-    Use this endpoint to:
-    - Calculate historical P&L
-    - Analyze past trading performance
-    - Track settlement history
-
-    Args:
-        limit: Number of results (default 100, max 200)
-        cursor: Pagination cursor for next page
-
-    Returns:
-        List of settlements with pagination info
-    """
-    client = _ensure_client()
-    settlements, next_cursor = await client.get_settlements(limit=limit, cursor=cursor)
-
-    return {
-        "settlements": [
-            {
-                "order_id": s.order_id,
-                "ticker": s.ticker,
-                "side": s.side.value,
-                "count": s.count,
-                "price": s.price,
-                "payout": s.payout,
-                "payout_dollars": s.payout / 100,
-                "created_at": s.created_at,
-                "market_title": s.market_title,
-            }
-            for s in settlements
-        ],
-        "cursor": next_cursor,
-        "count": len(settlements),
-    }
-
-
-@mcp.tool()
-async def kalshi_decrease_order(order_id: str, count: int) -> dict[str, Any]:
-    """Decrease the size of an existing resting order.
-
-    Useful for:
-    - Reducing position size without canceling and recreating
-    - Partial profit-taking
-    - Risk reduction mid-trade
+    Decrease order size without losing queue position.
 
     Args:
         order_id: Order ID to decrease
-        count: Number of contracts to decrease by
+        reduce_by: Number of contracts to reduce by
 
     Returns:
-        Updated Order details
+        Updated order details
+
+    Reduces the size of a resting order while maintaining queue position.
+    Useful for partially unwinding a position without full cancellation.
+
+    Example:
+        order = kalshi_decrease_order(
+            "01234567-89ab-cdef-0123-456789abcdef",
+            reduce_by=5
+        )
+        # Reduces order by 5 contracts (e.g., 20 → 15)
     """
-    client = _ensure_client()
-    order = await client.decrease_order(order_id, count)
+    if ctx:
+        await ctx.info(f"Decreasing order {order_id} by {reduce_by} contracts")
 
-    return {
-        "order_id": order.id,
-        "ticker": order.ticker,
-        "side": order.side.value,
-        "count": order.count,
-        "price": order.price,
-        "status": order.status.value,
-        "created_at": order.created_at,
-        "modified_at": order.modified_at,
-    }
+    async with KalshiClient.from_env() as client:
+        order = await client.decrease_order(order_id, reduce_by)
+
+    if ctx:
+        await ctx.info(
+            f"✅ Order decreased: {order.remaining_count} remaining "
+            f"(queue: {order.queue_position or 'N/A'})"
+        )
+
+    return order
 
 
-@mcp.tool()
-async def kalshi_get_queue_positions(order_ids: list[str]) -> dict[str, Any]:
-    """Get queue positions for multiple orders in bulk.
+# ============================================================================
+# PORTFOLIO MANAGEMENT
+# ============================================================================
 
-    Queue position (0 = next to execute, higher numbers = further back).
-    Useful for:
-    - Monitoring order priority
-    - Predicting execution timing
-    - Analyzing market congestion
+
+@mcp.tool
+async def kalshi_get_positions(
+    ticker: Annotated[
+        str | None,
+        Field(description="Filter by ticker (optional)")
+    ] = None,
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of positions to return", ge=1, le=200)
+    ] = 100,
+    ctx: Context | None = None,
+) -> list[Position]:
+    """
+    Get current portfolio positions.
 
     Args:
-        order_ids: List of order IDs to check positions for
+        ticker: Filter by ticker (optional)
+        limit: Maximum results (1-200)
 
     Returns:
-        Dictionary mapping order_id to queue position
+        List of current positions with P&L information
+
+    Shows your current holdings across all markets or filtered by ticker.
+    Includes realized and unrealized P&L, position size, and market exposure.
+
+    Example:
+        positions = kalshi_get_positions()
+        # Returns all current positions with P&L
     """
-    client = _ensure_client()
-    positions = await client.get_queue_positions(order_ids)
+    if ctx:
+        filter_desc = f" for {ticker}" if ticker else ""
+        await ctx.info(f"Fetching positions{filter_desc}...")
 
-    return {
-        "positions": positions,
-        "count": len(positions),
-    }
+    async with KalshiClient.from_env() as client:
+        positions = await client.get_positions(ticker=ticker, limit=limit)
 
-
-# ========== PHASE 2: MARKET INTELLIGENCE & ANALYSIS TOOLS (5 tools) ==========
-
-
-@mcp.tool()
-async def kalshi_get_event_metadata(ticker: str) -> dict[str, Any]:
-    """Get detailed metadata for an event.
-
-    Event metadata includes additional information beyond basic event details,
-    such as category classifications, historical context, and data sources.
-
-    Args:
-        ticker: Event ticker (e.g., KXHARRIS24)
-
-    Returns:
-        Event metadata dictionary
-    """
-    client = _ensure_client()
-    metadata = await client.get_event_metadata(ticker)
-    return {
-        "ticker": ticker,
-        "metadata": metadata,
-    }
-
-
-@mcp.tool()
-async def kalshi_analyze_market_probability(ticker: str) -> dict[str, Any]:
-    """Analyze a market and calculate implied probability from current prices.
-
-    Implied probability is derived from the YES and NO side prices:
-    - YES price = probability market resolves YES
-    - NO price = probability market resolves NO
-    - Both should sum to ~100 cents (100%)
-
-    This is useful for:
-    - Understanding market consensus on outcomes
-    - Identifying mispricings (probability doesn't sum to 100)
-    - Comparing implied vs. actual probabilities
-
-    Args:
-        ticker: Market ticker
-
-    Returns:
-        Implied probability analysis with mispricing detection
-    """
-    client = _ensure_client()
-    market = await client.get_market(ticker)
-
-    # Extract prices (in cents, 0-100)
-    yes_price = market.yes_bid or 50  # Default to 50 if missing
-    no_price = market.no_bid or 50
-    midpoint_yes = ((market.yes_bid or 0) + (market.yes_ask or 100)) / 2
-    midpoint_no = ((market.no_bid or 0) + (market.no_ask or 100)) / 2
-
-    # Implied probabilities
-    total_cents = yes_price + no_price if (yes_price and no_price) else 100
-    implied_yes = (yes_price / total_cents * 100) if total_cents > 0 else 50
-    implied_no = 100 - implied_yes
-
-    # Calculate mispricing (should sum to 100, but usually ~99 due to spreads)
-    mispricing = abs(total_cents - 100)
-
-    return {
-        "ticker": ticker,
-        "market_title": market.title,
-        "implied_probability": {
-            "yes_percent": round(implied_yes, 2),
-            "no_percent": round(implied_no, 2),
-        },
-        "prices": {
-            "yes_bid": yes_price,
-            "yes_ask": market.yes_ask,
-            "no_bid": no_price,
-            "no_ask": market.no_ask,
-        },
-        "mispricing": {
-            "cents": mispricing,
-            "is_mispriced": mispricing > 2,  # >2 cents suggests potential mispricing
-        },
-    }
-
-
-@mcp.tool()
-async def kalshi_analyze_market_spread(ticker: str) -> dict[str, Any]:
-    """Calculate bid-ask spread for both YES and NO sides.
-
-    Spread is the difference between ask and bid prices. Lower spreads indicate:
-    - Better liquidity
-    - Lower trading costs
-    - More efficient price discovery
-
-    Useful for:
-    - Evaluating trading execution costs
-    - Comparing market liquidity
-    - Timing entry/exit decisions
-
-    Args:
-        ticker: Market ticker
-
-    Returns:
-        Spread analysis for YES and NO sides
-    """
-    client = _ensure_client()
-    market = await client.get_market(ticker)
-
-    # Calculate spreads
-    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else None
-    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else None
-
-    # Calculate spread percentages (relative to mid)
-    yes_mid = ((market.yes_bid or 0) + (market.yes_ask or 100)) / 2
-    no_mid = ((market.no_bid or 0) + (market.no_ask or 100)) / 2
-    yes_spread_pct = (yes_spread / yes_mid * 100) if yes_spread and yes_mid > 0 else None
-    no_spread_pct = (no_spread / no_mid * 100) if no_spread and no_mid > 0 else None
-
-    return {
-        "ticker": ticker,
-        "market_title": market.title,
-        "yes_side": {
-            "bid": market.yes_bid,
-            "ask": market.yes_ask,
-            "spread_cents": yes_spread,
-            "spread_percent": round(yes_spread_pct, 2) if yes_spread_pct else None,
-        },
-        "no_side": {
-            "bid": market.no_bid,
-            "ask": market.no_ask,
-            "spread_cents": no_spread,
-            "spread_percent": round(no_spread_pct, 2) if no_spread_pct else None,
-        },
-        "total_spread": round((yes_spread or 0) + (no_spread or 0), 2),
-        "liquidity_assessment": "tight" if (yes_spread or 0) + (no_spread or 0) <= 2
-            else "moderate" if (yes_spread or 0) + (no_spread or 0) <= 5
-            else "wide",
-    }
-
-
-@mcp.tool()
-async def kalshi_calculate_liquidity_score(ticker: str, depth: int = 10) -> dict[str, Any]:
-    """Calculate a liquidity score for a market based on orderbook depth.
-
-    Liquidity score is derived from:
-    - Orderbook depth (how many contracts at each price level)
-    - Bid-ask spread (tightness of prices)
-    - Recent trade volume
-
-    Score: 0-100, where higher = more liquid
-
-    Useful for:
-    - Assessing execution slippage risk
-    - Finding good markets for large orders
-    - Comparing market maturity
-
-    Args:
-        ticker: Market ticker
-        depth: Orderbook depth to analyze (default 10, max 100)
-
-    Returns:
-        Liquidity score and component analysis
-    """
-    client = _ensure_client()
-    market = await client.get_market(ticker)
-    orderbook = await client.get_orderbook(ticker, depth=depth)
-
-    # Calculate orderbook metrics
-    yes_bids = sum([level[1] for level in (orderbook.yes_bids or [])])
-    yes_asks = sum([level[1] for level in (orderbook.yes_asks or [])])
-    no_bids = sum([level[1] for level in (orderbook.no_bids or [])])
-    no_asks = sum([level[1] for level in (orderbook.no_asks or [])])
-
-    total_orderbook_volume = yes_bids + yes_asks + no_bids + no_asks
-
-    # Spread component (tighter = higher score)
-    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else 5
-    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else 5
-    avg_spread = (yes_spread + no_spread) / 2
-    spread_score = max(0, 100 - (avg_spread * 20))  # Tight spread = high score
-
-    # Volume component
-    volume_score = min(100, (total_orderbook_volume / 10000) * 100) if total_orderbook_volume > 0 else 20
-
-    # Market volume component
-    recent_volume = market.volume_24h or 0
-    volume_trend_score = min(100, (recent_volume / 100000) * 100) if recent_volume > 0 else 30
-
-    # Composite score (weighted average)
-    liquidity_score = (spread_score * 0.4 + volume_score * 0.3 + volume_trend_score * 0.3)
-
-    return {
-        "ticker": ticker,
-        "market_title": market.title,
-        "liquidity_score": round(liquidity_score, 2),
-        "score_components": {
-            "spread_component": round(spread_score, 2),
-            "orderbook_depth_component": round(volume_score, 2),
-            "volume_trend_component": round(volume_trend_score, 2),
-        },
-        "orderbook_metrics": {
-            "yes_bids_volume": yes_bids,
-            "yes_asks_volume": yes_asks,
-            "no_bids_volume": no_bids,
-            "no_asks_volume": no_asks,
-            "total_orderbook_volume": total_orderbook_volume,
-        },
-        "assessment": "excellent" if liquidity_score >= 75
-            else "good" if liquidity_score >= 50
-            else "fair" if liquidity_score >= 25
-            else "poor",
-    }
-
-
-@mcp.tool()
-async def kalshi_analyze_portfolio_risk() -> dict[str, Any]:
-    """Analyze portfolio risk combining positions, resting orders, and balance.
-
-    Risk analysis includes:
-    - Total exposure (sum of position values)
-    - Max drawdown potential
-    - Order execution risk
-    - Correlated positions
-
-    Useful for:
-    - Portfolio rebalancing decisions
-    - Understanding total risk exposure
-    - Pre-trade risk checks
-
-    Returns:
-        Comprehensive portfolio risk analysis
-    """
-    client = _ensure_client()
-
-    # Fetch all portfolio data
-    balance = await client.get_balance()
-    positions, _ = await client.get_positions(limit=1000)
-    try:
-        total_value = await client.get_total_resting_order_value()
-        resting_order_value = total_value.total_resting_order_value
-    except Exception:
-        resting_order_value = 0
-
-    # Calculate position metrics
-    total_position_value = 0
-    long_value = 0
-    short_value = 0
-    max_single_position = 0
-
-    for position in positions:
-        # Position value = contracts * current mid price (approximate)
-        # For now, estimate at 50 cents (neutral position)
-        position_value = position.contracts * 50
-        total_position_value += position_value
-
-        if position.contracts > 0:
-            long_value += position_value
+    if ctx:
+        if positions:
+            total_pnl = sum(p.pnl_dollars for p in positions)
+            await ctx.info(
+                f"Found {len(positions)} position(s) | "
+                f"Total P&L: ${total_pnl:.2f}"
+            )
+            # Show top 3 positions by absolute P&L
+            sorted_positions = sorted(positions, key=lambda p: abs(p.pnl_dollars), reverse=True)
+            for i, pos in enumerate(sorted_positions[:3], 1):
+                pnl_emoji = "📈" if pos.pnl_dollars > 0 else "📉" if pos.pnl_dollars < 0 else "➡️"
+                await ctx.info(
+                    f"{i}. {pos.ticker}: {pos.position:+d} {pos.side_name} | "
+                    f"{pnl_emoji} ${pos.pnl_dollars:+.2f}"
+                )
         else:
-            short_value += abs(position_value)
+            await ctx.info("No positions found")
 
-        max_single_position = max(max_single_position, abs(position_value))
-
-    # Portfolio metrics
-    total_capital = balance.balance  # in cents
-    used_capital = total_position_value + resting_order_value
-    available_capital = total_capital - used_capital
-    utilization_pct = (used_capital / total_capital * 100) if total_capital > 0 else 0
-
-    # Risk assessment
-    correlation_risk = "high" if len(positions) > 5 else "moderate" if len(positions) > 0 else "low"
-
-    return {
-        "capital_metrics": {
-            "total_capital_cents": total_capital,
-            "total_capital_dollars": total_capital / 100,
-            "used_capital_cents": used_capital,
-            "used_capital_dollars": used_capital / 100,
-            "available_capital_cents": available_capital,
-            "available_capital_dollars": available_capital / 100,
-            "utilization_percent": round(utilization_pct, 2),
-        },
-        "position_metrics": {
-            "total_positions": len(positions),
-            "long_value_cents": long_value,
-            "short_value_cents": short_value,
-            "total_position_value_cents": total_position_value,
-            "max_single_position_cents": max_single_position,
-            "net_exposure_cents": long_value - short_value,
-        },
-        "order_metrics": {
-            "resting_order_value_cents": resting_order_value,
-            "resting_order_value_dollars": resting_order_value / 100,
-        },
-        "risk_assessment": {
-            "utilization_level": "critical" if utilization_pct > 90
-                else "high" if utilization_pct > 70
-                else "moderate" if utilization_pct > 50
-                else "low",
-            "correlation_risk": correlation_risk,
-            "recommendation": "reduce positions" if utilization_pct > 80
-                else "maintain current risk" if utilization_pct > 40
-                else "can take more risk",
-        },
-    }
+    return positions
 
 
-# ========== TIER 4: WEBSOCKET TOOLS (4 tools) ==========
-
-
-@mcp.tool()
-async def kalshi_websocket_connect(
-    channels: list[str],
-    market_tickers: list[str],
-) -> dict[str, Any]:
-    """Establish persistent WebSocket connection for real-time market data.
-
-    Creates a new WebSocket connection with automatic reconnection and message routing.
-    Connection persists until explicitly closed.
-
-    Available channels:
-    - "ticker": Real-time market price updates (yes/no bids, asks, spreads)
-    - "orderbook_snapshot": Full order book state (all price levels)
-    - "orderbook_delta": Incremental order book changes (efficient for frequent updates)
-    - "trades": Public trade execution feed (timestamp, price, size)
-    - "user_fills": Authenticated user order fills (personal trades)
-    - "user_positions": Authenticated user position updates (real-time P&L)
-    - "communications": RFQ and quote notifications
+@mcp.tool
+async def kalshi_get_fills(
+    ticker: Annotated[
+        str | None,
+        Field(description="Filter by ticker (optional)")
+    ] = None,
+    order_id: Annotated[
+        str | None,
+        Field(description="Filter by order ID (optional)")
+    ] = None,
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of fills to return", ge=1, le=200)
+    ] = 100,
+    ctx: Context | None = None,
+) -> list[Fill]:
+    """
+    Get trade execution history (fills).
 
     Args:
-        channels: List of channels to subscribe to (see above)
-        market_tickers: List of market tickers to stream (e.g., ["KXHARRIS24-LSV", ...])
+        ticker: Filter by ticker (optional)
+        order_id: Filter by order ID (optional)
+        limit: Maximum results (1-200)
 
     Returns:
-        Connection ID and initial status
+        List of trade fills with prices and fees
+
+    Shows your trade execution history - when orders were filled,
+    at what price, and with what fees. Useful for tracking execution
+    quality and analyzing trading costs.
+
+    Example:
+        fills = kalshi_get_fills(ticker="KXBTC-31DEC-50K")
+        # Returns all fills for this market
     """
-    client = _ensure_client()
+    if ctx:
+        filters = []
+        if ticker:
+            filters.append(f"ticker={ticker}")
+        if order_id:
+            filters.append(f"order_id={order_id}")
+        filter_desc = f" ({', '.join(filters)})" if filters else ""
+        await ctx.info(f"Fetching fill history{filter_desc}...")
 
-    # Get or create WebSocket connection
-    ws_client = await client.get_websocket_connection()
+    async with KalshiClient.from_env() as client:
+        fills = await client.get_fills(ticker=ticker, order_id=order_id, limit=limit)
 
-    # Establish connection
-    if not await ws_client.connect():
-        return {
-            "status": "error",
-            "message": "Failed to establish WebSocket connection",
-            "connection_id": None,
-        }
+    if ctx:
+        if fills:
+            total_volume = sum(f.cost_dollars for f in fills)
+            total_fees = sum(f.fees_dollars for f in fills)
+            await ctx.info(
+                f"Found {len(fills)} fill(s) | "
+                f"Total volume: ${total_volume:.2f} | "
+                f"Total fees: ${total_fees:.2f}"
+            )
+            # Show most recent 3 fills
+            for i, fill in enumerate(fills[:3], 1):
+                action_emoji = "🟢" if fill.action == "buy" else "🔴"
+                taker_marker = " (taker)" if fill.is_taker else " (maker)"
+                await ctx.info(
+                    f"{i}. {fill.ticker}: {action_emoji} {fill.action.upper()} "
+                    f"{fill.count}x {fill.side.upper()} @ {fill.price}¢{taker_marker}"
+                )
+        else:
+            await ctx.info("No fills found")
 
-    # Subscribe to channels
-    if not await ws_client.subscribe(channels, market_tickers):
-        await ws_client.disconnect()
-        return {
-            "status": "error",
-            "message": "Failed to subscribe to channels",
-            "connection_id": None,
-        }
-
-    status = ws_client.get_status()
-    return {
-        "status": "connected",
-        "connection_id": ws_client.connection_id,
-        "channels": channels,
-        "market_tickers": market_tickers,
-        "connection_details": status,
-    }
+    return fills
 
 
-@mcp.tool()
-async def kalshi_websocket_subscribe(
-    connection_id: str,
-    channels: list[str],
-    market_tickers: list[str],
-) -> dict[str, Any]:
-    """Subscribe to additional channels on an existing WebSocket connection.
-
-    Can be called multiple times to add more channels or tickers without reconnecting.
+@mcp.tool
+async def kalshi_get_orders(
+    ticker: Annotated[
+        str | None,
+        Field(description="Filter by ticker (optional)")
+    ] = None,
+    status: Annotated[
+        str,
+        Field(description="Filter by status: 'resting', 'canceled', 'filled'")
+    ] = "resting",
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of orders to return", ge=1, le=200)
+    ] = 100,
+    ctx: Context | None = None,
+) -> list[Order]:
+    """
+    Get orders (active, filled, or canceled).
 
     Args:
-        connection_id: Connection ID from kalshi_websocket_connect
-        channels: Channels to subscribe to
-        market_tickers: Market tickers to subscribe to
+        ticker: Filter by ticker (optional)
+        status: Filter by status (default: "resting")
+        limit: Maximum results (1-200)
 
     Returns:
-        Subscription confirmation with updated status
+        List of orders matching filters
+
+    Shows your orders across all markets or filtered by ticker and status.
+    Use status="resting" for active orders, "filled" for completed orders,
+    or "canceled" for canceled orders.
+
+    Example:
+        orders = kalshi_get_orders(status="resting")
+        # Returns all active orders waiting to be filled
     """
-    client = _ensure_client()
+    if ctx:
+        filter_desc = f" for {ticker}" if ticker else ""
+        await ctx.info(f"Fetching {status} orders{filter_desc}...")
 
-    # Get existing connection
-    ws_client = await client.get_websocket_connection(connection_id)
+    async with KalshiClient.from_env() as client:
+        orders = await client.get_orders(ticker=ticker, status=status, limit=limit)
 
-    if not ws_client.is_connected():
-        return {
-            "status": "error",
-            "message": "WebSocket connection not connected",
-            "connection_id": connection_id,
-        }
+    if ctx:
+        if orders:
+            await ctx.info(f"Found {len(orders)} order(s)")
+            # Show up to 3 orders
+            for i, order in enumerate(orders[:3], 1):
+                status_emoji = "📋" if order.is_active else "✅" if order.is_filled else "❌"
+                progress = f"{order.fill_count}/{order.initial_count}" if order.initial_count else "N/A"
+                await ctx.info(
+                    f"{i}. {status_emoji} {order.ticker}: "
+                    f"{order.action.upper()} {order.side.upper()} "
+                    f"({progress} filled)"
+                )
+        else:
+            await ctx.info("No orders found")
 
-    # Subscribe
-    if not await ws_client.subscribe(channels, market_tickers):
-        return {
-            "status": "error",
-            "message": "Subscription failed",
-            "connection_id": connection_id,
-        }
-
-    status = ws_client.get_status()
-    return {
-        "status": "subscribed",
-        "connection_id": connection_id,
-        "channels": channels,
-        "market_tickers": market_tickers,
-        "connection_details": status,
-    }
+    return orders
 
 
-@mcp.tool()
-async def kalshi_websocket_unsubscribe(
-    connection_id: str,
-    channels: list[str],
-    market_tickers: list[str],
-) -> dict[str, Any]:
-    """Unsubscribe from channels on an existing WebSocket connection.
+# ============================================================================
+# MARKET DISCOVERY (ADVANCED)
+# ============================================================================
 
-    Connection remains open; you can subscribe to other channels later.
+
+@mcp.tool
+async def kalshi_get_events(
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of events to return", ge=1, le=200)
+    ] = 50,
+    status: Annotated[
+        str,
+        Field(description="Filter by status: 'open', 'closed', 'settled'")
+    ] = "open",
+    ctx: Context | None = None,
+) -> list[Event]:
+    """
+    Get list of prediction market events.
 
     Args:
-        connection_id: Connection ID
-        channels: Channels to unsubscribe from
-        market_tickers: Market tickers to unsubscribe from
+        limit: Maximum results (1-200)
+        status: Filter by status (default: "open")
 
     Returns:
-        Unsubscription confirmation with updated status
+        List of events
+
+    Events are collections of related markets. For example, an event
+    might be "2024 Presidential Election" with multiple markets for
+    different outcomes or timeframes.
+
+    Example:
+        events = kalshi_get_events(status="open", limit=20)
+        # Returns active events with their markets
     """
-    client = _ensure_client()
+    if ctx:
+        await ctx.info(f"Fetching {status} events (limit={limit})...")
 
-    # Get existing connection
-    ws_client = await client.get_websocket_connection(connection_id)
+    async with KalshiClient.from_env() as client:
+        events = await client.get_events(limit=limit, status=status)
 
-    if not ws_client.is_connected():
-        return {
-            "status": "error",
-            "message": "WebSocket connection not connected",
-            "connection_id": connection_id,
-        }
+    if ctx:
+        if events:
+            await ctx.info(f"Found {len(events)} event(s)")
+            # Show up to 3 events
+            for i, event in enumerate(events[:3], 1):
+                await ctx.info(f"{i}. {event.event_ticker}: {event.title}")
+        else:
+            await ctx.info("No events found")
 
-    # Unsubscribe
-    if not await ws_client.unsubscribe(channels, market_tickers):
-        return {
-            "status": "error",
-            "message": "Unsubscription failed",
-            "connection_id": connection_id,
-        }
-
-    status = ws_client.get_status()
-    return {
-        "status": "unsubscribed",
-        "connection_id": connection_id,
-        "channels": channels,
-        "market_tickers": market_tickers,
-        "connection_details": status,
-    }
+    return events
 
 
-@mcp.tool()
-async def kalshi_websocket_disconnect(connection_id: str) -> dict[str, Any]:
-    """Close a WebSocket connection gracefully.
-
-    Disconnects from all channels and closes the socket. To reconnect, call
-    kalshi_websocket_connect with a new request.
+@mcp.tool
+async def kalshi_get_event(
+    event_ticker: Annotated[
+        str,
+        Field(description="Event ticker (e.g., 'INXD-25JAN31')")
+    ],
+    ctx: Context | None = None,
+) -> Event:
+    """
+    Get detailed information about a specific event.
 
     Args:
-        connection_id: Connection ID to close
+        event_ticker: Event ticker symbol
 
     Returns:
-        Disconnection confirmation
+        Event details
+
+    Get full details about an event including its category, title,
+    settlement date, and whether markets are mutually exclusive.
+
+    Example:
+        event = kalshi_get_event("INXD-25JAN31")
+        # Returns event details and structure
     """
-    client = _ensure_client()
+    if ctx:
+        await ctx.info(f"Fetching event: {event_ticker}")
 
-    # Get existing connection
-    ws_client = await client.get_websocket_connection(connection_id)
+    async with KalshiClient.from_env() as client:
+        event = await client.get_event(event_ticker)
 
-    # Disconnect gracefully
-    await ws_client.disconnect()
+    if ctx:
+        await ctx.info(f"Event: {event.title}")
+        await ctx.info(f"Category: {event.category}")
+        if event.strike_date:
+            await ctx.info(f"Strike date: {event.strike_date}")
 
-    return {
-        "status": "disconnected",
-        "connection_id": connection_id,
-        "message": "WebSocket connection closed",
-    }
+    return event
+
+
+@mcp.tool
+async def kalshi_get_orderbook(
+    ticker: Annotated[
+        str,
+        Field(description="Market ticker symbol")
+    ],
+    depth: Annotated[
+        int,
+        Field(description="Number of price levels per side", ge=1, le=100)
+    ] = 10,
+    ctx: Context | None = None,
+) -> OrderBook:
+    """
+    Get order book depth for a market (bids and asks).
+
+    Args:
+        ticker: Market ticker
+        depth: Number of price levels per side (default: 10)
+
+    Returns:
+        Order book with bids and asks for YES and NO sides
+
+    Shows available liquidity at each price level. Useful for
+    understanding market depth before placing large orders.
+
+    Example:
+        book = kalshi_get_orderbook("KXBTC-31DEC-50K", depth=5)
+        # Returns top 5 levels of bids/asks for both YES and NO
+    """
+    if ctx:
+        await ctx.info(f"Fetching order book for {ticker} (depth={depth})...")
+
+    async with KalshiClient.from_env() as client:
+        orderbook = await client.get_orderbook(ticker, depth=depth)
+
+    if ctx:
+        if orderbook.yes_bids or orderbook.yes_asks:
+            yes_best_bid = orderbook.yes_bids[0].price if orderbook.yes_bids else None
+            yes_best_ask = orderbook.yes_asks[0].price if orderbook.yes_asks else None
+            spread = orderbook.yes_spread
+
+            await ctx.info(
+                f"YES market: "
+                f"Best bid: {yes_best_bid}¢ | "
+                f"Best ask: {yes_best_ask}¢ | "
+                f"Spread: {spread}¢" if spread else "N/A"
+            )
+            await ctx.info(f"Total YES liquidity: {orderbook.yes_depth} contracts")
+        else:
+            await ctx.info("No liquidity in order book")
+
+    return orderbook
+
+
+@mcp.tool
+async def kalshi_get_trades(
+    ticker: Annotated[
+        str | None,
+        Field(description="Filter by market ticker (optional)")
+    ] = None,
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of trades to return", ge=1, le=200)
+    ] = 100,
+    ctx: Context | None = None,
+) -> list[Trade]:
+    """
+    Get recent public trades (market activity).
+
+    Args:
+        ticker: Filter by market ticker (optional)
+        limit: Maximum results (1-200)
+
+    Returns:
+        List of recent trades with prices and volumes
+
+    Shows recent trade flow - useful for understanding market
+    momentum, execution prices, and trading activity patterns.
+
+    Example:
+        trades = kalshi_get_trades(ticker="KXBTC-31DEC-50K", limit=50)
+        # Returns last 50 trades on this market
+    """
+    if ctx:
+        filter_desc = f" for {ticker}" if ticker else ""
+        await ctx.info(f"Fetching recent trades{filter_desc}...")
+
+    async with KalshiClient.from_env() as client:
+        trades = await client.get_trades(ticker=ticker, limit=limit)
+
+    if ctx:
+        if trades:
+            total_volume = sum(t.volume_dollars for t in trades)
+            await ctx.info(
+                f"Found {len(trades)} trade(s) | "
+                f"Total volume: ${total_volume:.2f}"
+            )
+            # Show 3 most recent trades
+            for i, trade in enumerate(trades[:3], 1):
+                side_emoji = "🟢" if trade.side == "yes" else "🔴"
+                await ctx.info(
+                    f"{i}. {side_emoji} {trade.side.upper()} "
+                    f"{trade.count}x @ {trade.price}¢ "
+                    f"(${trade.volume_dollars:.2f})"
+                )
+        else:
+            await ctx.info("No recent trades found")
+
+    return trades
+
+
+# ============================================================================
+# RESOURCES (Optional but useful for context)
+# ============================================================================
+
+
+@mcp.resource("kalshi://account/balance")
+async def get_balance_resource() -> str:
+    """Current account balance as a resource."""
+    async with KalshiClient.from_env() as client:
+        balance = await client.get_balance()
+    return f"Account Balance: ${balance.balance_dollars:.2f} ({balance.balance} cents)"
+
+
+@mcp.resource("kalshi://exchange/status")
+async def get_exchange_status_resource() -> str:
+    """Exchange operational status as a resource."""
+    async with KalshiClient.from_env() as client:
+        status = await client.get_exchange_status()
+
+    lines = [
+        f"Exchange Status: {'✅ ONLINE' if status.exchange_active else '❌ OFFLINE'}",
+        f"Trading: {'✅ ACTIVE' if status.trading_active else '⏸️ HALTED'}"
+    ]
+    return "\n".join(lines)
+
+
+# ============================================================================
+# SERVER LIFECYCLE
+# ============================================================================
 
 
 if __name__ == "__main__":
-    # Run the MCP server
+    # This allows running the server directly for testing
+    # In production, wrapper scripts import and run via mcp.run()
+    logger.info(f"Starting Kalshi MCP server in {env} mode...")
     mcp.run()

@@ -1,0 +1,637 @@
+# Prediction Market Interface - Project Documentation
+
+## ⚠️ CRITICAL: When MCP Server Restart is Required
+
+**ANY code changes to the MCP server or its dependencies (server, client, models) require a Claude Code session restart to take effect when testing via MCP tools.**
+
+### When Restart IS Required:
+
+✅ **After ANY code changes when testing MCP tools** - Claude Code caches the MCP server process
+- Changes to: `src/kalshi/kalshi_mcp_server.py`, `src/kalshi/client.py`, `src/kalshi/models.py`
+- **How to restart:** User must completely restart Claude Code session (quit and reopen)
+- Example: After fixing orderbook bug, user must restart before `@kalshi_demo get_orderbook` will work
+
+✅ **All MCP tool testing via `@kalshi_demo` or `@kalshi_prod`**
+- MCP server is launched once and cached by Claude Code
+- Code changes don't reload until full session restart
+
+### When Restart is NOT Required:
+
+❌ **Running integration tests** - Tests import code directly, see changes immediately
+❌ **Testing via `uv run pytest`** - Always uses latest code
+❌ **General development work** - Edit/test cycle doesn't need restarts
+
+### Development Workflow:
+
+**Correct pattern:**
+```
+1. Make code changes (fix bug, add feature)
+2. Run tests: `uv run pytest` - Changes visible immediately ✓
+3. User restarts Claude Code session
+4. Test MCP tools: `@kalshi_demo <command>` - Changes now visible ✓
+```
+
+**Common mistake:**
+```
+1. Make code changes
+2. Try `@kalshi_demo <command>` - OLD CODE still running ✗
+3. Wonder why changes don't work ✗
+```
+
+**DO NOT:**
+- ❌ Tell user to restart for running integration tests (not needed)
+- ❌ Attempt to use `claude mcp restart` (doesn't exist - must restart full session)
+- ❌ Expect MCP tools to reflect code changes without restart
+
+---
+
+## Project Documentation
+
+### Product Requirements
+
+- @docs/kalshi-mcp-prd.md — **Kalshi MCP Server PRD** - Complete product requirements, Phase 1 completion status, implementation statistics, and roadmap for future phases.
+
+### Agent Documentation
+
+Refer to the curated docs for detailed guidance:
+
+- @docs/kalshi/index.md and related subpages — Kalshi agent architecture, SDK usage, and API reference.
+- @docs/polymarket/index.md and related subpages — Polymarket agent overview, quickstarts, and developer guides.
+- @docs/gofastmcp/INDEX.md and related subpages— Complete FastMCP framework documentation mirror including servers, clients, deployment, integrations, and Python SDK reference.
+
+## MCP Server Setup - FastMCP
+
+### FastMCP + UV Dependency Resolution
+
+**Issue**: When registering a FastMCP server with Claude Code, using `fastmcp run server.py` directly fails with "No module named" errors, even if dependencies are in `pyproject.toml`.
+
+**Root Cause**: The `fastmcp run` command doesn't inherit the project's `uv` environment. It spawns a subprocess that can't find project dependencies, only globally-installed packages.
+
+#### ✅ Solution: Wrapper Script
+
+Instead of pointing Claude Code directly at the FastMCP server file, create a wrapper script that runs within the `uv` project environment:
+
+**1. Create wrapper script** (`run_kalshi_mcp.py` in project root):
+```python
+#!/usr/bin/env python3
+"""Wrapper script to run the Kalshi MCP server."""
+
+if __name__ == "__main__":
+    from src.kalshi.kalshi_mcp_server import mcp
+    mcp.run()
+```
+
+**2. Register with Claude Code**:
+```bash
+# Install fastmcp as a uv tool (one-time)
+uv tool install fastmcp
+
+# Add to Claude Code (respects project dependencies via uv run)
+claude mcp add kalshi_mcp_server -- uv run run_kalshi_mcp.py
+```
+
+**3. Verify**:
+```bash
+claude mcp list | grep kalshi_mcp_server  # Should show ✓ Connected
+```
+
+#### Why This Works
+
+- ✅ `uv run wrapper.py` automatically loads project dependencies from `pyproject.toml`
+- ✅ Wrapper imports and runs the FastMCP server within that dependency-rich environment
+- ✅ No need to hardcode `--with loguru --with fastmcp` flags (dependencies are in config)
+- ✅ Avoids subprocess isolation issues with `fastmcp run`
+
+#### ❌ Anti-Pattern: Direct fastmcp run
+
+```bash
+# ❌ DON'T - Subprocess can't find project dependencies
+claude mcp add kalshi_mcp_server -- uv run fastmcp run src/kalshi/kalshi_mcp_server.py
+
+# ❌ DON'T - Even with explicit --with flags, dependency resolution is fragile
+fastmcp install claude-code src/kalshi/kalshi_mcp_server.py --with loguru
+```
+
+#### Key Insight
+
+The wrapper approach works because:
+1. `uv run wrapper.py` = "run this Python file in the project environment"
+2. Project environment includes all `pyproject.toml` dependencies
+3. `wrapper.py` imports the actual MCP server (now dependencies are already loaded)
+4. FastMCP's `mcp.run()` uses STDIO by default (what Claude Code expects)
+
+**Reference**: Kalshi MCP server setup (Nov 2025)
+
+### Project-Level MCP Configuration - Proper Pattern
+
+**Pattern**: Store project-specific MCP servers in `.mcp.json` at project root with explicit working directories.
+
+#### Setup Steps
+
+**1. Create wrapper script** that loads `.env` BEFORE importing server:
+
+```python
+#!/usr/bin/env python3
+"""Wrapper script must load env vars before importing server."""
+
+from dotenv import load_dotenv
+
+# Load .env FIRST - server validates credentials at import time
+load_dotenv()
+
+if __name__ == "__main__":
+    from src.kalshi.kalshi_mcp_server import mcp
+    mcp.run()
+```
+
+**2. Register with project scope:**
+
+```bash
+# Use --scope project flag to store in .mcp.json
+claude mcp add kalshi_mcp_server --scope project -- bash -c "cd /full/path && uv run wrapper.py"
+```
+
+This creates `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "server_name": {
+      "type": "stdio",
+      "command": "bash",
+      "args": ["-c", "cd /full/path && uv run wrapper.py"],
+      "env": {}
+    }
+  }
+}
+```
+
+**3. Enable project servers in `.claude/settings.json`:**
+
+```json
+{
+  "enableAllProjectMcpServers": true
+}
+```
+
+#### Key Patterns
+
+| Pattern | Why |
+|---------|-----|
+| `.mcp.json` at project root | Claude Code auto-discovers it |
+| Explicit working directory in bash command | MCP may run from different context |
+| `load_dotenv()` BEFORE import | Server validates credentials at module load |
+| `--scope project` flag | Keeps servers isolated from user config |
+| `enableAllProjectMcpServers: true` | Allows project config to be recognized |
+
+#### What NOT to Do
+
+```bash
+❌ Don't: .claude/claude.json (wrong location)
+❌ Don't: load_dotenv() AFTER import (env vars unavailable)
+❌ Don't: Relative paths in bash command (fails from different contexts)
+❌ Don't: Add to user level if project-specific (pollutes global config)
+```
+
+## Credentials & Secrets Management
+
+### Overview
+
+The project uses a dual-environment credential system for Kalshi trading:
+- **Production** environment (real money) - `.env.kalshi.prod`
+- **Demo** environment (test money) - `.env.kalshi.demo`
+
+Both `.env` files and the `secrets/` directory are gitignored for security.
+
+### File Structure
+
+```
+.
+├── .env.kalshi.prod           # Production API credentials (gitignored)
+├── .env.kalshi.demo           # Demo API credentials (gitignored)
+├── secrets/                   # Private keys directory (gitignored)
+│   ├── kalshi_prod_private_key.txt
+│   └── kalshi_demo_private_key.txt
+├── .gitignore                 # Excludes .env* and secrets/
+└── run_kalshi_mcp_*.py        # Wrapper scripts (load appropriate .env)
+```
+
+### Environment File Format
+
+**Production (.env.kalshi.prod):**
+```bash
+# Kalshi Production API Credentials
+KALSHI_API_KEY=your_prod_api_key_here
+KALSHI_PRIVATE_KEY_PATH=./secrets/kalshi_prod_private_key.txt
+KALSHI_ENVIRONMENT=production
+
+# API Configuration
+KALSHI_BASE_URL=https://trading-api.kalshi.com
+KALSHI_API_VERSION=v2
+
+# Safety Limits (Production)
+KALSHI_MAX_ORDER_SIZE=100
+KALSHI_DAILY_ORDER_LIMIT=50
+KALSHI_LARGE_ORDER_THRESHOLD=50
+KALSHI_MAX_BALANCE_USAGE_PCT=25
+```
+
+**Demo (.env.kalshi.demo):**
+```bash
+# Kalshi Demo API Credentials
+KALSHI_API_KEY=your_demo_api_key_here
+KALSHI_PRIVATE_KEY_PATH=./secrets/kalshi_demo_private_key.txt
+KALSHI_ENVIRONMENT=demo
+
+# API Configuration
+KALSHI_BASE_URL=https://demo-api.kalshi.co
+KALSHI_API_VERSION=v2
+
+# Safety Limits (Demo - more permissive)
+KALSHI_MAX_ORDER_SIZE=1000
+KALSHI_DAILY_ORDER_LIMIT=500
+KALSHI_LARGE_ORDER_THRESHOLD=500
+KALSHI_MAX_BALANCE_USAGE_PCT=100
+```
+
+### Private Keys
+
+Private keys are stored in `secrets/` directory and referenced by path in `.env` files.
+
+**Obtaining Private Keys:**
+1. Log into Kalshi (production or demo environment)
+2. Navigate to API settings
+3. Generate API key pair
+4. Save private key to `secrets/kalshi_{env}_private_key.txt`
+5. Add public key to `.env.kalshi.{env}` as `KALSHI_API_KEY`
+
+### Wrapper Scripts Load Environment
+
+Each MCP server wrapper loads its specific environment:
+
+**run_kalshi_mcp_prod.py:**
+```python
+#!/usr/bin/env python3
+"""Wrapper for Kalshi MCP server (PRODUCTION)."""
+from dotenv import load_dotenv
+
+# Load production environment BEFORE importing server
+load_dotenv(".env.kalshi.prod")
+
+if __name__ == "__main__":
+    from src.kalshi.kalshi_mcp_server import mcp
+    mcp.run()
+```
+
+**run_kalshi_mcp_demo.py:**
+```python
+#!/usr/bin/env python3
+"""Wrapper for Kalshi MCP server (DEMO - Safe for testing)."""
+from dotenv import load_dotenv
+
+# Load demo environment BEFORE importing server
+load_dotenv(".env.kalshi.demo")
+
+if __name__ == "__main__":
+    from src.kalshi.kalshi_mcp_server import mcp
+    mcp.run()
+```
+
+### Security Notes
+
+✅ **What IS gitignored:**
+- `.env.kalshi.prod`
+- `.env.kalshi.demo`
+- `secrets/` directory and all contents
+- `.env` (legacy/default)
+
+✅ **What is NOT gitignored (safe to commit):**
+- `.env.example` - Template showing required variables
+- Wrapper scripts (`run_kalshi_mcp_*.py`)
+- Documentation about credential setup
+
+### Setup Checklist
+
+When setting up on a new machine:
+
+1. **Create secrets directory:**
+   ```bash
+   mkdir -p secrets
+   chmod 700 secrets  # Owner only
+   ```
+
+2. **Obtain Kalshi credentials:**
+   - Sign up at https://kalshi.com (production)
+   - Sign up at https://demo.kalshi.co (demo)
+   - Generate API keys for both
+
+3. **Create production private key file:**
+   ```bash
+   echo "your_prod_private_key_here" > secrets/kalshi_prod_private_key.txt
+   chmod 600 secrets/kalshi_prod_private_key.txt
+   ```
+
+4. **Create demo private key file:**
+   ```bash
+   echo "your_demo_private_key_here" > secrets/kalshi_demo_private_key.txt
+   chmod 600 secrets/kalshi_demo_private_key.txt
+   ```
+
+5. **Create .env.kalshi.prod:**
+   ```bash
+   cp .env.example .env.kalshi.prod
+   # Edit and fill in production values
+   ```
+
+6. **Create .env.kalshi.demo:**
+   ```bash
+   cp .env.example .env.kalshi.demo
+   # Edit and fill in demo values
+   ```
+
+7. **Verify setup:**
+   ```bash
+   # Check files exist and are secure
+   ls -la .env.kalshi.*
+   ls -la secrets/
+
+   # Ensure proper permissions
+   chmod 600 .env.kalshi.*
+   chmod 600 secrets/*
+   ```
+
+### Testing with Credentials
+
+**Integration tests** use demo credentials automatically:
+
+```bash
+# Tests load .env.kalshi.demo via conftest.py
+uv run pytest tests/kalshi/integration/
+```
+
+**Manual testing** via MCP servers:
+
+```bash
+# Test with demo server (safe, fake money)
+# In Claude Code:
+User: "@kalshi_demo search for bitcoin markets"
+
+# Use production server (real money - be careful!)
+User: "@kalshi_prod check my balance"
+```
+
+### Testing Patterns
+
+**FastMCP Client in pytest** - Don't use fixtures, creates event loop context mismatch:
+
+```python
+# ❌ DON'T - Async fixture hangs
+@pytest.fixture
+async def mcp_client():
+    async with Client(mcp) as client:
+        yield client  # Test hangs when using client
+
+# ✅ DO - Create client directly in test
+@pytest.mark.asyncio
+async def test_my_tool(demo_env):
+    from src.kalshi.kalshi_mcp_server import mcp
+    async with Client(mcp) as client:
+        result = await client.call_tool("my_tool", {})
+```
+
+### Troubleshooting
+
+**Error: "Invalid API credentials"**
+- Check API key is correct in `.env` file
+- Verify private key file exists at path specified
+- Ensure no trailing whitespace in credentials
+- Confirm you're using matching env (demo key → demo API, prod key → prod API)
+
+**Error: "Permission denied" reading private key**
+- Check file permissions: `chmod 600 secrets/*`
+- Verify file path in `.env` is correct (relative or absolute)
+
+**Error: "Module not found" when running wrapper**
+- Ensure you're using `uv run wrapper.py` (loads project dependencies)
+- Don't use `python wrapper.py` directly
+
+**⚠️ CRITICAL: Environment Variable Override Required**
+
+When multiple `.env` files exist, `load_dotenv()` **does NOT override by default**:
+
+```python
+# ❌ WRONG - Won't override existing vars from .env
+load_dotenv(".env.kalshi.demo")
+
+# ✅ CORRECT - Forces demo values to replace .env values
+load_dotenv(".env.kalshi.demo", override=True)
+```
+
+**Why this matters:**
+- If `.env` loads first (production credentials)
+- Then `.env.kalshi.demo` loads without `override=True`
+- Result: Mixed credentials (demo API key + prod private key) → 401 errors
+
+**Always use `override=True` in environment-specific wrapper scripts** to ensure the intended credentials win.
+
+---
+
+## Testing Anti-Patterns & Gotchas
+
+### VCR Cassettes Can Hide Bugs
+
+**Problem:** VCR cassettes replay successful HTTP interactions, masking bugs that only appear with real API calls.
+
+**Example bugs missed by cassettes:**
+
+1. **Auth signature bugs** - Cassettes replay old successful auth, even if signature algorithm is completely wrong
+2. **Parsing bugs with null data** - If cassettes have `null` orderbooks, bad parsing code never executes
+3. **Env loading issues** - Tests explicitly load `.env.kalshi.demo` in `conftest.py`, bypassing wrapper script bugs
+
+**Prevention checklist:**
+
+- [ ] Audit VCR cassettes for realistic data (not just nulls/empty responses)
+- [ ] Periodically re-record cassettes to catch API changes
+- [ ] Add tests with real API responses, not just null data
+- [ ] Test MCP tools via `@kalshi_demo` in addition to running `uv run pytest`
+- [ ] When auth works in tests but fails in MCP, check env loading in wrapper scripts
+
+**Pattern from this project:**
+
+```
+✅ Tests passed (using VCR cassettes)
+❌ MCP tools failed (real API calls)
+
+Root causes found:
+1. Auth signature included body (wrong per docs, but cassettes masked it)
+2. Orderbook parser expected nested structure (cassettes had null, didn't trigger)
+3. Env vars mixed prod/demo (tests bypass wrapper script, didn't catch)
+```
+
+**Lesson:** **Passing tests ≠ working code** when cassettes have unrealistic data. Always test MCP tools directly after code changes.
+
+### When Tests Pass But MCP Fails
+
+**Debugging checklist:**
+
+1. **Check if using VCR cassettes**
+   - Look for `@pytest.mark.vcr` or `tests/cassettes/` directory
+   - Cassettes bypass real authentication and API calls
+
+2. **Test outside MCP first**
+   - Run `uv run python -c "...test code..."` with `load_dotenv()` explicitly
+   - This bypasses both MCP caching AND test fixtures
+
+3. **Check environment loading**
+   - Print env vars in wrapper script to verify values
+   - Ensure `override=True` in `load_dotenv()` calls
+   - Look for multiple `.env` files that might conflict
+
+4. **Verify credentials are paired correctly**
+   - API key and private key must come from same generation
+   - Check file paths are absolute (or relative to correct directory)
+   - Confirm demo/prod environments aren't mixed
+
+5. **Restart Claude Code after fixes**
+   - MCP server is cached - code changes need full restart
+   - Don't expect changes to take effect until restart
+
+**Common pattern:** If direct client test works but MCP fails, the issue is in environment loading or MCP server initialization, not the core logic.
+
+---
+
+## Project Structure
+
+### Data Models (`src/kalshi/models.py`)
+
+**Core Models (10 total)**:
+
+1. **ExchangeStatus** - Exchange operational status
+2. **Balance** - Account balance with dollar conversions
+3. **Market** - Market details with prices, volume, interpretation
+4. **Event** - Event metadata (collection of related markets)
+5. **Order** - Order details with fill status and prices
+6. **Position** - Portfolio position with P&L calculations
+7. **Fill** - Trade execution details with costs and fees
+8. **OrderBook** - Order book depth with bids/asks for YES/NO sides
+9. **OrderBookLevel** - Single price level in order book
+10. **Trade** - Public trade details with volume calculations
+
+**Key Model Patterns:**
+- All models use Pydantic v2 for validation
+- Helper properties for computed values (e.g., `balance_dollars`, `pnl_dollars`)
+- Optional fields for API flexibility
+- Type-safe datetime handling
+
+### MCP Tools (16 total)
+
+**Authentication (2 tools):**
+- `kalshi_get_exchange_status` - Check exchange operational status
+- `kalshi_get_balance` - Get account balance
+
+**Market Discovery (6 tools):**
+- `kalshi_search_markets` - Search markets by query/status
+- `kalshi_get_market` - Get single market details
+- `kalshi_get_events` - List events (collections of markets)
+- `kalshi_get_event` - Get single event details
+- `kalshi_get_orderbook` - Get order book depth (bids/asks)
+- `kalshi_get_trades` - Get recent public trades
+
+**Order Execution (5 tools):**
+- `kalshi_create_market_order` - Create market order (immediate execution)
+- `kalshi_create_limit_order` - Create limit order (price-controlled)
+- `kalshi_cancel_order` - Cancel pending order
+- `kalshi_amend_order` - Modify order without losing queue position
+- `kalshi_decrease_order` - Reduce order size
+
+**Portfolio Management (3 tools):**
+- `kalshi_get_positions` - Get current positions with P&L
+- `kalshi_get_fills` - Get trade execution history
+- `kalshi_get_orders` - Get orders (active/filled/canceled)
+
+### Client Methods (`src/kalshi/client.py`)
+
+**KalshiClient** provides async methods for all API operations:
+- Authentication with RSA-PSS signature
+- Rate limiting and error handling
+- Context manager support (`async with KalshiClient() as client`)
+- Environment-based initialization (`from_env()`)
+
+**Key Methods:**
+- Exchange: `get_exchange_status()`, `get_balance()`
+- Markets: `search_markets()`, `get_market()`, `get_orderbook()`, `get_trades()`
+- Events: `get_events()`, `get_event()`
+- Orders: `create_order()`, `cancel_order()`, `amend_order()`, `decrease_order()`, `get_orders()`
+- Portfolio: `get_positions()`, `get_fills()`
+
+### Testing Infrastructure
+
+**VCR Cassettes (48 total)**:
+- Automatic HTTP interaction recording/replay
+- Configured in `tests/conftest.py` with automatic marking
+- Filter sensitive headers (API keys, signatures)
+- Tests run 2.5x faster (9s vs 23s without cassettes)
+
+**Test Structure:**
+```
+tests/kalshi/integration/
+├── test_client.py                    # Client method tests
+├── test_mcp_tools.py                 # Protocol-level MCP tests
+├── test_mcp_order_tools.py          # Order execution tests
+├── test_mcp_portfolio_tools.py      # Portfolio management tests
+├── test_mcp_discovery_tools.py      # Market discovery tests
+└── test_tool_functions.py           # Direct tool function tests
+```
+
+**53 integration tests** covering:
+- All 16 MCP tools
+- Client methods
+- Error handling
+- Workflow scenarios
+- Safety limits validation
+
+### Common API Patterns
+
+**Endpoint Path Corrections:**
+- ✅ Trades: `/markets/trades` (NOT `/trades`)
+- ✅ Market: `/markets/{ticker}`
+- ✅ Events: `/events` and `/events/{event_ticker}`
+
+**API Response Structures:**
+- Most endpoints return data wrapped: `{"markets": [...]}`, `{"orders": [...]}`
+- Trade endpoint returns prices as floats (dollars), not cents
+- Order book returns nested structure with YES/NO bids/asks
+- Pagination uses `limit` parameter (max varies by endpoint)
+
+**Safety Patterns:**
+- Always check balance before order creation
+- Validate order size against MAX_ORDER_SIZE
+- Log context updates for LLM visibility
+- Handle empty result sets gracefully (positions, fills, orders)
+
+---
+
+## Known Issues & Gotchas
+
+### Trade Model vs Fill Model
+
+- **Trade** = Public trades endpoint (`/markets/trades`) - uses float prices in dollars
+- **Fill** = Personal fills endpoint (`/portfolio/fills`) - uses int prices in cents
+- These are different data structures despite similar concepts
+
+### Order Book Data Format
+
+API returns order book levels as nested arrays:
+```python
+{
+  "yes": {"bids": [[price, quantity], ...], "asks": [...]},
+  "no": {"bids": [...], "asks": [...]}
+}
+```
+
+Client converts to structured `OrderBookLevel` objects for type safety.
+
+### Empty Response Handling
+
+Tools that return lists (positions, fills, orders) may return empty lists. MCP tools handle this gracefully with appropriate context messages ("No positions found").
+```

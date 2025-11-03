@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/HIGHTEST-24/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:14:47 GMT
+      Via:
+      - 1.1 4a388ec8ea42024279163b19a36240ea.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - xyjda76x3gHtyOTmBTi0LdfyDu4jAOAMfydLbkOVcC4O84Yksvjj0w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

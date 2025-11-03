@@ -1,373 +1,245 @@
-"""Pydantic models for Kalshi API data structures."""
+"""Pydantic models for Kalshi API requests and responses."""
 
 from datetime import datetime
-from typing import Optional, List, Union
-from enum import Enum
-
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-
-
-class MarketStatus(str, Enum):
-    """Market trading status."""
-    UNOPENED = "unopened"
-    OPEN = "open"
-    ACTIVE = "active"  # Real API sometimes returns this
-    CLOSED = "closed"
-    SETTLED = "settled"
-
-
-class OrderSide(str, Enum):
-    """Order side: buy or sell."""
-    BUY = "buy"
-    SELL = "sell"
-
-
-class OrderType(str, Enum):
-    """Order type: limit or market."""
-    LIMIT = "limit"
-    MARKET = "market"
-
-
-class OrderStatus(str, Enum):
-    """Order status."""
-    RESTING = "resting"
-    CANCELED = "canceled"
-    EXECUTED = "executed"
-
-
-class EventStatus(str, Enum):
-    """Event status."""
-    OPEN = "open"
-    CLOSED = "closed"
-    SETTLED = "settled"
-
-
-class Market(BaseModel):
-    """Kalshi market data - matches actual API response format."""
-
-    # Core identifiers
-    ticker: str = Field(..., description="Unique market identifier (e.g., KXHARRIS24-LSV)")
-    title: str = Field(..., description="Market display name")
-    subtitle: Optional[str] = Field(None, description="Secondary title")
-    status: MarketStatus = Field(..., description="Market trading status (unopened/open/closed/settled)")
-
-    # Event/Series relationships (optional - API may provide different fields)
-    event_ticker: Optional[str] = Field(None, description="Parent event identifier")
-    mve_collection_ticker: Optional[str] = Field(None, description="Multivariate collection identifier")
-
-    # Category and type information
-    category: Optional[str] = Field(None, description="Market category")
-    market_type: Optional[str] = Field(None, description="Market type (e.g., 'binary')")
-    strike_type: Optional[str] = Field(None, description="Strike type for custom strike markets")
-
-    # Pricing - YES side (in cents, 0-100 range)
-    yes_bid: Optional[float] = Field(None, description="Current yes side best bid (cents)")
-    yes_ask: Optional[float] = Field(None, description="Current yes side best ask (cents)")
-    yes_bid_dollars: Optional[str] = Field(None, description="yes_bid formatted in dollars")
-    yes_ask_dollars: Optional[str] = Field(None, description="yes_ask formatted in dollars")
-
-    # Pricing - NO side (in cents, 0-100 range)
-    no_bid: Optional[float] = Field(None, description="Current no side best bid (cents)")
-    no_ask: Optional[float] = Field(None, description="Current no side best ask (cents)")
-    no_bid_dollars: Optional[str] = Field(None, description="no_bid formatted in dollars")
-    no_ask_dollars: Optional[str] = Field(None, description="no_ask formatted in dollars")
-
-    # Recent prices
-    last_price: Optional[float] = Field(None, description="Most recent trade price (cents)")
-    last_price_dollars: Optional[str] = Field(None, description="last_price formatted in dollars")
-    previous_price: Optional[float] = Field(None, description="Previous trade price")
-    previous_price_dollars: Optional[str] = Field(None, description="previous_price formatted in dollars")
-
-    # Volume & Liquidity
-    volume: Optional[int] = Field(None, description="Total contracts traded (all time)")
-    volume_24h: Optional[int] = Field(None, description="Total contracts traded in 24h")
-    open_interest: Optional[int] = Field(None, description="Open position count")
-    liquidity: Optional[int] = Field(None, description="Current market liquidity")
-    liquidity_dollars: Optional[str] = Field(None, description="Liquidity formatted in dollars")
-
-    # Timestamps (actual API field names)
-    open_time: Optional[str] = Field(None, description="ISO timestamp of market open")
-    close_time: Optional[str] = Field(None, description="ISO timestamp of market close")
-    expiration_time: Optional[str] = Field(None, description="ISO timestamp of expiration")
-    expected_expiration_time: Optional[str] = Field(None, description="Expected expiration time")
-    latest_expiration_time: Optional[str] = Field(None, description="Latest expiration time")
-    settlement_timer_seconds: Optional[int] = Field(None, description="Seconds until settlement")
-
-    # Settlement info
-    result: Optional[str] = Field(None, description="Settlement result (yes/no)")
-    expiration_value: Optional[str] = Field(None, description="Settlement value")
-
-    # Additional metadata
-    can_close_early: Optional[bool] = Field(None, description="Whether market can close early")
-    notional_value: Optional[int] = Field(None, description="Notional value")
-    notional_value_dollars: Optional[str] = Field(None, description="Notional value in dollars")
-    rules_primary: Optional[str] = Field(None, description="Primary rules")
-    rules_secondary: Optional[str] = Field(None, description="Secondary rules")
-
-
-class Orderbook(BaseModel):
-    """Order book for a market."""
-
-    ticker: str = Field(..., description="Market ticker")
-    bids: List[tuple[float, int]] = Field(default_factory=list, description="List of (price, size) bids")
-    asks: List[tuple[float, int]] = Field(default_factory=list, description="List of (price, size) asks")
-    timestamp: int = Field(..., description="Orderbook timestamp (Unix ms)")
-
-
-class Trade(BaseModel):
-    """Executed trade."""
-
-    model_config = ConfigDict(populate_by_name=True)
-
-    market_ticker: str = Field(..., alias="ticker", description="Market ticker")
-    price: float = Field(..., description="Execution price (cents)")
-    size: int = Field(..., alias="count", description="Number of contracts traded")
-    timestamp: int = Field(..., alias="created_at", description="Trade timestamp (Unix ms)")
-
-
-class Order(BaseModel):
-    """User order."""
-
-    id: str = Field(..., description="Unique order identifier")
-    ticker: str = Field(..., description="Market ticker")
-    status: OrderStatus = Field(..., description="Order status")
-    side: OrderSide = Field(..., description="Buy or sell")
-    type: OrderType = Field(..., description="Limit or market")
-    price: int = Field(..., description="Limit price in cents (1-99)")
-    count: int = Field(..., description="Total contracts")
-    fill_count: int = Field(..., description="Filled contracts")
-    remaining_count: int = Field(..., description="Unfilled contracts")
-    created_at: str = Field(..., description="ISO timestamp")
-    last_updated_at: str = Field(..., description="ISO timestamp")
-
-
-class CreateOrderRequest(BaseModel):
-    """Request to create an order."""
-
-    ticker: str = Field(..., description="Market identifier")
-    side: OrderSide = Field(..., description="Buy or sell")
-    type: OrderType = Field(default=OrderType.LIMIT, description="Limit or market")
-    price: Optional[int] = Field(None, description="Limit price in cents (1-99, required for limit orders)")
-    count: int = Field(..., description="Number of contracts")
-    expire_at: Optional[int] = Field(None, description="Unix timestamp for order expiration")
-    order_group_id: Optional[str] = Field(None, description="Optional order group for risk management")
-
-
-class Position(BaseModel):
-    """User position in a market."""
-
-    ticker: str = Field(..., description="Market ticker")
-    event_ticker: str = Field(..., description="Event identifier")
-    side: str = Field(..., description="long or short")
-    position: int = Field(..., description="Net contracts held")
-    fill_price: int = Field(..., description="Average fill price (cents)")
-    total_traded: int = Field(..., description="Lifetime contracts traded")
-    resting_order_count: int = Field(..., description="Active orders count")
-
-
-class Fill(BaseModel):
-    """Executed fill/trade."""
-
-    market_ticker: str = Field(..., description="Market ticker")
-    order_id: str = Field(..., description="Order identifier")
-    is_buy: bool = Field(..., description="True if buy order, False if sell")
-    quantity: int = Field(..., description="Contracts filled")
-    price: float = Field(..., description="Execution price (cents)")
-    timestamp: int = Field(..., description="Unix timestamp (seconds)")
-
-
-class Balance(BaseModel):
-    """Account balance and portfolio value."""
-
-    balance: int = Field(..., description="Account balance in cents")
-    portfolio_value: int = Field(..., description="Total portfolio value in cents (unrealized + cash)")
-
-
-class Candlestick(BaseModel):
-    """OHLCV candlestick data."""
-
-    start_ts: int = Field(..., description="Period start (Unix seconds)")
-    end_ts: int = Field(..., description="Period end (Unix seconds)")
-    open: float = Field(..., description="Opening price (cents)")
-    high: float = Field(..., description="High price (cents)")
-    low: float = Field(..., description="Low price (cents)")
-    close: float = Field(..., description="Closing price (cents)")
-    volume: int = Field(..., description="Contracts traded")
-
-
-class Event(BaseModel):
-    """Kalshi event - matches actual API response format."""
-
-    event_ticker: str = Field(..., description="Event identifier (e.g., PRES-2024)")
-    title: str = Field(..., description="Event name")
-    sub_title: Optional[str] = Field(None, description="Event subtitle")
-    category: Optional[str] = Field(None, description="Event category")
-    series_ticker: Optional[str] = Field(None, description="Associated series template")
-
-    # Event properties
-    strike_period: Optional[str] = Field(None, description="Strike period information")
-    mutually_exclusive: Optional[bool] = Field(None, description="Whether markets are mutually exclusive")
-    available_on_brokers: Optional[Union[bool, List[str]]] = Field(None, description="Brokers where available (bool or list)")
-    collateral_return_type: Optional[str] = Field(None, description="Collateral return type")
-
-    # For compatibility with old code that uses 'ticker'
-    @property
-    def ticker(self) -> str:
-        """Alias for event_ticker for backward compatibility."""
-        return self.event_ticker
-
-    # Legacy fields (optional for backward compatibility)
-    description: Optional[str] = Field(None, description="Event details")
-    created_at: Optional[str] = Field(None, description="ISO timestamp")
-    status: Optional[EventStatus] = Field(None, description="Event status")
-    markets: Optional[List[Market]] = Field(None, description="Nested markets (optional)")
-
-    @field_validator("available_on_brokers", mode="before")
-    @classmethod
-    def normalize_available_on_brokers(cls, v):
-        """Normalize available_on_brokers to handle both bool and list.
-
-        The API sometimes returns this as a boolean flag, sometimes as a list.
-        We keep it as-is to maintain fidelity with the API response.
-        """
-        return v
-
-
-class Series(BaseModel):
-    """Kalshi series template."""
-
-    ticker: str = Field(..., description="Series identifier")
-    title: str = Field(..., description="Series name")
-    description: Optional[str] = Field(None, description="Series details")
-    category: Optional[str] = Field(None, description="Series category")
-    created_at: Optional[str] = Field(None, description="ISO timestamp")
-
-
-class OrderGroup(BaseModel):
-    """Order group for risk management."""
-
-    id: str = Field(..., description="Order group identifier")
-    contract_limit: int = Field(..., description="Maximum contracts allowed in group")
-    matched_contracts: int = Field(..., description="Currently matched contracts")
-
-
-class Milestone(BaseModel):
-    """Event milestone."""
-
-    id: str = Field(..., description="Milestone identifier")
-    event_ticker: str = Field(..., description="Associated event")
-    title: str = Field(..., description="Milestone title")
-    timestamp: int = Field(..., description="Milestone timestamp (Unix seconds)")
-    source: str = Field(..., description="Milestone source")
-
-
-class RFQ(BaseModel):
-    """Request for Quote - market maker solicitation."""
-
-    id: str = Field(..., description="RFQ identifier")
-    ticker: str = Field(..., description="Market ticker")
-    side: OrderSide = Field(..., description="Buy or sell")
-    count: int = Field(..., description="Number of contracts")
-    created_at: str = Field(..., description="ISO timestamp of creation")
-    status: str = Field(..., description="RFQ status (open, filled, expired, accepted, confirmed, rejected)")
-    updated_at: Optional[str] = Field(None, description="ISO timestamp of last update")
-    expires_at: Optional[str] = Field(None, description="ISO timestamp of expiration")
-    requester_id: Optional[str] = Field(None, description="User ID of RFQ requester")
-
-
-class Quote(BaseModel):
-    """Quote response to RFQ - market maker response."""
-
-    id: str = Field(..., description="Quote identifier")
-    rfq_id: str = Field(..., description="Associated RFQ ID")
-    ticker: str = Field(..., description="Market ticker")
-    side: OrderSide = Field(..., description="Buy or sell")
-    price: int = Field(..., description="Quoted price (cents)")
-    quantity: int = Field(..., description="Quoted quantity")
-    created_at: str = Field(..., description="ISO timestamp of quote creation")
-    status: str = Field(..., description="Quote status (open, accepted, confirmed, rejected, expired)")
-    quoter_id: Optional[str] = Field(None, description="User ID of quoter")
-    expires_at: Optional[str] = Field(None, description="ISO timestamp of expiration")
-
-
-class MultivarianateCollection(BaseModel):
-    """Multivariate event collection - complex market combinations."""
-
-    ticker: str = Field(..., description="Collection identifier")
-    title: str = Field(..., description="Collection name")
-    description: str = Field(..., description="Collection details")
-    status: str = Field(..., description="Collection status (open/closed/settled)")
-    event_tickers: Optional[List[str]] = Field(None, description="Associated event tickers")
-    market_count: Optional[int] = Field(None, description="Number of markets in collection")
-    created_at: Optional[str] = Field(None, description="ISO timestamp of creation")
-    close_time: Optional[str] = Field(None, description="ISO timestamp of closing")
-
-
-class MarketInCollection(BaseModel):
-    """Market within a multivariate collection."""
-
-    ticker: str = Field(..., description="Market ticker")
-    title: str = Field(..., description="Market title")
-    status: str = Field(..., description="Market status")
-    yes_bid: Optional[float] = Field(None, description="Yes side bid (cents)")
-    yes_ask: Optional[float] = Field(None, description="Yes side ask (cents)")
-    no_bid: Optional[float] = Field(None, description="No side bid (cents)")
-    no_ask: Optional[float] = Field(None, description="No side ask (cents)")
-    collection_ticker: str = Field(..., description="Parent collection ticker")
-
-
-class CollectionLookup(BaseModel):
-    """Lookup result for market tickers in a collection."""
-
-    collection_ticker: str = Field(..., description="Collection ticker")
-    market_ticker: str = Field(..., description="Market ticker")
-    market_title: Optional[str] = Field(None, description="Market title")
-    lookup_tickers: Optional[List[str]] = Field(None, description="Related lookup tickers")
-
-
-class QueuePosition(BaseModel):
-    """Order's position in price-time priority queue."""
-
-    order_id: str = Field(..., description="Order identifier")
-    position: int = Field(..., description="Position in queue (0 = next to execute)")
-    timestamp: int = Field(..., description="Timestamp when order entered queue")
-
-
-class Settlement(BaseModel):
-    """Settlement record - historical P&L tracking."""
-
-    order_id: str = Field(..., description="Associated order ID")
-    ticker: str = Field(..., description="Market ticker")
-    side: OrderSide = Field(..., description="Buy or sell side")
-    count: int = Field(..., description="Number of contracts")
-    price: int = Field(..., description="Settlement price (cents)")
-    payout: int = Field(..., description="Total payout (cents)")
-    created_at: int = Field(..., description="Settlement timestamp (Unix milliseconds)")
-    market_title: Optional[str] = Field(None, description="Market title")
-
-
-class TotalRestingOrderValue(BaseModel):
-    """Total value of all resting orders."""
-
-    total_resting_order_value: int = Field(..., description="Total value of resting orders (cents)")
-
-
-class MarketMakerMetrics(BaseModel):
-    """Market maker performance and activity metrics."""
-
-    total_rfqs: int = Field(..., description="Total RFQs received")
-    open_rfqs: int = Field(..., description="Currently open RFQs")
-    total_quotes: int = Field(..., description="Total quotes provided")
-    accepted_quotes: int = Field(..., description="Quotes accepted by counterparties")
-    quote_acceptance_rate: float = Field(..., description="Percentage of quotes accepted")
-    total_volume: int = Field(..., description="Total contract volume from RFQs")
-    avg_response_time: float = Field(..., description="Average response time to RFQ (seconds)")
-    expiration_rate: float = Field(..., description="Percentage of RFQs that expired")
+from typing import Optional
+from pydantic import BaseModel, Field
 
 
 class ExchangeStatus(BaseModel):
-    """Exchange-wide status information - matches actual API response format."""
+    """Exchange operational status."""
 
-    trading_active: bool = Field(..., description="Is trading currently active")
-    timestamp: int = Field(default=0, description="Status timestamp (Unix seconds)")
-    maintenance: Optional[str] = Field(None, description="Maintenance message if applicable")
+    exchange_active: bool
+    trading_active: bool
+
+
+class Balance(BaseModel):
+    """Account balance information."""
+
+    balance: int = Field(..., description="Balance in cents")
+
+    @property
+    def balance_dollars(self) -> float:
+        """Balance in dollars."""
+        return self.balance / 100
+
+
+class Market(BaseModel):
+    """Prediction market details."""
+
+    ticker: str
+    event_ticker: str
+    title: str
+    subtitle: Optional[str] = None
+    yes_bid: Optional[int] = Field(None, ge=0, le=100)
+    yes_ask: Optional[int] = Field(None, ge=0, le=100)
+    no_bid: Optional[int] = Field(None, ge=0, le=100)
+    no_ask: Optional[int] = Field(None, ge=0, le=100)
+    last_price: Optional[int] = None
+    volume: Optional[int] = None
+    volume_24h: Optional[int] = None
+    open_interest: Optional[int] = None
+    status: str
+    close_time: datetime
+    expiration_time: Optional[datetime] = None
+    result: Optional[str] = None
+
+    @property
+    def interpretation(self) -> str:
+        """Human-readable market summary."""
+        if self.yes_ask:
+            return f"Market implies {self.yes_ask}% chance: {self.title}"
+        elif self.last_price:
+            return f"Last traded at {self.last_price}% probability: {self.title}"
+        return f"Market: {self.title}"
+
+    @property
+    def spread(self) -> Optional[int]:
+        """Bid-ask spread in cents."""
+        if self.yes_bid and self.yes_ask:
+            return self.yes_ask - self.yes_bid
+        return None
+
+
+class Event(BaseModel):
+    """Prediction market event."""
+
+    event_ticker: str
+    title: str
+    category: str
+    series_ticker: Optional[str] = None
+    sub_title: Optional[str] = None
+    mutually_exclusive: bool
+    strike_date: Optional[datetime] = None
+
+
+class Order(BaseModel):
+    """Order details."""
+
+    order_id: str
+    user_id: Optional[str] = None
+    client_order_id: Optional[str] = None
+    ticker: str
+    side: str  # "yes" or "no"
+    action: str  # "buy" or "sell"
+    type: str  # "market" or "limit"
+    status: str  # "resting", "filled", "canceled", etc.
+    yes_price: Optional[int] = None
+    no_price: Optional[int] = None
+    fill_count: int = 0
+    remaining_count: int = 0
+    initial_count: int
+    taker_fees: Optional[int] = None
+    maker_fees: Optional[int] = None
+    taker_fill_cost: Optional[int] = None
+    maker_fill_cost: Optional[int] = None
+    queue_position: Optional[int] = None
+    expiration_time: Optional[datetime] = None
+    created_time: datetime
+    last_update_time: Optional[datetime] = None
+
+    @property
+    def is_filled(self) -> bool:
+        """Check if order is fully filled."""
+        return self.status == "filled"
+
+    @property
+    def is_active(self) -> bool:
+        """Check if order is still active/resting."""
+        return self.status == "resting"
+
+    @property
+    def average_fill_price(self) -> Optional[int]:
+        """Average fill price in cents."""
+        if self.fill_count > 0:
+            total_cost = (self.taker_fill_cost or 0) + (self.maker_fill_cost or 0)
+            return total_cost // self.fill_count
+        return None
+
+
+class Position(BaseModel):
+    """Portfolio position details."""
+
+    ticker: str
+    market_ticker: Optional[str] = None
+    event_ticker: Optional[str] = None
+    position: int = Field(..., description="Number of contracts (positive=YES, negative=NO)")
+    market_exposure: Optional[int] = Field(None, description="Current value in cents")
+    total_cost: Optional[int] = Field(None, description="Total cost paid in cents")
+    realized_pnl: Optional[int] = Field(None, description="Realized profit/loss in cents")
+    unrealized_pnl: Optional[int] = Field(None, description="Unrealized profit/loss in cents")
+
+    @property
+    def pnl_dollars(self) -> float:
+        """Total P&L in dollars (realized + unrealized)."""
+        realized = self.realized_pnl or 0
+        unrealized = self.unrealized_pnl or 0
+        return (realized + unrealized) / 100
+
+    @property
+    def is_long(self) -> bool:
+        """Check if position is long (positive contracts)."""
+        return self.position > 0
+
+    @property
+    def side_name(self) -> str:
+        """Human-readable position side."""
+        return "YES" if self.position > 0 else "NO" if self.position < 0 else "FLAT"
+
+
+class Fill(BaseModel):
+    """Trade fill details."""
+
+    fill_id: str
+    order_id: str
+    ticker: str
+    side: str  # "yes" or "no"
+    action: str  # "buy" or "sell"
+    count: int = Field(..., description="Number of contracts filled")
+    price: int = Field(..., description="Fill price in cents", ge=0, le=100)
+    created_time: datetime
+    trade_id: Optional[str] = None
+    is_taker: bool = False
+    fees: Optional[int] = Field(None, description="Trading fees in cents")
+
+    @property
+    def cost_cents(self) -> int:
+        """Total cost in cents (price × count)."""
+        return self.price * self.count
+
+    @property
+    def cost_dollars(self) -> float:
+        """Total cost in dollars."""
+        return self.cost_cents / 100
+
+    @property
+    def fees_dollars(self) -> float:
+        """Fees in dollars."""
+        return (self.fees or 0) / 100
+
+
+class OrderBookLevel(BaseModel):
+    """Single level in the order book."""
+
+    price: int = Field(..., description="Price in cents", ge=0, le=100)
+    quantity: int = Field(..., description="Number of contracts at this price")
+
+
+class OrderBook(BaseModel):
+    """Order book depth (bids and asks)."""
+
+    ticker: str
+    yes_bids: list[OrderBookLevel] = Field(default_factory=list, description="YES buy orders")
+    yes_asks: list[OrderBookLevel] = Field(default_factory=list, description="YES sell orders")
+    no_bids: list[OrderBookLevel] = Field(default_factory=list, description="NO buy orders")
+    no_asks: list[OrderBookLevel] = Field(default_factory=list, description="NO sell orders")
+
+    @property
+    def yes_spread(self) -> Optional[int]:
+        """Spread on YES side in cents."""
+        if self.yes_bids and self.yes_asks:
+            return self.yes_asks[0].price - self.yes_bids[0].price
+        return None
+
+    @property
+    def yes_depth(self) -> int:
+        """Total YES liquidity (both sides)."""
+        bid_depth = sum(level.quantity for level in self.yes_bids)
+        ask_depth = sum(level.quantity for level in self.yes_asks)
+        return bid_depth + ask_depth
+
+
+class Trade(BaseModel):
+    """Public trade details."""
+
+    trade_id: str
+    ticker: str
+    price: float = Field(..., description="Trade price in dollars")
+    count: int = Field(..., description="Number of contracts traded")
+    yes_price: Optional[float] = Field(None, description="YES side price in dollars")
+    no_price: Optional[float] = Field(None, description="NO side price in dollars")
+    yes_price_dollars: Optional[str] = None
+    no_price_dollars: Optional[str] = None
+    taker_side: Optional[str] = Field(None, description="Which side was the taker (yes/no)")
+    created_time: datetime
+
+    @property
+    def price_cents(self) -> int:
+        """Trade price in cents."""
+        return int(self.price * 100)
+
+    @property
+    def volume_dollars(self) -> float:
+        """Trade volume in dollars."""
+        return self.price * self.count
+
+    @property
+    def side(self) -> str:
+        """Derive trade side from yes/no prices."""
+        if self.yes_price and not self.no_price:
+            return "yes"
+        elif self.no_price and not self.yes_price:
+            return "no"
+        elif self.taker_side:
+            return self.taker_side
+        else:
+            return "unknown"

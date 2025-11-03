@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/exchange/status
+  response:
+    body:
+      string: '{"exchange_active":true,"exchange_estimated_resume_time":null,"trading_active":true}'
+    headers:
+      Cache-Control:
+      - public, max-age=1
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '84'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:02:31 GMT
+      Via:
+      - 1.1 a2ca9c0945475efb53271befc31e9b30.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 0Vm35yQ7OnB3xdqu5hHDqBFcgcIEgJh8suUAK5DJtDFtUdr5GnUzLg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

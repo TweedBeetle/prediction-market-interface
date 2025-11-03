@@ -1,0 +1,2739 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=50&status=open
+  response:
+    body:
+      string: '{"cursor":"CgwI8PWjyAYQiPby5wESFUtYRjFSQUNFLVNBT1BHUDI1LUJPUg","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLANYTD-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett scores a touchdown in Dallas at Arizona professional football
+        game originally scheduled for Nov 3, 2025, then the market resolves to Yes.","rules_secondary":"The
+        following market refers to a player or team in Dallas at Arizona professional
+        football game originally scheduled for Nov 3, 2025. If a player is active
+        but never takes a snap, the market settles to the last fair market price before
+        game start. Once a player takes at least one snap, even if nullified by penalty,
+        the market settles based on touchdowns scored. If no touchdowns are scored
+        in the game, the No Touchdown Scorer market resolves to Yes and all other
+        player markets resolve to No.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLANYTD-25NOV03ARIDAL-ARIJBRISSETT7","title":"Arizona
+        at Dallas: Anytime Touchdown Scorer: Jacoby Brissett","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLFIRSTTD-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett scores the first touchdown in Dallas at Arizona professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player or team
+        in Dallas at Arizona professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on touchdowns
+        scored. If no touchdowns are scored in the game, the No Touchdown Scorer market
+        resolves to Yes and all other player markets resolve to No.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLFIRSTTD-25NOV03ARIDAL-ARIJBRISSETT7","title":"Arizona
+        at Dallas: First Touchdown Scorer: Jacoby Brissett","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":349.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 350+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 350+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-350","title":"Jacoby
+        Brissett records 350+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 350+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":299.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 300+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 300+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-300","title":"Jacoby
+        Brissett records 300+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 300+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":274.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 275+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 275+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-275","title":"Jacoby
+        Brissett records 275+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 275+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":249.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 250+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 250+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-250","title":"Jacoby
+        Brissett records 250+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 250+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":224.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 225+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 225+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-225","title":"Jacoby
+        Brissett records 225+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 225+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":199.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 200+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 200+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-200","title":"Jacoby
+        Brissett records 200+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 200+"},{"can_close_early":true,"category":"","close_time":"2025-11-18T01:15:00Z","custom_strike":{"football_player":"2f076878-2266-41f9-a636-e4645710d20c","football_team":"d73dae4f-1f08-4b5e-bf23-4e25e9b6a69c"},"early_close_condition":"This
+        market will close and expire early if the event occurs.","event_ticker":"KXNFLPASSYDS-25NOV03ARIDAL","expected_expiration_time":"2025-11-04T04:15:00Z","expiration_time":"2025-11-18T01:15:00Z","expiration_value":"","floor_strike":174.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T01:15:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Jacoby
+        Brissett: 175+","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"primary_participant_key":"football_player","response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Jacoby Brissett records 175+ Passing Yards in the Arizona at Dallas professional
+        football game originally scheduled for Nov 3, 2025, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to a player in the
+        Arizona at Dallas professional football game originally scheduled for Nov
+        3, 2025. If a player is active but never takes a snap, the market settles
+        to the last fair market price before game start. Once a player takes at least
+        one snap, even if nullified by penalty, the market settles based on Passing
+        Yards.","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-175","title":"Jacoby
+        Brissett records 175+ passing yards","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Jacoby
+        Brissett: 175+"},{"can_close_early":true,"category":"","close_time":"2026-10-30T05:30:00Z","custom_strike":{"demo
+        strike":"demo strike"},"early_close_condition":"This market will close and
+        expire after a winner is declared.","event_ticker":"KXCSGOGAME-LYN3DM25","expected_expiration_time":"2025-11-04T05:30:00Z","expiration_time":"2026-10-30T05:30:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2026-10-30T05:30:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lynn
+        Vision","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lynn Vision wins IEM Chengdu 2025: Lynn Vision vs. 3DMAX best of 3 matchup,
+        then the market resolves to Yes.","rules_secondary":"This matchup is expected
+        to take place on November 3, 2025.","settlement_timer_seconds":1800,"status":"open","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXCSGOGAME-LYN3DM25-LYN","title":"Will
+        Lynn Vision win the IEM Chengdu 2025: Lynn Vision vs. 3DMAX?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lynn
+        Vision"},{"can_close_early":true,"category":"","close_time":"2026-10-30T05:30:00Z","custom_strike":{"demo
+        strike":"demo strike"},"early_close_condition":"This market will close and
+        expire after a winner is declared.","event_ticker":"KXCSGOGAME-LYN3DM25","expected_expiration_time":"2025-11-04T05:30:00Z","expiration_time":"2026-10-30T05:30:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2026-10-30T05:30:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"3DMAX","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        3DMAX wins IEM Chengdu 2025: Lynn Vision vs. 3DMAX best of 3 matchup, then
+        the market resolves to Yes.","rules_secondary":"This matchup is expected to
+        take place on November 3, 2025.","settlement_timer_seconds":1800,"status":"open","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXCSGOGAME-LYN3DM25-3DM","title":"Will
+        3DMAX win the IEM Chengdu 2025: Lynn Vision vs. 3DMAX?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"3DMAX"},{"can_close_early":true,"category":"","close_time":"2026-10-30T08:00:00Z","custom_strike":{"demo
+        strike":"demo strike"},"early_close_condition":"This market will close and
+        expire after a winner is declared.","event_ticker":"KXCSGOGAME-FAZVIR25","expected_expiration_time":"2025-11-04T08:00:00Z","expiration_time":"2026-10-30T08:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2026-10-30T08:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Virtus.pro","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Virtus.pro wins IEM Chengdu 2025: FaZe vs. Virtus.pro best of 3 matchup, then
+        the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":1800,"status":"open","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXCSGOGAME-FAZVIR25-VIRT","title":"Will
+        Virtus.pro win the IEM Chengdu 2025: FaZe vs. Virtus.pro?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Virtus.pro"},{"can_close_early":true,"category":"","close_time":"2026-10-30T08:00:00Z","custom_strike":{"demo
+        strike":"demo strike"},"early_close_condition":"This market will close and
+        expire after a winner is declared.","event_ticker":"KXCSGOGAME-FAZVIR25","expected_expiration_time":"2025-11-04T08:00:00Z","expiration_time":"2026-10-30T08:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2026-10-30T08:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"FaZe","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        FaZe wins IEM Chengdu 2025: FaZe vs. Virtus.pro best of 3 matchup, then the
+        market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":1800,"status":"open","strike_type":"custom","subtitle":"","tick_size":1,"ticker":"KXCSGOGAME-FAZVIR25-FAZ","title":"Will
+        FaZe win the IEM Chengdu 2025: FaZe vs. Virtus.pro?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"FaZe"},{"can_close_early":true,"category":"","close_time":"2025-11-05T15:00:00Z","custom_strike":{"demo
+        strike":"demo strike"},"early_close_condition":"This market will close and
+        expire early if the event occurs.","event_ticker":"KXNFLTRADE-25NOV05","expected_expiration_time":"2025-11-05T15:00:00Z","expiration_time":"2025-11-19T15:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-19T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Bradley
+        Chubb","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Bradley Chubb is traded before Nov 5, 2025, then the market resolves to Yes.","rules_secondary":"The
+        trade must be officially processed and approved by Pro Football before Nov
+        5, 2025 for market to resolve to Yes. If Bradley Chubb later fails their physical
+        and/or the trade is rescinded for any reason after being officially processed,
+        the market nonetheless resolves to Yes.","settlement_timer_seconds":1800,"status":"open","strike_type":"custom","subtitle":"::
+        Miami","tick_size":1,"ticker":"KXNFLTRADE-25NOV05-BCHU","title":"Will Bradley
+        Chubb be traded by Miami before Nov 5, 2025?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Bradley
+        Chubb"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"0bd33b83-6f37-4ad3-b84c-32b06cce902c"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Max
+        Verstappen","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Max Verstappen has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Red Bull Racing","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-VER","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Max
+        Verstappen"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"78dc0bf3-3408-4d20-97d0-8c3425812a15"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Yuki
+        Tsunoda","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Yuki Tsunoda has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Red Bull Racing","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-TSU","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Yuki
+        Tsunoda"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"6477cad9-2bd2-4d2a-8589-d52c6238708e"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lance
+        Stroll","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lance Stroll has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Aston Martin F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-STR","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lance
+        Stroll"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"21730209-e907-4377-8e68-97c65070c645"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Carlos
+        Sainz Jr.","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Carlos Sainz Jr. has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Williams","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-SAI","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Carlos
+        Sainz Jr."},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"6dc8a2b4-c1d9-4ce6-8882-960ccd2282d7"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"George
+        Russell","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        George Russell has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Mercedes AMG Motorsport","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-RUS","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"George
+        Russell"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"463e968e-3572-4a49-89dd-958f7f1f42da"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Oscar
+        Piastri","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Oscar Piastri has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        McLaren","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-PIA","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Oscar
+        Piastri"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"180a3580-10ec-42e8-bceb-8bdd934692c8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Esteban
+        Ocon","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Esteban Ocon has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Haas F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-OCO","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Esteban
+        Ocon"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"f5d7f13f-75cd-4f52-8f36-e6647c28fc96"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lando
+        Norris","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lando Norris has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        McLaren","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-NOR","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lando
+        Norris"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"075f99ca-413c-49df-875e-245fd5aaade8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Charles
+        Leclerc","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Charles Leclerc has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Ferrari","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-LEC","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Charles
+        Leclerc"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1bb6b8ac-ef4c-4be4-a221-4ada941014de"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Liam
+        Lawson","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Liam Lawson has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Racing Bulls","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-LAW","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Liam
+        Lawson"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"76cfbf0c-a64f-4440-bbec-e83c75027c61"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Nico
+        Hulkenberg","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Nico Hulkenberg has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Sauber","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-HUL","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Nico
+        Hulkenberg"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1efe7926-7c66-4481-9c6c-4a0f907c29a8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lewis
+        Hamilton","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lewis Hamilton has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Ferrari","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-HAM","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lewis
+        Hamilton"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1617881e-6e16-4a9b-8c6e-0fa37ea760c1"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Isack
+        Hadjar","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Isack Hadjar has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Racing Bulls","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-HAD","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Isack
+        Hadjar"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"06efbb70-23f0-4967-9efb-e321e9373931"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Pierre
+        Gasly","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Pierre Gasly has a podium finish (finishes in the top three) of the Sao Paulo
+        Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Alpine F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-GAS","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Pierre
+        Gasly"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"9b88632c-470d-4914-be9b-d657ab3d8d93"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Franco
+        Colapinto","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Franco Colapinto has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Alpine F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-COL","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Franco
+        Colapinto"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"9fa998ce-dd8c-4a37-b0e9-394b57f8005a"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Gabriel
+        Bortoleto","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Gabriel Bortoleto has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Sauber","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-BOR","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Gabriel
+        Bortoleto"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"461e024d-d6ba-454e-b8a9-9d3a33c60cd3"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Oliver
+        Bearman","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Oliver Bearman has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Haas F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-BEA","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Oliver
+        Bearman"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"26dc7b60-3ce0-4d45-bcf9-3c8e50933fea"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Andrea
+        Kimi Antonelli","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Andrea Kimi Antonelli has a podium finish (finishes in the top three) of the
+        Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Mercedes AMG Motorsport","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-ANT","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Andrea
+        Kimi Antonelli"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"09f5c944-d785-4712-aacb-e9c4b79b1ccf"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Fernando
+        Alonso","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Fernando Alonso has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Aston Martin F1 Team","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-ALO","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Fernando
+        Alonso"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"0f52807f-508c-4be7-8605-325261b24d65"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACEPODIUM-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Alexander
+        Albon","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Alexander Albon has a podium finish (finishes in the top three) of the Sao
+        Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Williams","tick_size":1,"ticker":"KXF1RACEPODIUM-SAOPGP25-ALB","title":"Sao
+        Paulo Grand Prix Podium Finishers?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Alexander
+        Albon"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"0bd33b83-6f37-4ad3-b84c-32b06cce902c"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Max
+        Verstappen","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Max Verstappen wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Red Bull Racing","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-VER","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Max
+        Verstappen"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"78dc0bf3-3408-4d20-97d0-8c3425812a15"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Yuki
+        Tsunoda","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Yuki Tsunoda wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Red Bull Racing","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-TSU","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Yuki
+        Tsunoda"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"6477cad9-2bd2-4d2a-8589-d52c6238708e"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lance
+        Stroll","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lance Stroll wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Aston Martin F1 Team","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-STR","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lance
+        Stroll"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"21730209-e907-4377-8e68-97c65070c645"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Carlos
+        Sainz Jr.","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Carlos Sainz Jr. wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Williams","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-SAI","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Carlos
+        Sainz Jr."},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"6dc8a2b4-c1d9-4ce6-8882-960ccd2282d7"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"George
+        Russell","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        George Russell wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Mercedes AMG Motorsport","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-RUS","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"George
+        Russell"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"463e968e-3572-4a49-89dd-958f7f1f42da"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Oscar
+        Piastri","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Oscar Piastri wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        McLaren","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-PIA","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Oscar
+        Piastri"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"180a3580-10ec-42e8-bceb-8bdd934692c8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Esteban
+        Ocon","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Esteban Ocon wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Haas F1 Team","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-OCO","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Esteban
+        Ocon"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"f5d7f13f-75cd-4f52-8f36-e6647c28fc96"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lando
+        Norris","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lando Norris wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        McLaren","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-NOR","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lando
+        Norris"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"075f99ca-413c-49df-875e-245fd5aaade8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Charles
+        Leclerc","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Charles Leclerc wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Ferrari","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-LEC","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Charles
+        Leclerc"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1bb6b8ac-ef4c-4be4-a221-4ada941014de"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Liam
+        Lawson","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Liam Lawson wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Racing Bulls","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-LAW","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Liam
+        Lawson"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"76cfbf0c-a64f-4440-bbec-e83c75027c61"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Nico
+        Hulkenberg","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Nico Hulkenberg wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Sauber","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-HUL","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Nico
+        Hulkenberg"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1efe7926-7c66-4481-9c6c-4a0f907c29a8"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Lewis
+        Hamilton","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Lewis Hamilton wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Ferrari","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-HAM","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Lewis
+        Hamilton"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"1617881e-6e16-4a9b-8c6e-0fa37ea760c1"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Isack
+        Hadjar","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Isack Hadjar wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Racing Bulls","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-HAD","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Isack
+        Hadjar"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"06efbb70-23f0-4967-9efb-e321e9373931"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Pierre
+        Gasly","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Pierre Gasly wins the Sao Paulo Grand Prix, then the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Alpine F1 Team","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-GAS","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Pierre
+        Gasly"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"9b88632c-470d-4914-be9b-d657ab3d8d93"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Franco
+        Colapinto","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Franco Colapinto wins the Sao Paulo Grand Prix, then the market resolves to
+        Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Alpine F1 Team","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-COL","title":"Sao
+        Paulo Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Franco
+        Colapinto"},{"can_close_early":true,"category":"","close_time":"2025-11-23T19:00:00Z","custom_strike":{"racing_competitor":"9fa998ce-dd8c-4a37-b0e9-394b57f8005a"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXF1RACE-SAOPGP25","expected_expiration_time":"2025-11-09T19:00:00Z","expiration_time":"2025-11-23T19:00:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-23T19:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"Gabriel
+        Bortoleto","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T19:26:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Gabriel Bortoleto wins the Sao Paulo Grand Prix, then the market resolves
+        to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"::
+        Sauber","tick_size":1,"ticker":"KXF1RACE-SAOPGP25-BOR","title":"Sao Paulo
+        Grand Prix Winner?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Gabriel
+        Bortoleto"}]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:44:32 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - pMIeLz6l0s2VU91oR-0UE7KTkcDP16f0UmIykMrwdgowurqKPZVnTQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLANYTD-25NOV03ARIDAL-ARIJBRISSETT7/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:33 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 0u2Aa1B3u9I5lwWWB1YYehwd92LXEesNflDvQhx0mp0dHj8T1B4rSQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLFIRSTTD-25NOV03ARIDAL-ARIJBRISSETT7/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:33 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - yQHuRsc9Nz-PsTuhX7FL6N7ckSRpdCrYbkNoKsXluml9inqKMnIg4A==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-350/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:34 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 9s_aW8LZsVOD0n4rEu_g1KZYubQbxco6htnBx6uZkwEdpivAh-z3yg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-300/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:34 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - -6pXYX1n6F2yGYljOlJvux1Nfwyxmu1Z7DbOdA7g-K_MPZmrTdcHnQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-275/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:34 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - aiwcCTxneue8pL49GVwu8zdb_l9Pvirwt838yYevXcNvol1VIWRSRg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-250/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:35 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - EmeEJV8EqnVJ_rB82HdcOa6NfZIASfpr5MpKXw_nud19ek8Vutq67A==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-225/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:35 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - VTjX-j8P56zsjRTgyoXDcWHWOAdilIbppVNH5ptt6o1UwL_gaAJp7w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-200/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:35 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - qBtrgazLwHf157ITNNAUXz0gHtEBLp1Xfhf4hCvk_l0wH5iPsfjnUw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLPASSYDS-25NOV03ARIDAL-ARIJBRISSETT7-175/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - e7JlhXdMojoyQbrqHQSqX0YWPlaqt1ZCYlWHUQoWwbTYtob3gcY-Tw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXCSGOGAME-LYN3DM25-LYN/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - ntMTOQScSJsSn0ub7WpblY1Y2aPUFCNhXdUh2pyExwb-GRsk8fThaQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXCSGOGAME-LYN3DM25-3DM/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - HON0OMdbQvblCn1_wtN2lfH8POoZEfb9ylgVRd7g5LaHpjHoKeEGkA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXCSGOGAME-FAZVIR25-VIRT/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - ky3BOASd39gOoE2vwuAW-HCnbWOOmACJFovXWRD5hbPfP2UTKyQqOw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXCSGOGAME-FAZVIR25-FAZ/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - iJWKgEcnAslWK-7gfPAQU097fDe8ixmtbTiXTcFmOQjid_2V9f2PWg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNFLTRADE-25NOV05-BCHU/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:36 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - _MyJQAM7ZWvqoYlCBAH_2LQnYNXaB01hkTOBN75j0L2OarUQIXncqQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-VER/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:37 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Yj1T2ZcKolc0XBQ0E5HtPwai-R4xATTC_rs_k5btX4knzaHicuKhxA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-TSU/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:37 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 1zYx8F-TvpCLahbt3SDmYoZk2DrAafHdMythwMoCqGGNqJUQkWrPUg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-STR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:37 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - bB68HiXxbEp1axfs8LVyu3k4t-YSlbpgKvs97iJzWYUev3Gf0J2Ijg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-SAI/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:37 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Pw8ZDlhFtq9i-HH8lzu-d6mnCc4ZSJasMNoPY9TTArqj2opaDO8-9g==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-RUS/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:37 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - U_OdXroIiAU8O_zd4jA3wOJvmC1P5eknLPvf_K8I2TwNxDvFjLDCeA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-PIA/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:38 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - fifKOc0_AMb44CdYDg7ovxHDQopTamnz4hMw-daHJoqHL44UQF9GTQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-OCO/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:38 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - kSqzPqqpQcLBuaGarVvmuExBZhYyOgw9GNqpcAuPJRaia0fCbn8M3A==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-NOR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:38 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - UJc-Euy1qNsflNUm7NnCbQJ6AnZdWeUm6dmue7J8uBaS4rQzp2DA5w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-LEC/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:38 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - tTXEye09WoWpzxuoaohIdUbhZfkJdoGbdX7V9QiQNy-8NptPSsvE3w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-LAW/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:38 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - BZVN6iYg8SxpzWYDYKhBiMPpjjKsVU2rjfyS2LidIPjsEOghiYvB4g==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-HUL/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 7tsNWSgoVl6Z6ST1UYsCRIkv4BijUNortAuinoRSXPHCZDwUZorUKg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-HAM/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 6YCh-GeedU-eKNcNcNzDjIi07WnE37tCW5LU77Pv4w1dkWcMe__J0w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-HAD/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - zCw7vL6n4RicyDQBKAFrIrr-vritKuW1L0lYcFSvxLekAEmjhBTBRQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-GAS/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Hs6EwJ5MENW0DwHHYyG4RG10QJdVdg0krK716nSyQlXLmm-RFtjilA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-COL/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - gq5OpLwPfLPngiJhIpw_jZGg7ucEpQPjr3NNH62Itf1GIOLeauLyIQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-BOR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:39 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - TVMJl7jSAC6FrfPI2eHXelKHHEExmWLUKtzyC6vy39gCB6aUc-Fdkw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-BEA/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:40 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - L4e2Ws0-A9gzF-jk4oeZ-6-wAXxTcszetA8hFkF0khZOqhTnThkZbA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-ANT/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:40 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 1A_GLsdH_V5UVtDXIxaMhsfWKFEJXVPDk9-W0uRCqvtBCE6cbqfx9Q==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-ALO/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:40 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 94_0xRevAL8m1uT66sdieM7b6VpgQZrzX410s2M_tHVaQ6aOzRWi1w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACEPODIUM-SAOPGP25-ALB/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:40 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - XBdiUpQueZs0FwN3bb0H5Zh6soKuz-OuYEo4M7-fRO_Qcw-sGBTX-w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-VER/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:40 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - hG2rbV9CwZ1iECqV8jUv8_cBQjWeNUTnJoTLOnmulSB_puPs973JLQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-TSU/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - jaTbOubDijmgD0yvL_-XPsc2bjqoK2wRT4C9HllxaNSvIrTPlVRhRA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-STR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - G8Bfv0p7tHnC5611y6W-VoqTYj-y8waSsqm5nN4ZxDpZ--UNb1HKWQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-SAI/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - pKvX4kz83U2at6dWa8Ywfxm0YNr4SkNxuEpPU4-yVEZw7O4yqEYVFQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-RUS/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - DBU4RVfJvwv5EnLaRdrk_e1ZjIjIz6qQvVYCMTllmonyDeLkE-vMKA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-PIA/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Zhqsp_BRihEHMOyWOLtP_suACjpa4V7rwVWUdAimrispAvDAUHr6Xw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-OCO/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:41 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - UTKsEs8-I_TvJsMNFCm6stTVLMa0hQ4TqMlYv63dtvFMMJYTiGch6Q==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-NOR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:42 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Txh93W90iGEZ9LuUhK_G-hZFPlm_woJtaFWK7fjBc48LNHGziGQOwg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-LEC/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:42 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - -VZRYIbWVri3YYlS2INk_CfDALSnGywxRU3_Bz41QC9M51kBaXLZUg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-LAW/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:42 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - TYrO5mvkcW_b4BJNAyuP6clplDYSATYCV-poexlAOcisWHn0p8iFiw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-HUL/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:42 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 66UdmreQZIPNk_v1C-Q2wtQPi6C-bn0cnZh5PsqGrpU0m-HlXpOnHA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-HAM/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:42 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - YzEa-f5ZbCzYvTaoai4-vcsKAeKxx_FnkdhECQxkNQzcVW_-bOCULg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-HAD/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:43 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - WxLUtcUH2yM_gLacK3ybF4rkYni4X7ezQf-7eMolMlakDpCrW_gkZg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-GAS/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:43 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - X_V33OIlcgthClx2uTOYRq8KaoTmkOs0Zqwu65GBM_f6jct1atycxg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-COL/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:43 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 2m2qoxLN6XeSZHmG0e-YcL5ZsYAgqpsCVaT4i_Pth1iWIsE8Jotfvg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXF1RACE-SAOPGP25-BOR/orderbook?depth=5
+  response:
+    body:
+      string: '{"orderbook":{"no":null,"no_dollars":null,"yes":null,"yes_dollars":null}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '73'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:44:43 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 0hw1N8Lmci1h-CFR3EwSnr8DGYrdhWO0Xl5UhoIl7glImwq0chslWw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

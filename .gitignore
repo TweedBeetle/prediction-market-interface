@@ -2,9 +2,12 @@
 .env
 .env.local
 .env.*.local
+.env.kalshi.demo
+.env.kalshi.prod
 
 # Python
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 *.so
@@ -63,3 +66,5 @@ logs/
 .claude/
 fastmcp.json
 mcp-servers/
+secrets/
+*.pem

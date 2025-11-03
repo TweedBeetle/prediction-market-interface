@@ -1,0 +1,97 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/events?limit=1&status=open
+  response:
+    body:
+      string: '{"cursor":"CgYI8Oj1nQ8SDUtYRUxPTk1BUlMtOTk","events":[{"available_on_brokers":false,"category":"World","collateral_return_type":"","event_ticker":"KXELONMARS-99","mutually_exclusive":false,"series_ticker":"KXELONMARS","strike_period":"","sub_title":"Before
+        2099","title":"Will Elon Musk visit Mars in his lifetime?"}],"milestones":[]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '335'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:14:46 GMT
+      Via:
+      - 1.1 82ff0052ebe0221db99dbbd87510e2b0.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - IuK1bRapQY1e0vaZJTXyyj8rFGnG2mR_H0JPL22uSYYr9a9gisCXAg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/events/INXD
+  response:
+    body:
+      string: '{"error":{"code":"not_found","message":"not found","service":"query-exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '79'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:14:47 GMT
+      Via:
+      - 1.1 3bb2d7dfa1d1ed1489724f88ce816db2.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - cFUL0VeOSSJTI840wgRleeb8CBxOSNqjHH7Hhz5vTfFpHyIkA94yXw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 404
+      message: Not Found
+version: 1
