@@ -262,33 +262,67 @@ class Milestone(BaseModel):
 
 
 class RFQ(BaseModel):
-    """Request for Quote."""
+    """Request for Quote - market maker solicitation."""
 
     id: str = Field(..., description="RFQ identifier")
     ticker: str = Field(..., description="Market ticker")
     side: OrderSide = Field(..., description="Buy or sell")
     count: int = Field(..., description="Number of contracts")
-    created_at: str = Field(..., description="ISO timestamp")
-    status: str = Field(..., description="RFQ status")
+    created_at: str = Field(..., description="ISO timestamp of creation")
+    status: str = Field(..., description="RFQ status (open, filled, expired, accepted, confirmed, rejected)")
+    updated_at: Optional[str] = Field(None, description="ISO timestamp of last update")
+    expires_at: Optional[str] = Field(None, description="ISO timestamp of expiration")
+    requester_id: Optional[str] = Field(None, description="User ID of RFQ requester")
 
 
 class Quote(BaseModel):
-    """Quote response to RFQ."""
+    """Quote response to RFQ - market maker response."""
 
     id: str = Field(..., description="Quote identifier")
-    rfq_id: str = Field(..., description="Associated RFQ")
+    rfq_id: str = Field(..., description="Associated RFQ ID")
+    ticker: str = Field(..., description="Market ticker")
+    side: OrderSide = Field(..., description="Buy or sell")
     price: int = Field(..., description="Quoted price (cents)")
     quantity: int = Field(..., description="Quoted quantity")
-    created_at: str = Field(..., description="ISO timestamp")
+    created_at: str = Field(..., description="ISO timestamp of quote creation")
+    status: str = Field(..., description="Quote status (open, accepted, confirmed, rejected, expired)")
+    quoter_id: Optional[str] = Field(None, description="User ID of quoter")
+    expires_at: Optional[str] = Field(None, description="ISO timestamp of expiration")
 
 
 class MultivarianateCollection(BaseModel):
-    """Multivariate event collection."""
+    """Multivariate event collection - complex market combinations."""
 
     ticker: str = Field(..., description="Collection identifier")
     title: str = Field(..., description="Collection name")
     description: str = Field(..., description="Collection details")
-    status: str = Field(..., description="Collection status")
+    status: str = Field(..., description="Collection status (open/closed/settled)")
+    event_tickers: Optional[List[str]] = Field(None, description="Associated event tickers")
+    market_count: Optional[int] = Field(None, description="Number of markets in collection")
+    created_at: Optional[str] = Field(None, description="ISO timestamp of creation")
+    close_time: Optional[str] = Field(None, description="ISO timestamp of closing")
+
+
+class MarketInCollection(BaseModel):
+    """Market within a multivariate collection."""
+
+    ticker: str = Field(..., description="Market ticker")
+    title: str = Field(..., description="Market title")
+    status: str = Field(..., description="Market status")
+    yes_bid: Optional[float] = Field(None, description="Yes side bid (cents)")
+    yes_ask: Optional[float] = Field(None, description="Yes side ask (cents)")
+    no_bid: Optional[float] = Field(None, description="No side bid (cents)")
+    no_ask: Optional[float] = Field(None, description="No side ask (cents)")
+    collection_ticker: str = Field(..., description="Parent collection ticker")
+
+
+class CollectionLookup(BaseModel):
+    """Lookup result for market tickers in a collection."""
+
+    collection_ticker: str = Field(..., description="Collection ticker")
+    market_ticker: str = Field(..., description="Market ticker")
+    market_title: Optional[str] = Field(None, description="Market title")
+    lookup_tickers: Optional[List[str]] = Field(None, description="Related lookup tickers")
 
 
 class QueuePosition(BaseModel):
@@ -316,6 +350,19 @@ class TotalRestingOrderValue(BaseModel):
     """Total value of all resting orders."""
 
     total_resting_order_value: int = Field(..., description="Total value of resting orders (cents)")
+
+
+class MarketMakerMetrics(BaseModel):
+    """Market maker performance and activity metrics."""
+
+    total_rfqs: int = Field(..., description="Total RFQs received")
+    open_rfqs: int = Field(..., description="Currently open RFQs")
+    total_quotes: int = Field(..., description="Total quotes provided")
+    accepted_quotes: int = Field(..., description="Quotes accepted by counterparties")
+    quote_acceptance_rate: float = Field(..., description="Percentage of quotes accepted")
+    total_volume: int = Field(..., description="Total contract volume from RFQs")
+    avg_response_time: float = Field(..., description="Average response time to RFQ (seconds)")
+    expiration_rate: float = Field(..., description="Percentage of RFQs that expired")
 
 
 class ExchangeStatus(BaseModel):

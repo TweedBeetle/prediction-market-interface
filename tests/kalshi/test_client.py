@@ -823,3 +823,302 @@ class TestKalshiClientPhase1PortfolioManagement:
             call_args = mock_request.call_args
             assert call_args[0][0] == "POST"
             assert "/portfolio/orders/queue_positions" in call_args[0][1]
+
+
+@pytest.mark.unit
+class TestKalshiClientPhase4AdvancedFeatures:
+    """Test Phase 4 advanced features: Multivariate, RFQ, and Quotes."""
+
+    @pytest.mark.asyncio
+    async def test_get_multivariate_collections(self, mock_kalshi_client):
+        """Test get_multivariate_collections returns collection list."""
+        api_response = {
+            "collections": [
+                {
+                    "ticker": "MVE-PRES-2024",
+                    "title": "Presidential Election 2024",
+                    "description": "Election outcomes",
+                    "status": "open",
+                    "event_tickers": ["PRES-2024-DEM", "PRES-2024-REP"],
+                    "market_count": 5,
+                    "created_at": "2024-01-01T00:00:00Z",
+                    "close_time": "2024-11-05T00:00:00Z",
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            collections, cursor = await mock_kalshi_client.get_multivariate_collections(
+                status="open", limit=100
+            )
+
+            assert len(collections) == 1
+            assert collections[0].ticker == "MVE-PRES-2024"
+            assert collections[0].status == "open"
+            assert cursor is None
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_get_multivariate_collection(self, mock_kalshi_client):
+        """Test get_multivariate_collection returns single collection."""
+        api_response = {
+            "collection": {
+                "ticker": "MVE-PRES-2024",
+                "title": "Presidential Election 2024",
+                "description": "Election outcomes",
+                "status": "open",
+                "event_tickers": ["PRES-2024"],
+                "market_count": 10,
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            collection = await mock_kalshi_client.get_multivariate_collection("MVE-PRES-2024")
+
+            assert collection.ticker == "MVE-PRES-2024"
+            assert collection.market_count == 10
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_get_markets_in_collection(self, mock_kalshi_client):
+        """Test get_markets_in_collection returns markets in collection."""
+        api_response = {
+            "markets": [
+                {
+                    "ticker": "KXDEM24-LSV",
+                    "title": "Democratic Nominee",
+                    "status": "open",
+                    "yes_bid": 65.0,
+                    "yes_ask": 70.0,
+                    "no_bid": 30.0,
+                    "no_ask": 35.0,
+                    "collection_ticker": "MVE-PRES-2024",
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            markets, cursor = await mock_kalshi_client.get_markets_in_collection(
+                "MVE-PRES-2024", limit=100
+            )
+
+            assert len(markets) == 1
+            assert markets[0].ticker == "KXDEM24-LSV"
+            assert markets[0].yes_bid == 65.0
+            assert cursor is None
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_create_rfq(self, mock_kalshi_client):
+        """Test create_rfq creates a Request for Quote."""
+        api_response = {
+            "rfq": {
+                "id": "rfq-123",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "count": 100,
+                "created_at": "2024-01-01T00:00:00Z",
+                "status": "open",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            rfq = await mock_kalshi_client.create_rfq("KXHARRIS24-LSV", "buy", 100)
+
+            assert rfq.id == "rfq-123"
+            assert rfq.ticker == "KXHARRIS24-LSV"
+            assert rfq.side == "buy"
+            assert rfq.count == 100
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_get_rfqs(self, mock_kalshi_client):
+        """Test get_rfqs returns list of RFQs."""
+        api_response = {
+            "rfqs": [
+                {
+                    "id": "rfq-1",
+                    "ticker": "KXHARRIS24-LSV",
+                    "side": "buy",
+                    "count": 50,
+                    "created_at": "2024-01-01T00:00:00Z",
+                    "status": "open",
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            rfqs, cursor = await mock_kalshi_client.get_rfqs(status="open", limit=100)
+
+            assert len(rfqs) == 1
+            assert rfqs[0].id == "rfq-1"
+            assert rfqs[0].status == "open"
+            assert cursor is None
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_get_rfq(self, mock_kalshi_client):
+        """Test get_rfq returns single RFQ."""
+        api_response = {
+            "rfq": {
+                "id": "rfq-123",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "count": 100,
+                "created_at": "2024-01-01T00:00:00Z",
+                "status": "open",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            rfq = await mock_kalshi_client.get_rfq("rfq-123")
+
+            assert rfq.id == "rfq-123"
+            assert rfq.ticker == "KXHARRIS24-LSV"
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_delete_rfq(self, mock_kalshi_client):
+        """Test delete_rfq deletes an RFQ."""
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = {}
+
+            await mock_kalshi_client.delete_rfq("rfq-123")
+
+            mock_request.assert_called_once()
+            call_args = mock_request.call_args
+            assert call_args[0][0] == "DELETE"
+            assert "rfq-123" in call_args[0][1]
+
+    @pytest.mark.asyncio
+    async def test_create_quote(self, mock_kalshi_client):
+        """Test create_quote creates a quote response to RFQ."""
+        api_response = {
+            "quote": {
+                "id": "quote-456",
+                "rfq_id": "rfq-123",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "price": 55,
+                "quantity": 100,
+                "created_at": "2024-01-01T00:01:00Z",
+                "status": "open",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            quote = await mock_kalshi_client.create_quote("rfq-123", 55, 100)
+
+            assert quote.id == "quote-456"
+            assert quote.rfq_id == "rfq-123"
+            assert quote.price == 55
+            assert quote.quantity == 100
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_get_quotes(self, mock_kalshi_client):
+        """Test get_quotes returns list of quotes for RFQ."""
+        api_response = {
+            "quotes": [
+                {
+                    "id": "quote-1",
+                    "rfq_id": "rfq-123",
+                    "ticker": "KXHARRIS24-LSV",
+                    "side": "buy",
+                    "price": 55,
+                    "quantity": 100,
+                    "created_at": "2024-01-01T00:01:00Z",
+                    "status": "open",
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            quotes, cursor = await mock_kalshi_client.get_quotes("rfq-123", limit=100)
+
+            assert len(quotes) == 1
+            assert quotes[0].id == "quote-1"
+            assert quotes[0].rfq_id == "rfq-123"
+            assert cursor is None
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_accept_quote(self, mock_kalshi_client):
+        """Test accept_quote accepts a quote."""
+        api_response = {
+            "quote": {
+                "id": "quote-456",
+                "rfq_id": "rfq-123",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "price": 55,
+                "quantity": 100,
+                "created_at": "2024-01-01T00:01:00Z",
+                "status": "accepted",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            quote = await mock_kalshi_client.accept_quote("quote-456")
+
+            assert quote.status == "accepted"
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_confirm_quote(self, mock_kalshi_client):
+        """Test confirm_quote confirms an accepted quote."""
+        api_response = {
+            "quote": {
+                "id": "quote-456",
+                "rfq_id": "rfq-123",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "price": 55,
+                "quantity": 100,
+                "created_at": "2024-01-01T00:01:00Z",
+                "status": "confirmed",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            quote = await mock_kalshi_client.confirm_quote("quote-456")
+
+            assert quote.status == "confirmed"
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_delete_quote(self, mock_kalshi_client):
+        """Test delete_quote deletes a quote."""
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = {}
+
+            await mock_kalshi_client.delete_quote("quote-456")
+
+            mock_request.assert_called_once()
+            call_args = mock_request.call_args
+            assert call_args[0][0] == "DELETE"
+            assert "quote-456" in call_args[0][1]

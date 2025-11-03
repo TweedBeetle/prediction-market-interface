@@ -26,6 +26,12 @@ from .models import (
     OrderGroup,
     Settlement,
     TotalRestingOrderValue,
+    MultivarianateCollection,
+    MarketInCollection,
+    CollectionLookup,
+    RFQ,
+    Quote,
+    MarketMakerMetrics,
 )
 
 
@@ -668,44 +674,50 @@ async def kalshi_create_rfq(
         count: Number of contracts
 
     Returns:
-        Created RFQ with ID
+        Created RFQ with full details
     """
-    # Note: This requires API endpoint not yet documented in client
-    # Placeholder implementation
-    return {
-        "rfq_id": "placeholder",
-        "ticker": ticker,
-        "side": side,
-        "count": count,
-        "status": "open",
-    }
+    client = _ensure_client()
+    rfq = await client.create_rfq(ticker, side, count)
+    return rfq.model_dump()
 
 
 @mcp.tool()
 async def kalshi_get_rfqs(
     status: Optional[str] = None,
     ticker: Optional[str] = None,
+    limit: int = 100,
+    cursor: Optional[str] = None,
 ) -> dict[str, Any]:
     """Get user's Requests for Quote (RFQs).
 
     Args:
-        status: Filter by status (open, filled, expired)
+        status: Filter by status (open, filled, expired, accepted, confirmed, rejected)
         ticker: Filter by market ticker
+        limit: Number of results (max 1000, default 100)
+        cursor: Pagination cursor for next page
 
     Returns:
-        List of RFQs
+        List of RFQs with pagination info
     """
-    # Note: This requires API endpoint not yet documented in client
-    # Placeholder implementation
+    client = _ensure_client()
+    rfqs, next_cursor = await client.get_rfqs(
+        status=status,
+        ticker=ticker,
+        limit=limit,
+        cursor=cursor,
+    )
     return {
-        "rfqs": [],
-        "count": 0,
+        "rfqs": [r.model_dump() for r in rfqs],
+        "cursor": next_cursor,
+        "count": len(rfqs),
     }
 
 
 @mcp.tool()
 async def kalshi_get_multivariate_collections(
     status: Optional[str] = None,
+    limit: int = 100,
+    cursor: Optional[str] = None,
 ) -> dict[str, Any]:
     """Get multivariate event collections for related market trading.
 
@@ -713,16 +725,381 @@ async def kalshi_get_multivariate_collections(
     useful for capturing correlations and hedging strategies.
 
     Args:
-        status: Filter by status
+        status: Filter by status (open, closed, settled)
+        limit: Number of results (max 1000, default 100)
+        cursor: Pagination cursor for next page
 
     Returns:
-        List of available multivariate collections
+        List of available multivariate collections with pagination info
     """
-    # Note: This requires API endpoint not yet documented in client
-    # Placeholder implementation
+    client = _ensure_client()
+    collections, next_cursor = await client.get_multivariate_collections(
+        status=status,
+        limit=limit,
+        cursor=cursor,
+    )
+
     return {
-        "collections": [],
-        "count": 0,
+        "collections": [c.model_dump() for c in collections],
+        "cursor": next_cursor,
+        "count": len(collections),
+    }
+
+
+@mcp.tool()
+async def kalshi_get_multivariate_collection(ticker: str) -> dict[str, Any]:
+    """Get a specific multivariate event collection.
+
+    Args:
+        ticker: Collection ticker (e.g., MVE-PRES-2024)
+
+    Returns:
+        Collection details with markets and event information
+    """
+    client = _ensure_client()
+    collection = await client.get_multivariate_collection(ticker)
+    return collection.model_dump()
+
+
+@mcp.tool()
+async def kalshi_get_markets_in_collection(
+    collection_ticker: str,
+    limit: int = 100,
+    cursor: Optional[str] = None,
+) -> dict[str, Any]:
+    """Get markets within a multivariate collection.
+
+    Args:
+        collection_ticker: Collection ticker
+        limit: Number of results (max 1000, default 100)
+        cursor: Pagination cursor for next page
+
+    Returns:
+        List of markets in the collection with pricing
+    """
+    client = _ensure_client()
+    markets, next_cursor = await client.get_markets_in_collection(
+        collection_ticker,
+        limit=limit,
+        cursor=cursor,
+    )
+    return {
+        "markets": [m.model_dump() for m in markets],
+        "cursor": next_cursor,
+        "count": len(markets),
+    }
+
+
+@mcp.tool()
+async def kalshi_lookup_market_in_collection(
+    collection_ticker: str,
+    market_ticker: str,
+) -> dict[str, Any]:
+    """Lookup a specific market within a collection.
+
+    Args:
+        collection_ticker: Collection ticker
+        market_ticker: Market ticker to lookup
+
+    Returns:
+        Market lookup result with related tickers
+    """
+    client = _ensure_client()
+    lookup = await client.lookup_market_in_collection(collection_ticker, market_ticker)
+    return lookup.model_dump()
+
+
+@mcp.tool()
+async def kalshi_get_rfq(rfq_id: str) -> dict[str, Any]:
+    """Get a specific RFQ (Request for Quote).
+
+    Args:
+        rfq_id: RFQ identifier
+
+    Returns:
+        RFQ details including status and timestamps
+    """
+    client = _ensure_client()
+    rfq = await client.get_rfq(rfq_id)
+    return rfq.model_dump()
+
+
+@mcp.tool()
+async def kalshi_delete_rfq(rfq_id: str) -> dict[str, Any]:
+    """Delete an RFQ (Request for Quote).
+
+    Args:
+        rfq_id: RFQ identifier to delete
+
+    Returns:
+        Confirmation message
+    """
+    client = _ensure_client()
+    await client.delete_rfq(rfq_id)
+    return {
+        "status": "success",
+        "message": f"RFQ {rfq_id} deleted successfully",
+    }
+
+
+@mcp.tool()
+async def kalshi_create_quote(
+    rfq_id: str,
+    price: int,
+    quantity: int,
+) -> dict[str, Any]:
+    """Create a quote response to an RFQ.
+
+    Args:
+        rfq_id: RFQ identifier
+        price: Quoted price in cents (1-99)
+        quantity: Quoted quantity
+
+    Returns:
+        Created quote with ID and status
+    """
+    client = _ensure_client()
+    quote = await client.create_quote(rfq_id, price, quantity)
+    return quote.model_dump()
+
+
+@mcp.tool()
+async def kalshi_get_quotes(
+    rfq_id: str,
+    limit: int = 100,
+    cursor: Optional[str] = None,
+) -> dict[str, Any]:
+    """Get quotes for a specific RFQ.
+
+    Args:
+        rfq_id: RFQ identifier
+        limit: Number of results (max 1000, default 100)
+        cursor: Pagination cursor for next page
+
+    Returns:
+        List of quotes with pagination info
+    """
+    client = _ensure_client()
+    quotes, next_cursor = await client.get_quotes(rfq_id, limit=limit, cursor=cursor)
+    return {
+        "quotes": [q.model_dump() for q in quotes],
+        "cursor": next_cursor,
+        "count": len(quotes),
+    }
+
+
+@mcp.tool()
+async def kalshi_accept_quote(quote_id: str) -> dict[str, Any]:
+    """Accept a quote response.
+
+    Args:
+        quote_id: Quote identifier to accept
+
+    Returns:
+        Updated quote with accepted status
+    """
+    client = _ensure_client()
+    quote = await client.accept_quote(quote_id)
+    return quote.model_dump()
+
+
+@mcp.tool()
+async def kalshi_confirm_quote(quote_id: str) -> dict[str, Any]:
+    """Confirm an accepted quote.
+
+    Args:
+        quote_id: Quote identifier to confirm
+
+    Returns:
+        Updated quote with confirmed status
+    """
+    client = _ensure_client()
+    quote = await client.confirm_quote(quote_id)
+    return quote.model_dump()
+
+
+@mcp.tool()
+async def kalshi_delete_quote(quote_id: str) -> dict[str, Any]:
+    """Delete a quote.
+
+    Args:
+        quote_id: Quote identifier to delete
+
+    Returns:
+        Confirmation message
+    """
+    client = _ensure_client()
+    await client.delete_quote(quote_id)
+    return {
+        "status": "success",
+        "message": f"Quote {quote_id} deleted successfully",
+    }
+
+
+# ========== PHASE 4.5: MARKET MAKER ANALYSIS TOOLS (derived) ==========
+
+
+@mcp.tool()
+async def kalshi_analyze_market_maker_opportunity(ticker: str) -> dict[str, Any]:
+    """Analyze market making opportunity for a specific market.
+
+    Combines market data, RFQ activity, and order book metrics to identify
+    attractive market making opportunities.
+
+    Args:
+        ticker: Market ticker to analyze
+
+    Returns:
+        Market making opportunity score and component analysis
+    """
+    client = _ensure_client()
+
+    # Fetch market and orderbook data
+    market = await client.get_market(ticker)
+    orderbook = await client.get_orderbook(ticker, depth=20)
+
+    # Calculate spread metrics
+    yes_spread = (market.yes_ask or 100) - (market.yes_bid or 0) if market.yes_ask and market.yes_bid else None
+    no_spread = (market.no_ask or 100) - (market.no_bid or 0) if market.no_ask and market.no_bid else None
+
+    # Calculate orderbook depth
+    yes_bids = sum([level[1] for level in (orderbook.yes_bids or [])])
+    yes_asks = sum([level[1] for level in (orderbook.yes_asks or [])])
+    no_bids = sum([level[1] for level in (orderbook.no_bids or [])])
+    no_asks = sum([level[1] for level in (orderbook.no_asks or [])])
+
+    total_depth = yes_bids + yes_asks + no_bids + no_asks
+
+    # Calculate opportunity score (0-100)
+    # Wider spreads = higher opportunity (more profit potential)
+    spread_score = 0
+    if yes_spread and no_spread:
+        avg_spread = (yes_spread + no_spread) / 2
+        spread_score = min(100, avg_spread * 10)  # 10-cent spread = 100 score
+
+    # Depth score (more volume = more opportunity to fill)
+    depth_score = min(100, (total_depth / 100) * 100) if total_depth > 0 else 0
+
+    # Volatility score (recent price changes)
+    price_movement = 0
+    if market.last_price and market.previous_price:
+        price_movement = abs(market.last_price - market.previous_price)
+
+    volatility_score = min(100, (price_movement / 10) * 100)
+
+    # Composite opportunity score
+    opportunity_score = (spread_score * 0.5 + depth_score * 0.3 + volatility_score * 0.2)
+
+    return {
+        "ticker": ticker,
+        "market_title": market.title,
+        "opportunity_score": round(opportunity_score, 2),
+        "score_components": {
+            "spread_opportunity": round(spread_score, 2),
+            "depth_opportunity": round(depth_score, 2),
+            "volatility_opportunity": round(volatility_score, 2),
+        },
+        "spread_metrics": {
+            "yes_spread_cents": yes_spread,
+            "no_spread_cents": no_spread,
+            "avg_spread_cents": round((yes_spread + no_spread) / 2, 2) if yes_spread and no_spread else None,
+        },
+        "depth_metrics": {
+            "yes_bids": yes_bids,
+            "yes_asks": yes_asks,
+            "no_bids": no_bids,
+            "no_asks": no_asks,
+            "total_depth": total_depth,
+        },
+        "volatility_metrics": {
+            "last_price_cents": market.last_price,
+            "previous_price_cents": market.previous_price,
+            "price_movement_cents": price_movement,
+            "volume_24h": market.volume_24h,
+        },
+        "recommendation": "excellent" if opportunity_score >= 75
+            else "good" if opportunity_score >= 50
+            else "fair" if opportunity_score >= 25
+            else "poor",
+    }
+
+
+@mcp.tool()
+async def kalshi_assess_rfq_demand(
+    status: Optional[str] = None,
+    limit: int = 100,
+) -> dict[str, Any]:
+    """Assess RFQ demand patterns across markets.
+
+    Analyzes open RFQs to identify which markets have the highest demand
+    for market maker liquidity.
+
+    Args:
+        status: Filter by RFQ status (default: open)
+        limit: Number of RFQs to analyze (max 1000)
+
+    Returns:
+        Demand analysis with top opportunities
+    """
+    client = _ensure_client()
+
+    # Fetch open RFQs
+    rfqs, _ = await client.get_rfqs(
+        status=status or "open",
+        limit=limit,
+    )
+
+    # Aggregate demand by ticker
+    demand_by_ticker: dict[str, dict[str, Any]] = {}
+    total_volume = 0
+
+    for rfq in rfqs:
+        if rfq.ticker not in demand_by_ticker:
+            demand_by_ticker[rfq.ticker] = {
+                "buy_volume": 0,
+                "sell_volume": 0,
+                "total_rfqs": 0,
+                "imbalance": 0,
+            }
+
+        ticker_data = demand_by_ticker[rfq.ticker]
+        ticker_data["total_rfqs"] += 1
+
+        if rfq.side == "buy":
+            ticker_data["buy_volume"] += rfq.count
+        else:
+            ticker_data["sell_volume"] += rfq.count
+
+        total_volume += rfq.count
+
+    # Calculate imbalance and sort by opportunity
+    opportunities = []
+    for ticker, data in demand_by_ticker.items():
+        total_rfq_volume = data["buy_volume"] + data["sell_volume"]
+        imbalance = abs(data["buy_volume"] - data["sell_volume"]) / total_rfq_volume if total_rfq_volume > 0 else 0
+
+        opportunities.append({
+            "ticker": ticker,
+            "total_rfqs": data["total_rfqs"],
+            "buy_volume": data["buy_volume"],
+            "sell_volume": data["sell_volume"],
+            "total_volume": total_rfq_volume,
+            "volume_percent": round((total_rfq_volume / total_volume * 100), 2) if total_volume > 0 else 0,
+            "buy_sell_imbalance": round(imbalance, 3),
+            "opportunity_level": "high" if total_rfq_volume > 50 else "medium" if total_rfq_volume > 10 else "low",
+        })
+
+    # Sort by total volume
+    opportunities.sort(key=lambda x: x["total_volume"], reverse=True)
+
+    return {
+        "summary": {
+            "total_rfqs": len(rfqs),
+            "total_volume": total_volume,
+            "markets_with_demand": len(demand_by_ticker),
+        },
+        "top_opportunities": opportunities[:10],
+        "all_opportunities": opportunities,
     }
 
 

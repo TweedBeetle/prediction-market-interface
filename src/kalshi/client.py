@@ -31,6 +31,10 @@ from .models import (
     OrderGroup,
     Settlement,
     TotalRestingOrderValue,
+    MultivarianateCollection,
+    MarketInCollection,
+    CollectionLookup,
+    MarketMakerMetrics,
 )
 from .websocket_client import KalshiWebSocketClient, WebSocketChannel
 
@@ -788,6 +792,262 @@ class KalshiClient:
             else:
                 positions[order_id] = pos_data
         return positions
+
+    # ========== MULTIVARIATE COLLECTIONS ==========
+
+    async def get_multivariate_collections(
+        self,
+        status: Optional[str] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[MultivarianateCollection], Optional[str]]:
+        """Get multivariate event collections.
+
+        Args:
+            status: Filter by status (open, closed, settled)
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (list of collections, next cursor)
+        """
+        params: Dict[str, Any] = {"limit": limit}
+        if status:
+            params["status"] = status
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/multivariate_collections", params=params, authenticated=False)
+        collections = [
+            MultivarianateCollection(**c) for c in response.get("collections", [])
+        ]
+        return collections, response.get("cursor")
+
+    async def get_multivariate_collection(self, ticker: str) -> MultivarianateCollection:
+        """Get a specific multivariate collection.
+
+        Args:
+            ticker: Collection ticker
+
+        Returns:
+            MultivarianateCollection object
+        """
+        response = await self._request(
+            "GET",
+            f"/multivariate_collections/{ticker}",
+            authenticated=False,
+        )
+        collection_data = response.get("collection", response)
+        return MultivarianateCollection(**collection_data)
+
+    async def get_markets_in_collection(
+        self,
+        collection_ticker: str,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[MarketInCollection], Optional[str]]:
+        """Get markets within a multivariate collection.
+
+        Args:
+            collection_ticker: Collection ticker
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (list of markets, next cursor)
+        """
+        params: Dict[str, Any] = {"limit": limit}
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request(
+            "GET",
+            f"/multivariate_collections/{collection_ticker}/markets",
+            params=params,
+            authenticated=False,
+        )
+        markets = [MarketInCollection(**m) for m in response.get("markets", [])]
+        return markets, response.get("cursor")
+
+    async def lookup_market_in_collection(
+        self,
+        collection_ticker: str,
+        market_ticker: str,
+    ) -> CollectionLookup:
+        """Lookup a specific market within a collection.
+
+        Args:
+            collection_ticker: Collection ticker
+            market_ticker: Market ticker to lookup
+
+        Returns:
+            CollectionLookup object with tickers
+        """
+        response = await self._request(
+            "POST",
+            f"/multivariate_collections/{collection_ticker}/lookup",
+            json={"market_ticker": market_ticker},
+            authenticated=False,
+        )
+        lookup_data = response.get("lookup", response)
+        return CollectionLookup(**lookup_data)
+
+    # ========== COMMUNICATIONS: RFQs ==========
+
+    async def create_rfq(
+        self,
+        ticker: str,
+        side: str,
+        count: int,
+    ) -> RFQ:
+        """Create a Request for Quote.
+
+        Args:
+            ticker: Market ticker
+            side: "buy" or "sell"
+            count: Number of contracts
+
+        Returns:
+            Created RFQ object
+        """
+        payload = {
+            "ticker": ticker,
+            "side": side,
+            "count": count,
+        }
+        response = await self._request("POST", "/communications/rfq", json=payload)
+        return RFQ(**response.get("rfq", response))
+
+    async def get_rfqs(
+        self,
+        status: Optional[str] = None,
+        ticker: Optional[str] = None,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[RFQ], Optional[str]]:
+        """Get RFQs (Request for Quotes).
+
+        Args:
+            status: Filter by status
+            ticker: Filter by market ticker
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (list of RFQs, next cursor)
+        """
+        params: Dict[str, Any] = {"limit": limit}
+        if status:
+            params["status"] = status
+        if ticker:
+            params["ticker"] = ticker
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", "/communications/rfq", params=params)
+        rfqs = [RFQ(**r) for r in response.get("rfqs", [])]
+        return rfqs, response.get("cursor")
+
+    async def get_rfq(self, rfq_id: str) -> RFQ:
+        """Get a specific RFQ.
+
+        Args:
+            rfq_id: RFQ ID
+
+        Returns:
+            RFQ object
+        """
+        response = await self._request("GET", f"/communications/rfq/{rfq_id}")
+        return RFQ(**response.get("rfq", response))
+
+    async def delete_rfq(self, rfq_id: str) -> None:
+        """Delete an RFQ.
+
+        Args:
+            rfq_id: RFQ ID to delete
+        """
+        await self._request("DELETE", f"/communications/rfq/{rfq_id}")
+
+    # ========== COMMUNICATIONS: QUOTES ==========
+
+    async def create_quote(
+        self,
+        rfq_id: str,
+        price: int,
+        quantity: int,
+    ) -> Quote:
+        """Create a quote response to an RFQ.
+
+        Args:
+            rfq_id: RFQ ID to respond to
+            price: Quote price (cents)
+            quantity: Quote quantity
+
+        Returns:
+            Created Quote object
+        """
+        payload = {
+            "price": price,
+            "quantity": quantity,
+        }
+        response = await self._request("POST", f"/communications/rfq/{rfq_id}/quote", json=payload)
+        return Quote(**response.get("quote", response))
+
+    async def get_quotes(
+        self,
+        rfq_id: str,
+        limit: int = 100,
+        cursor: Optional[str] = None,
+    ) -> tuple[List[Quote], Optional[str]]:
+        """Get quotes for a specific RFQ.
+
+        Args:
+            rfq_id: RFQ ID
+            limit: Number of results
+            cursor: Pagination cursor
+
+        Returns:
+            Tuple of (list of quotes, next cursor)
+        """
+        params: Dict[str, Any] = {"limit": limit}
+        if cursor:
+            params["cursor"] = cursor
+
+        response = await self._request("GET", f"/communications/rfq/{rfq_id}/quote", params=params)
+        quotes = [Quote(**q) for q in response.get("quotes", [])]
+        return quotes, response.get("cursor")
+
+    async def accept_quote(self, quote_id: str) -> Quote:
+        """Accept a quote response.
+
+        Args:
+            quote_id: Quote ID to accept
+
+        Returns:
+            Updated Quote object
+        """
+        response = await self._request("POST", f"/communications/quote/{quote_id}/accept")
+        return Quote(**response.get("quote", response))
+
+    async def confirm_quote(self, quote_id: str) -> Quote:
+        """Confirm an accepted quote.
+
+        Args:
+            quote_id: Quote ID to confirm
+
+        Returns:
+            Updated Quote object
+        """
+        response = await self._request("POST", f"/communications/quote/{quote_id}/confirm")
+        return Quote(**response.get("quote", response))
+
+    async def delete_quote(self, quote_id: str) -> None:
+        """Delete a quote.
+
+        Args:
+            quote_id: Quote ID to delete
+        """
+        await self._request("DELETE", f"/communications/quote/{quote_id}")
 
     # ========== WEBSOCKET STREAMING ==========
 
