@@ -56,6 +56,7 @@
 Refer to the curated docs for detailed guidance:
 
 - @docs/kalshi/index.md and related subpages — Kalshi agent architecture, SDK usage, and API reference.
+- @docs/kalshi/gotchas/CLAUDE.md — **Known Kalshi API gotchas and workarounds** - Critical issues, undocumented behaviors, and cost traps (action/side semantics, MVE market explosion, market orders deprecated, negative liquidity in settled markets)
 - @docs/polymarket/index.md and related subpages — Polymarket agent overview, quickstarts, and developer guides.
 - @docs/gofastmcp/INDEX.md and related subpages— Complete FastMCP framework documentation mirror including servers, clients, deployment, integrations, and Python SDK reference.
 
@@ -466,9 +467,261 @@ Root causes found:
 1. Auth signature included body (wrong per docs, but cassettes masked it)
 2. Orderbook parser expected nested structure (cassettes had null, didn't trigger)
 3. Env vars mixed prod/demo (tests bypass wrapper script, didn't catch)
+4. Fill model expected int prices, API returns floats (cassettes had empty arrays)
 ```
 
-**Lesson:** **Passing tests ≠ working code** when cassettes have unrealistic data. Always test MCP tools directly after code changes.
+**Case Study: Fill Model Bug (2025-11-03)**
+
+During system demonstration, `kalshi_get_fills` crashed with:
+```
+ValidationError: Input should be a valid integer, got a number with a fractional part
+price: 0.01  ← API returns float in dollars
+```
+
+**Why tests didn't catch it:**
+```yaml
+# tests/cassettes/TestPortfolioTools.test_get_fills.yaml
+response:
+  body:
+    string: '{"cursor":"","fills":[]}'  # ← Empty array!
+```
+
+- Integration tests ran against demo API with no trading activity
+- VCR recorded empty fill arrays `[]`
+- Empty arrays bypass model validation (no Fill objects created)
+- Bug in Fill model never triggered
+- **Tests passed ✅ but code was broken ❌**
+
+**The fix:**
+1. Changed Fill model `price` field from `int` to `float`
+2. Added unit tests that validate model structure with mock data
+3. Unit tests catch model bugs even when cassettes are empty
+
+**Prevention:**
+- ✅ Add unit tests for model parsing (don't rely only on integration tests)
+- ✅ Use realistic mock data in unit tests (simulate actual API responses)
+- ✅ Cassette validation tests check for empty/null data patterns
+- ✅ Periodically test MCP tools directly (bypasses cassettes)
+
+**Code references:**
+- Bug fix: `src/kalshi/models.py:158` (Fill.price changed to float)
+- Unit tests: `tests/kalshi/unit/test_fill_model.py` (6 tests for Fill model)
+- Cassette validation: `tests/kalshi/integration/test_cassette_validation.py`
+
+**Lesson:** **Passing tests ≠ working code** when cassettes have unrealistic data. Always test MCP tools directly after code changes, and add unit tests for model parsing.
+
+---
+
+**Case Study: Phase 2 Order Groups (2025-11-03)**
+
+During Phase 2 demonstration, order groups immediately failed with `KeyError: 'order_group'` when testing via MCP tools, despite 22 integration tests passing.
+
+**Why tests didn't catch it:**
+
+1. **Tests were written based on wrong documentation**:
+   - Python SDK docs suggested: `{"order_group": {...}}`
+   - Tests validated that expected structure
+   - VCR cassettes recorded fictional responses matching wrong code
+   - **Actual API** returns: `{"order_group_id": "..."}`
+
+2. **Cassettes replayed fictional success**:
+   ```python
+   # tests/kalshi/integration/test_order_groups.py (BEFORE fix)
+   group = await client.create_order_group(contracts_limit=100)
+   assert group.contracts_limit == 100  # ✅ Test passed (cassette had this)
+   assert group.contracts_filled == 0   # ✅ Test passed (cassette had this)
+
+   # But real API NEVER returns these fields!
+   ```
+
+3. **Integration tests weren't actually integrating**:
+   - Tests verified code behaved consistently with cassettes (regression tests)
+   - Tests did NOT verify code worked with real API
+   - First real API test was via MCP tools → immediate failure
+
+**The discovery process:**
+1. User asked to test MCP tools directly (bypasses cassettes)
+2. Immediate failure: `KeyError: 'order_group'`
+3. User said "look athe api docs mauybe again" (critical feedback!)
+4. Found actual API reference docs (not SDK docs)
+5. Discovered real API structure completely different
+
+**The fix:**
+1. Rewrote `OrderGroup` model to match actual API responses
+2. Fixed all 5 client methods (create, get, list, reset, delete)
+3. Updated integration tests to expect correct structure
+4. Documented API limitation (contracts_limit never returned)
+
+**Root cause:** Tests validated consistency with cassettes, not correctness against real API.
+
+**Prevention:**
+- ✅ Test MCP tools directly after code changes (bypasses cassettes)
+- ✅ Periodically re-record cassettes to catch API drift
+- ✅ Add cassette validation tests (check for realistic data)
+- ✅ Unit tests with mock data (don't rely only on cassettes)
+- ✅ When docs conflict, verify against actual API
+
+**Key insight:** **First test against real API wins**. MCP tools found bugs in minutes that 22 passing tests missed entirely.
+
+**Code references:**
+- Investigation: Commit `62ab18a` - "Fix Phase 2 bugs: Order Groups response parsing and Amend Order endpoint"
+- Model fix: `src/kalshi/models.py:284-310` (OrderGroup rewrite)
+- Client fixes: `src/kalshi/client.py:740-817` (all order group methods)
+- Test updates: `tests/kalshi/integration/test_order_groups.py`
+
+---
+
+### Search Markets Implementation - Client-Side Filtering
+
+**Implementation Detail:** The `kalshi_search_markets` tool uses **client-side text filtering** because Kalshi's API has no text search endpoint.
+
+**How it works:**
+1. When query is provided: Fetches up to 1000 markets, filters locally by title/subtitle
+2. When no query: Returns requested limit directly from API
+
+**Why:**
+- ❌ Kalshi API only supports exact filtering (event_ticker, series_ticker, status)
+- ❌ No fuzzy text search or keyword matching
+- ✅ Client-side filtering allows natural language queries like "election", "Bitcoin", "Trump"
+
+**Performance:**
+- First call with query: ~1-2 seconds (fetches 1000 markets)
+- Subsequent calls: Fast (if markets cached by API/network layer)
+- No query: Fast (direct API call with requested limit)
+
+**Code locations:**
+- Client implementation: `src/kalshi/client.py:179-215` (search_markets method)
+- MCP tool: `src/kalshi/kalshi_mcp_server.py:104-160` (kalshi_search_markets)
+- Documentation: `docs/kalshi/gotchas/no_text_search_api.md`
+
+**Testing note:** After modifying this implementation, VCR cassettes need re-recording:
+```bash
+# Re-record affected cassettes
+./scripts/rerecord_cassettes.sh test_client.py test_mcp_tools.py
+```
+
+---
+
+### Pagination Implementation
+
+**Overview:** The Kalshi API uses cursor-based pagination for list endpoints. The client handles this transparently.
+
+**Implementation Pattern:**
+```python
+# Internal helper method (_paginate)
+async def _paginate(
+    endpoint: str,
+    result_key: str,
+    params: dict,
+    max_results: Optional[int] = None
+) -> list[dict]:
+    """Fetches all pages using cursor-based pagination."""
+    # 1. Initial request with limit=100 (max per page)
+    # 2. Extract cursor from response
+    # 3. Loop with cursor until no more pages
+    # 4. Stop early if max_results reached
+```
+
+**Which methods use pagination:**
+- ✅ `search_markets()` - Custom incremental pagination for query filtering
+- ✅ `get_events()` - Uses `_paginate` helper
+- ✅ `get_trades()` - Uses `_paginate` helper
+- ✅ `get_orders()` - Uses `_paginate` helper
+- ✅ `get_positions()` - Uses `_paginate` helper
+- ✅ `get_fills()` - Uses `_paginate` helper
+
+**Key characteristics:**
+- **Transparent**: Callers request N results, client fetches pages as needed
+- **Efficient**: Stops fetching when limit reached (doesn't over-fetch)
+- **Simple API**: Returns `list[Model]` directly, no cursor exposure
+- **Max page size**: 100 items per page (Kalshi's limit)
+
+**Example:**
+```python
+# User requests 250 fills
+fills = await client.get_fills(limit=250)
+
+# Internally:
+# - Fetches page 1 (100 fills) with cursor=None
+# - Fetches page 2 (100 fills) with cursor from page 1
+# - Fetches page 3 (50 fills) with cursor from page 2
+# - Returns combined list of 250 fills
+```
+
+**Code locations:**
+- Pagination helper: `src/kalshi/client.py:169-213` (`_paginate` method)
+- Search markets: `src/kalshi/client.py:225-295` (custom incremental pagination)
+- Other methods: `src/kalshi/client.py:310+` (use `_paginate` helper)
+
+**Documentation reference:** `docs/kalshi/getting_started/pagination.md`
+
+**Future Enhancement Idea:**
+> **Problem:** Search with queries can be slow, potentially fetching 100+ pages from Kalshi (10,000+ markets) for client-side filtering.
+>
+> **Solution:** Continuous market sync with vector database:
+> - Background process periodically fetches all markets (every 5-15 minutes)
+> - Stores market metadata (title, subtitle, ticker, etc.) in vector database
+> - Embeds market text for semantic search
+> - MCP tool `kalshi_search_markets_fast()` queries local vector DB instead of API
+> - Benefits:
+>   - **100x faster**: Local semantic search vs 100+ API calls
+>   - **Semantic matching**: "presidential race" finds "election" markets
+>   - **Always fresh**: Background sync keeps data current
+>   - **Cost efficient**: One full fetch every 15min vs per-query fetching
+> - Implementation: ChromaDB or similar, with embedding model (text-embedding-3-small)
+> - Trade-off: Adds infrastructure complexity (background worker, database)
+>
+> **Related:** This pattern could extend to Polymarket too, enabling cross-platform semantic arbitrage detection.
+
+---
+
+### Demo API Reliability
+
+**Known Issue:** Kalshi's demo API (`demo-api.kalshi.co`) experiences intermittent infrastructure errors.
+
+**Symptoms:**
+```
+❌ 503 Service Unavailable - Order creation endpoint
+✅ Success (retry works)
+❌ 502 Bad Gateway - Order cancellation endpoint
+✅ Success (retry works)
+```
+
+**Impact:**
+- Order creation/cancellation endpoints may fail temporarily
+- Tests pass because they use VCR cassettes (recorded successful responses)
+- MCP tool testing may encounter errors that aren't in test results
+
+**Root Cause:** Infrastructure flakiness in demo environment, NOT a code bug.
+
+**Evidence:**
+1. ✅ Authentication implementation verified correct against Kalshi docs
+2. ✅ Same code succeeds on retry without changes
+3. ✅ Health check shows API alternates between working/failing
+4. ✅ Tests pass using cassettes even when API is down
+
+**When testing MCP tools directly:**
+- Expect occasional 502/503 errors during API instability
+- Retry once if you encounter these errors
+- Check API health first: `curl https://demo-api.kalshi.co/trade-api/v2/exchange/status`
+
+**Tools to help:**
+- **Health check fixture** - `tests/conftest.py` warns if API is down before running tests
+- **E2E tests** - `tests/kalshi/integration/test_e2e_order_lifecycle.py` tests real order workflows
+- **Cassette validation** - `tests/kalshi/integration/test_cassette_validation.py` verifies cassettes have realistic data
+- **Re-record script** - `scripts/rerecord_cassettes.sh` updates cassettes with fresh API data
+
+**Re-recording cassettes:**
+```bash
+# Re-record all cassettes (use when API is healthy)
+./scripts/rerecord_cassettes.sh
+
+# Only record new cassettes (preserve existing)
+./scripts/rerecord_cassettes.sh --new-only
+
+# Re-record specific test file
+./scripts/rerecord_cassettes.sh test_mcp_tools.py
+```
 
 ### When Tests Pass But MCP Fails
 
@@ -601,7 +854,35 @@ tests/kalshi/integration/
 - Most endpoints return data wrapped: `{"markets": [...]}`, `{"orders": [...]}`
 - Trade endpoint returns prices as floats (dollars), not cents
 - Order book returns nested structure with YES/NO bids/asks
-- Pagination uses `limit` parameter (max varies by endpoint)
+- Pagination uses `cursor` parameter (implemented automatically by client)
+
+**Pagination Support (Added 2025-11-03):**
+
+Kalshi uses cursor-based pagination with a maximum of 100 items per page. All client methods that return lists now support automatic pagination:
+
+**Paginated Methods:**
+- `search_markets()` - Fetches all pages when query is provided, respects limit otherwise
+- `get_events()` - Automatically paginates for limit >100
+- `get_trades()` - Automatically paginates for limit >100
+- `get_orders()` - Automatically paginates for limit >100
+- `get_positions()` - Automatically paginates for limit >100
+- `get_fills()` - Automatically paginates for limit >100
+
+**Implementation Details:**
+- Internal `_paginate()` helper handles cursor-based iteration
+- Page size: 100 items (Kalshi's maximum)
+- Query searches use incremental pagination (stop early once limit reached)
+- Safety limit: Max 100 pages per request (10,000 items) to prevent runaway loops
+- VCR cassettes updated to match new pagination parameters
+
+**Example:**
+```python
+# Request 500 markets - automatically fetches 5 pages
+markets = await client.search_markets(limit=500, status="open")
+
+# Search with query - fetches pages until 50 matches found
+matches = await client.search_markets(query="election", limit=50)
+```
 
 **Safety Patterns:**
 - Always check balance before order creation
