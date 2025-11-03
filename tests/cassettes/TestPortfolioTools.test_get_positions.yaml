@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=100
+  response:
+    body:
+      string: '{"cursor":"","event_positions":[{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXCSGOGAME-FURG225","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":3,"total_cost":0,"total_cost_dollars":"0.0000"}],"market_positions":[{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T18:02:01.971208Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":3,"ticker":"KXCSGOGAME-FURG225-G2","total_traded":0,"total_traded_dollars":"0.0000"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '623'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:12:10 GMT
+      Via:
+      - 1.1 851425d2e2023c33a5b8292e20a02270.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - yj0xp6AJ4LFMF53j4lbsGzmHfTHfPQr55jLtG7ipmPO0uHbFZgfLHw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

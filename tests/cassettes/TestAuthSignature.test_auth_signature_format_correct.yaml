@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/balance
+  response:
+    body:
+      string: '{"balance":980,"portfolio_value":0,"updated_ts":1762199165}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '59'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:46:05 GMT
+      Via:
+      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - usnvy62sYNlXmzD-DCaoVZeNUVKCb9jbqPZXXaZxD4MPtVhrQGggqw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

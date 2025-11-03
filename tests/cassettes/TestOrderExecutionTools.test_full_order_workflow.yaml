@@ -1,0 +1,152 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=1&status=open
+  response:
+    body:
+      string: '{"cursor":"CgwIvdyjyAYQuOHYjAISHEtYUVVJQ0tTRVRUTEUtMjVOT1YwM0gxNDEwLTM","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-03T19:10:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1410","expected_expiration_time":"2025-11-03T19:10:00Z","expiration_time":"2025-11-03T19:10:00Z","expiration_value":"","last_price":92,"last_price_dollars":"0.9200","latest_expiration_time":"2025-11-03T19:10:00Z","liquidity":14649,"liquidity_dollars":"146.4900","market_type":"binary","no_ask":99,"no_ask_dollars":"0.9900","no_bid":4,"no_bid_dollars":"0.0400","no_sub_title":"3","notional_value":100,"notional_value_dollars":"1.0000","open_interest":67,"open_time":"2025-11-03T19:00:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 3 on Nov 03 at 14:10 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1410-3","title":"Will
+        1+1 equal 3 on Nov 03 at 14:10?","volume":67,"volume_24h":67,"yes_ask":96,"yes_ask_dollars":"0.9600","yes_bid":1,"yes_bid_dollars":"0.0100","yes_sub_title":"3"}]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:08:55 GMT
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - accept-encoding
+      Via:
+      - 1.1 0631824901b7974213ff58a0ef901c8e.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 8H4kJfM1Rs33XpE9yLBGXGwxAV-0OnYCJTwwWPvGj3xCBYr6CYHh-w==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-length:
+      - '1417'
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/balance
+  response:
+    body:
+      string: '{"balance":980,"portfolio_value":0,"updated_ts":1762196936}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '59'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:08:56 GMT
+      Via:
+      - 1.1 29929bf1a9924b9a8d744154b986dafe.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - cDaMgOajid9omXIc7aVsq6_rhNAeDemLMOtvr0envfLRvfILttH_zw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 1, "type":
+      "limit", "yes_price": 1}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '91'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"authentication_error","message":"authentication_error","details":"rpc
+        error: code = Unauthenticated desc = INCORRECT_API_KEY_SIGNATURE"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '155'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:08:56 GMT
+      Via:
+      - 1.1 29929bf1a9924b9a8d744154b986dafe.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - jh0kqlCdlXSZx65ghO5c5TCeQ11JeKI6nxUn00XwKMNEA0vG0xQ6UQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

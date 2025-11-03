@@ -1,0 +1,75 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=5&status=open
+  response:
+    body:
+      string: '{"cursor":"CgwI9dmjyAYQ4Ij3vQISJEtYTkNBQU1CU1BSRUFELTI1Tk9WMDNCUkFEU0JPTi1TQk9OMg","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-03T19:10:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1410","expected_expiration_time":"2025-11-03T19:10:00Z","expiration_time":"2025-11-03T19:10:00Z","expiration_value":"","last_price":92,"last_price_dollars":"0.9200","latest_expiration_time":"2025-11-03T19:10:00Z","liquidity":36330,"liquidity_dollars":"363.3000","market_type":"binary","no_ask":99,"no_ask_dollars":"0.9900","no_bid":4,"no_bid_dollars":"0.0400","no_sub_title":"3","notional_value":100,"notional_value_dollars":"1.0000","open_interest":67,"open_time":"2025-11-03T19:00:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 3 on Nov 03 at 14:10 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1410-3","title":"Will
+        1+1 equal 3 on Nov 03 at 14:10?","volume":67,"volume_24h":0,"yes_ask":96,"yes_ask_dollars":"0.9600","yes_bid":1,"yes_bid_dollars":"0.0100","yes_sub_title":"3"},{"can_close_early":true,"category":"","close_time":"2025-11-03T19:10:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1410","expected_expiration_time":"2025-11-03T19:10:00Z","expiration_time":"2025-11-03T19:10:00Z","expiration_value":"","last_price":99,"last_price_dollars":"0.9900","latest_expiration_time":"2025-11-03T19:10:00Z","liquidity":21065,"liquidity_dollars":"210.6500","market_type":"binary","no_ask":43,"no_ask_dollars":"0.4300","no_bid":1,"no_bid_dollars":"0.0100","no_sub_title":"2","notional_value":100,"notional_value_dollars":"1.0000","open_interest":56,"open_time":"2025-11-03T19:00:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 2 on Nov 03 at 14:10 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1410-2","title":"Will
+        1+1 equal 2 on Nov 03 at 14:10?","volume":76,"volume_24h":0,"yes_ask":99,"yes_ask_dollars":"0.9900","yes_bid":57,"yes_bid_dollars":"0.5700","yes_sub_title":"2"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":8.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 8.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 8.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON8","title":"St.
+        Bonaventure wins by over 8.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 8.5 Points"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":5.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 5.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 5.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON5","title":"St.
+        Bonaventure wins by over 5.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 5.5 Points"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":2.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 2.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 2.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON2","title":"St.
+        Bonaventure wins by over 2.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 2.5 Points"}]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:02:33 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 68a32dce20d0762e3778fb28ca194854.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - xCV8q18RGB5ONXLF2PXCNztg0-1IXvwvs3ncB9A1br9HeVl8UXPgnQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

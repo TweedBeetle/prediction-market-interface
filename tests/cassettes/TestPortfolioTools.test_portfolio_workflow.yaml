@@ -1,0 +1,140 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=100
+  response:
+    body:
+      string: '{"cursor":"","event_positions":[{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXCSGOGAME-FURG225","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":3,"total_cost":0,"total_cost_dollars":"0.0000"}],"market_positions":[{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T18:02:01.971208Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":3,"ticker":"KXCSGOGAME-FURG225-G2","total_traded":0,"total_traded_dollars":"0.0000"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '623'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:12:14 GMT
+      Via:
+      - 1.1 0263e7e10b506a4542a1515f73f15568.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - G6bOTmE8SvgTct2ozoLftxeCqdlfCoSvLG5wBi03X-N_12BJzYxMiw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/fills?limit=50
+  response:
+    body:
+      string: '{"cursor":"","fills":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '24'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:12:14 GMT
+      Via:
+      - 1.1 a520c7c73f3ec109d3cb0bc2e5623210.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - duzTpAFyoco3-BrBuou291MvMAyRwxsKRnbV-uga5VD0DW7F4T6lDA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders?status=resting&limit=100
+  response:
+    body:
+      string: '{"cursor":"","orders":[{"action":"buy","client_order_id":"4c279d31-2766-4182-8e8a-3eba3bd154b6","created_time":"2025-11-03T18:02:03.749329Z","expiration_time":null,"fill_count":0,"initial_count":1,"last_update_time":"2025-11-03T18:02:03.749329Z","maker_fees":0,"maker_fees_dollars":null,"maker_fill_cost":0,"maker_fill_cost_dollars":"0.0000","no_price":99,"no_price_dollars":"0.9900","order_group_id":null,"order_id":"a5b064cd-d824-4428-a7ee-8d3cc8506091","queue_position":0,"remaining_count":1,"self_trade_prevention_type":null,"side":"yes","status":"resting","taker_fees":0,"taker_fees_dollars":null,"taker_fill_cost":0,"taker_fill_cost_dollars":"0.0000","ticker":"KXCSGOGAME-FURG225-G2","type":"limit","user_id":"9940974f-9a5c-47f2-b103-d46164f7f355","yes_price":1,"yes_price_dollars":"0.0100"},{"action":"sell","client_order_id":"da2af8c2-bd3b-4325-94a2-8243fd903514","created_time":"2025-11-03T18:02:03.039376Z","expiration_time":null,"fill_count":0,"initial_count":1,"last_update_time":"2025-11-03T18:02:03.039376Z","maker_fees":0,"maker_fees_dollars":null,"maker_fill_cost":0,"maker_fill_cost_dollars":"0.0000","no_price":99,"no_price_dollars":"0.9900","order_group_id":null,"order_id":"1734af3c-7378-4efc-a066-82571e2aaa1b","queue_position":0,"remaining_count":1,"self_trade_prevention_type":null,"side":"no","status":"resting","taker_fees":0,"taker_fees_dollars":null,"taker_fill_cost":0,"taker_fill_cost_dollars":"0.0000","ticker":"KXCSGOGAME-FURG225-G2","type":"limit","user_id":"9940974f-9a5c-47f2-b103-d46164f7f355","yes_price":1,"yes_price_dollars":"0.0100"},{"action":"buy","client_order_id":"0cb9dbbb-0647-4825-823d-ef1694f16731","created_time":"2025-11-03T18:02:01.970868Z","expiration_time":null,"fill_count":0,"initial_count":1,"last_update_time":"2025-11-03T18:02:01.970868Z","maker_fees":0,"maker_fees_dollars":null,"maker_fill_cost":0,"maker_fill_cost_dollars":"0.0000","no_price":99,"no_price_dollars":"0.9900","order_group_id":null,"order_id":"45630eca-2ff9-4340-b29d-067dfb9040fa","queue_position":0,"remaining_count":1,"self_trade_prevention_type":null,"side":"yes","status":"resting","taker_fees":0,"taker_fees_dollars":null,"taker_fill_cost":0,"taker_fill_cost_dollars":"0.0000","ticker":"KXCSGOGAME-FURG225-G2","type":"limit","user_id":"9940974f-9a5c-47f2-b103-d46164f7f355","yes_price":1,"yes_price_dollars":"0.0100"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:12:14 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 248e05f803b9ec4139b6bc53e3088d18.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - S4Qx3XF6LEla94GE84Y0TmWD2dxyoKUcukX9i5rSET8hXU5jvdulaw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

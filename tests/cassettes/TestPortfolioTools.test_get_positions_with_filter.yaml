@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=10&ticker=HIGHTEST
+  response:
+    body:
+      string: '{"cursor":"","event_positions":[],"market_positions":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:12:11 GMT
+      Via:
+      - 1.1 05e25fe9389d9c05dea8635f0696b51a.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - MR4H7rMnbS3xQv7jN0oLiXWUb2Nsb98IEy13FXFXKv6m7ktfpxRpnQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

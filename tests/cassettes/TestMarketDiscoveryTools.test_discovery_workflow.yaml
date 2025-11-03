@@ -1,0 +1,181 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/events?limit=5&status=open
+  response:
+    body:
+      string: '{"cursor":"CgYI8JHtswkSDktYRVJVUFRTVVBFUi0w","events":[{"available_on_brokers":false,"category":"World","collateral_return_type":"","event_ticker":"KXELONMARS-99","mutually_exclusive":false,"series_ticker":"KXELONMARS","strike_period":"","sub_title":"Before
+        2099","title":"Will Elon Musk visit Mars in his lifetime?"},{"available_on_brokers":false,"category":"World","collateral_return_type":"MECNET","event_ticker":"KXNEWPOPE-70","mutually_exclusive":true,"series_ticker":"KXNEWPOPE","strike_period":"","sub_title":"Before
+        2070","title":"Who will the next Pope be?"},{"available_on_brokers":false,"category":"Climate
+        and Weather","collateral_return_type":"","event_ticker":"KXWARMING-50","mutually_exclusive":false,"series_ticker":"KXWARMING","strike_period":"","sub_title":"Before
+        2050","title":"Will the world pass 2 degrees Celsius over pre-industrial levels
+        before 2050?"},{"available_on_brokers":false,"category":"Science and Technology","collateral_return_type":"","event_ticker":"KXMARSVRAIL-50","mutually_exclusive":false,"series_ticker":"KXMARSVRAIL","strike_period":"","sub_title":"Before
+        2050","title":"Will a human land on Mars before California starts high-speed
+        rail?"},{"available_on_brokers":false,"category":"Climate and Weather","collateral_return_type":"","event_ticker":"KXERUPTSUPER-0","mutually_exclusive":false,"series_ticker":"KXERUPTSUPER","strike_period":"","sub_title":"a
+        supervolcano","title":"Will a supervolcano erupt before 2050?"}],"milestones":[]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:17:32 GMT
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - accept-encoding
+      Via:
+      - 1.1 ba1ef4d237a5e56ce35ce0443c17d0de.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - c_8A1stYkTd-dtn9cSSZGdVDV4jQNSV5oC2srBIoSgEyOXpaT7sg0Q==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-length:
+      - '1482'
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=5&status=open
+  response:
+    body:
+      string: '{"cursor":"CgwI9dmjyAYQ4Ij3vQISJEtYTkNBQU1CU1BSRUFELTI1Tk9WMDNCUkFEU0JPTi1TQk9OMg","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-03T19:20:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1420","expected_expiration_time":"2025-11-03T19:20:00Z","expiration_time":"2025-11-03T19:20:00Z","expiration_value":"","last_price":85,"last_price_dollars":"0.8500","latest_expiration_time":"2025-11-03T19:20:00Z","liquidity":62533,"liquidity_dollars":"625.3300","market_type":"binary","no_ask":15,"no_ask_dollars":"0.1500","no_bid":3,"no_bid_dollars":"0.0300","no_sub_title":"3","notional_value":100,"notional_value_dollars":"1.0000","open_interest":169,"open_time":"2025-11-03T19:10:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 3 on Nov 03 at 14:20 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1420-3","title":"Will
+        1+1 equal 3 on Nov 03 at 14:20?","volume":207,"volume_24h":128,"yes_ask":97,"yes_ask_dollars":"0.9700","yes_bid":85,"yes_bid_dollars":"0.8500","yes_sub_title":"3"},{"can_close_early":true,"category":"","close_time":"2025-11-03T19:20:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1420","expected_expiration_time":"2025-11-03T19:20:00Z","expiration_time":"2025-11-03T19:20:00Z","expiration_value":"","last_price":17,"last_price_dollars":"0.1700","latest_expiration_time":"2025-11-03T19:20:00Z","liquidity":43925,"liquidity_dollars":"439.2500","market_type":"binary","no_ask":83,"no_ask_dollars":"0.8300","no_bid":2,"no_bid_dollars":"0.0200","no_sub_title":"2","notional_value":100,"notional_value_dollars":"1.0000","open_interest":176,"open_time":"2025-11-03T19:10:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 2 on Nov 03 at 14:20 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1420-2","title":"Will
+        1+1 equal 2 on Nov 03 at 14:20?","volume":264,"volume_24h":139,"yes_ask":98,"yes_ask_dollars":"0.9800","yes_bid":17,"yes_bid_dollars":"0.1700","yes_sub_title":"2"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":8.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 8.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 8.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON8","title":"St.
+        Bonaventure wins by over 8.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 8.5 Points"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":5.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 5.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 5.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON5","title":"St.
+        Bonaventure wins by over 5.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 5.5 Points"},{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":2.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
+        Bonaventure wins by over 2.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        St. Bonaventure wins by more than 2.5 points in the Bradley at St. Bonaventure
+        college basketball game originally scheduled for Nov 3, 2025, then the market
+        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON2","title":"St.
+        Bonaventure wins by over 2.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
+        Bonaventure wins by over 2.5 Points"}]}
+
+        '
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 03 Nov 2025 19:17:32 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 d97e7873a0aceff0d1cb844be87a55a8.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Th4NJM8N4gYYVcYQi4_Fu2zYVFrR8cMqdyAS5v1GV0QByIa2Wcqszg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/trades?limit=20
+  response:
+    body:
+      string: '{"cursor":"EhIKEFDA3e3-q2J2gZvsIj-LW_waDAjK_6PIBhD42b-nAw","trades":[{"count":3,"created_time":"2025-11-03T19:17:33.048264Z","no_price":26,"no_price_dollars":"0.2600","price":0.74,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.162","trade_id":"5fa22e20-f4e7-6ade-46f6-05294abb030e","yes_price":74,"yes_price_dollars":"0.7400"},{"count":3,"created_time":"2025-11-03T19:17:32.956707Z","no_price":26,"no_price_dollars":"0.2600","price":0.74,"taker_side":"yes","ticker":"KXDOGE-25NOV0315-B0.132","trade_id":"9dfdcb66-ed4d-47cf-4d48-d6a8b311b9cc","yes_price":74,"yes_price_dollars":"0.7400"},{"count":50,"created_time":"2025-11-03T19:17:32.934762Z","no_price":11,"no_price_dollars":"0.1100","price":0.89,"taker_side":"no","ticker":"KXETH-25NOV0315-B3110","trade_id":"43fa3a95-4323-5e57-ef2b-10a19b8c7a65","yes_price":89,"yes_price_dollars":"0.8900"},{"count":2,"created_time":"2025-11-03T19:17:32.761269Z","no_price":5,"no_price_dollars":"0.0500","price":0.95,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.137","trade_id":"8d6358b3-b25e-4576-0ed4-e9c7255a8dcf","yes_price":95,"yes_price_dollars":"0.9500"},{"count":8,"created_time":"2025-11-03T19:17:32.744898Z","no_price":30,"no_price_dollars":"0.3000","price":0.7,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.167","trade_id":"3b18981b-7dc9-44f0-e5e0-20380223d4fb","yes_price":70,"yes_price_dollars":"0.7000"},{"count":6,"created_time":"2025-11-03T19:17:32.457686Z","no_price":30,"no_price_dollars":"0.3000","price":0.7,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.142","trade_id":"c230aba2-0454-4e7b-68fc-89bafde9a063","yes_price":70,"yes_price_dollars":"0.7000"},{"count":4,"created_time":"2025-11-03T19:17:32.35986Z","no_price":20,"no_price_dollars":"0.2000","price":0.8,"taker_side":"yes","ticker":"KXDOGE-25NOV0315-B0.142","trade_id":"2ed39c74-b14f-4110-b118-d8916fb6821a","yes_price":80,"yes_price_dollars":"0.8000"},{"count":2,"created_time":"2025-11-03T19:17:32.346816Z","no_price":65,"no_price_dollars":"0.6500","price":0.35,"taker_side":"yes","ticker":"KXDOGE-25NOV0315-B0.172","trade_id":"49db2013-05f6-6bc6-7189-39b676e4394c","yes_price":35,"yes_price_dollars":"0.3500"},{"count":21,"created_time":"2025-11-03T19:17:32.206616Z","no_price":35,"no_price_dollars":"0.3500","price":0.65,"taker_side":"no","ticker":"KXETH-25NOV0315-B3550","trade_id":"cdbbc541-9935-55c7-67b2-bca6d1800191","yes_price":65,"yes_price_dollars":"0.6500"},{"count":8,"created_time":"2025-11-03T19:17:32.1586Z","no_price":40,"no_price_dollars":"0.4000","price":0.6,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.147","trade_id":"e65192b4-3c67-6298-8a96-764f05f32c33","yes_price":60,"yes_price_dollars":"0.6000"},{"count":8,"created_time":"2025-11-03T19:17:32.153951Z","no_price":22,"no_price_dollars":"0.2200","price":0.78,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.177","trade_id":"81a0e7da-1173-7d0d-57cc-ffd0b38fe7c2","yes_price":78,"yes_price_dollars":"0.7800"},{"count":23,"created_time":"2025-11-03T19:17:32.115319Z","no_price":12,"no_price_dollars":"0.1200","price":0.88,"taker_side":"yes","ticker":"KXETH-25NOV0315-B3870","trade_id":"6d96de98-0750-7a74-2d37-14436c72a8e3","yes_price":88,"yes_price_dollars":"0.8800"},{"count":4,"created_time":"2025-11-03T19:17:32.047679Z","no_price":15,"no_price_dollars":"0.1500","price":0.85,"taker_side":"yes","ticker":"KXDOGE-25NOV0315-B0.177","trade_id":"ae94fb0a-96cf-7145-a558-f6d975d14c6f","yes_price":85,"yes_price_dollars":"0.8500"},{"count":4,"created_time":"2025-11-03T19:17:31.858565Z","no_price":18,"no_price_dollars":"0.1800","price":0.82,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.152","trade_id":"04cb3af8-c9e8-5019-f72f-80dee4c56025","yes_price":82,"yes_price_dollars":"0.8200"},{"count":2,"created_time":"2025-11-03T19:17:31.845174Z","no_price":12,"no_price_dollars":"0.1200","price":0.88,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.182","trade_id":"fbaceda3-f78c-4d2c-fd98-986d1092f934","yes_price":88,"yes_price_dollars":"0.8800"},{"count":1,"created_time":"2025-11-03T19:17:31.757155Z","no_price":8,"no_price_dollars":"0.0800","price":0.92,"taker_side":"yes","ticker":"KXDOGE-25NOV0315-B0.152","trade_id":"ab9c65ca-8afc-641f-ddbd-1b747c5f70a6","yes_price":92,"yes_price_dollars":"0.9200"},{"count":100,"created_time":"2025-11-03T19:17:31.28628Z","no_price":13,"no_price_dollars":"0.1300","price":0.87,"taker_side":"no","ticker":"KXETH-25NOV0315-B3150","trade_id":"65da8a7d-6a89-54b4-cb09-66be3f44080e","yes_price":87,"yes_price_dollars":"0.8700"},{"count":22,"created_time":"2025-11-03T19:17:31.151878Z","no_price":13,"no_price_dollars":"0.1300","price":0.87,"taker_side":"no","ticker":"KXETH-25NOV0315-B3570","trade_id":"38034e44-a345-60a4-013a-5f17eb1cbe0a","yes_price":87,"yes_price_dollars":"0.8700"},{"count":1,"created_time":"2025-11-03T19:17:30.957946Z","no_price":31,"no_price_dollars":"0.3100","price":0.69,"taker_side":"no","ticker":"KXDOGE-25NOV0315-B0.167","trade_id":"de3d6686-e656-70f9-de26-ca410021556a","yes_price":69,"yes_price_dollars":"0.6900"},{"count":38,"created_time":"2025-11-03T19:17:30.888139Z","no_price":35,"no_price_dollars":"0.3500","price":0.65,"taker_side":"no","ticker":"KXETH-25NOV0315-B3890","trade_id":"50c0dded-feab-6276-819b-ec223f8b5bfc","yes_price":65,"yes_price_dollars":"0.6500"}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 19:17:33 GMT
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 2b5c6697d9ea18b3dedca979cc312b8c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - y3m2Jt--HWtTx3eVdyKP838DAo0_1FV_BkIdnRqbx-yXnpUkCArMyg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1
