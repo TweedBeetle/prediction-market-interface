@@ -32,12 +32,16 @@ from .models import (
     Settlement,
     TotalRestingOrderValue,
 )
+from .websocket_client import KalshiWebSocketClient, WebSocketChannel
 
 
 class KalshiClient:
-    """Kalshi API client with RSA-PSS signature authentication."""
+    """Kalshi API client with RSA-PSS signature authentication and WebSocket support."""
 
     BASE_URL = "https://api.elections.kalshi.com/trade-api/v2"
+
+    # Class-level WebSocket connection pool (shared across instances)
+    _websocket_connections: Dict[str, KalshiWebSocketClient] = {}
 
     def __init__(
         self,
@@ -784,3 +788,52 @@ class KalshiClient:
             else:
                 positions[order_id] = pos_data
         return positions
+
+    # ========== WEBSOCKET STREAMING ==========
+
+    async def get_websocket_connection(self, connection_id: Optional[str] = None) -> KalshiWebSocketClient:
+        """Get or create a WebSocket connection.
+
+        Implements connection pooling - reuses existing connections if available.
+
+        Args:
+            connection_id: Optional connection ID (creates new if not provided)
+
+        Returns:
+            KalshiWebSocketClient instance
+        """
+        if not connection_id:
+            connection_id = f"ws-{int(time.time() * 1000)}"
+
+        # Return existing connection if available
+        if connection_id in self._websocket_connections:
+            conn = self._websocket_connections[connection_id]
+            if conn.is_connected():
+                return conn
+
+        # Create new connection
+        ws_client = KalshiWebSocketClient(
+            api_key_id=self.api_key_id,
+            private_key_pem=self.private_key,
+            timeout=self.timeout,
+        )
+
+        # Store in pool
+        self._websocket_connections[connection_id] = ws_client
+
+        return ws_client
+
+    @classmethod
+    async def close_all_websockets(cls) -> None:
+        """Close all WebSocket connections in the pool.
+
+        Should be called on application shutdown.
+        """
+        for connection_id, ws_client in cls._websocket_connections.items():
+            try:
+                await ws_client.disconnect()
+            except Exception as e:
+                logger.error(f"Error closing WebSocket {connection_id}: {e}")
+
+        cls._websocket_connections.clear()
+        logger.info("All WebSocket connections closed")
