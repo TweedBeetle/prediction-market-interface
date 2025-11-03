@@ -24,6 +24,9 @@ from .models import (
     OrderBook,
     OrderBookLevel,
     Trade,
+    BatchOrderRequest,
+    BatchOrderResponse,
+    OrderGroup,
 )
 
 
@@ -166,6 +169,52 @@ class KalshiClient:
 
         return response.json()
 
+    async def _paginate(
+        self,
+        endpoint: str,
+        result_key: str,
+        params: Optional[dict[str, Any]] = None,
+        max_results: Optional[int] = None,
+    ) -> list[dict[str, Any]]:
+        """
+        Fetch all paginated results using cursor-based pagination.
+
+        Args:
+            endpoint: API endpoint (e.g., "markets")
+            result_key: Key in response containing results (e.g., "markets")
+            params: Initial query parameters
+            max_results: Maximum total results to fetch (None = fetch all)
+
+        Returns:
+            List of all result items across all pages
+        """
+        params = params or {}
+        all_results = []
+        cursor = None
+        page_size = 100  # Kalshi's max per page
+
+        while True:
+            # Add cursor to params if we have one
+            if cursor:
+                params["cursor"] = cursor
+
+            # Fetch page
+            data = await self._request("GET", endpoint, params=params)
+            results = data.get(result_key, [])
+            all_results.extend(results)
+
+            # Check if we've hit max_results
+            if max_results and len(all_results) >= max_results:
+                return all_results[:max_results]
+
+            # Check for next page
+            cursor = data.get("cursor")
+            if not cursor:
+                # No more pages
+                break
+
+        return all_results
+
     async def get_exchange_status(self) -> ExchangeStatus:
         """Get exchange operational status."""
         data = await self._request("GET", "exchange/status")
@@ -180,23 +229,73 @@ class KalshiClient:
         self, query: Optional[str] = None, limit: int = 20, status: str = "open"
     ) -> list[Market]:
         """
-        Search for markets.
+        Search for markets with client-side text filtering.
+
+        Note: Kalshi API has no text search. This method fetches markets page-by-page
+        and filters locally by title/subtitle. Stops early once enough matches found.
 
         Args:
-            query: Search query string
-            limit: Maximum number of results
+            query: Text to search in market titles/subtitles (case-insensitive)
+            limit: Maximum number of results to return
             status: Market status filter (open, closed, settled)
 
         Returns:
             List of matching markets
         """
-        params = {"limit": limit, "status": status}
         if query:
-            params["event_ticker"] = query  # Simple search for MVP
+            # Fetch pages incrementally and filter as we go
+            logger.info(f"Searching for '{query}' - fetching pages incrementally (need {limit} matches)")
+            query_lower = query.lower()
+            filtered = []
+            cursor = None
+            params = {"status": status, "limit": 100}
+            page_num = 0
+            max_pages = 100  # Safety limit to prevent infinite loops
 
-        data = await self._request("GET", "markets", params=params)
-        markets = data.get("markets", [])
-        return [Market(**m) for m in markets]
+            while len(filtered) < limit and page_num < max_pages:
+                page_num += 1
+                # Add cursor if we have one
+                if cursor:
+                    params["cursor"] = cursor
+
+                # Fetch next page
+                logger.info(f"Fetching page {page_num} (have {len(filtered)}/{limit} matches so far)")
+                data = await self._request("GET", "markets", params=params)
+                markets = data.get("markets", [])
+                logger.info(f"Page {page_num}: received {len(markets)} markets")
+
+                # Filter this page
+                matches_this_page = 0
+                for m in markets:
+                    title = m.get("title", "").lower()
+                    subtitle = m.get("subtitle", "").lower()
+                    if query_lower in title or query_lower in subtitle:
+                        filtered.append(m)
+                        matches_this_page += 1
+                        if len(filtered) >= limit:
+                            break  # Have enough matches
+
+                logger.info(f"Page {page_num}: found {matches_this_page} matches (total: {len(filtered)}/{limit})")
+
+                # Check for next page
+                cursor = data.get("cursor")
+                if not cursor:
+                    logger.info("No more pages available")
+                    break
+
+            if page_num >= max_pages:
+                logger.warning(f"Hit max pages limit ({max_pages}) - returning {len(filtered)} matches")
+
+            logger.info(f"Search complete: returning {len(filtered)} matches for '{query}'")
+            return [Market(**m) for m in filtered]
+
+        else:
+            # No query - just fetch requested number of markets
+            params = {"status": status, "limit": 100}
+            markets_data = await self._paginate(
+                "markets", "markets", params=params, max_results=limit
+            )
+            return [Market(**m) for m in markets_data]
 
     async def get_market(self, ticker: str) -> Market:
         """
@@ -215,7 +314,7 @@ class KalshiClient:
         self, limit: int = 50, status: str = "open"
     ) -> list[Event]:
         """
-        Get list of events.
+        Get list of events with pagination support.
 
         Args:
             limit: Maximum number of results
@@ -224,9 +323,8 @@ class KalshiClient:
         Returns:
             List of events
         """
-        params = {"limit": limit, "status": status}
-        data = await self._request("GET", "events", params=params)
-        events = data.get("events", [])
+        params = {"status": status, "limit": 100}
+        events = await self._paginate("events", "events", params=params, max_results=limit)
         return [Event(**e) for e in events]
 
     async def get_event(self, event_ticker: str) -> Event:
@@ -312,7 +410,7 @@ class KalshiClient:
         self, ticker: Optional[str] = None, limit: int = 100
     ) -> list[Trade]:
         """
-        Get recent public trades.
+        Get recent public trades with pagination support.
 
         Args:
             ticker: Filter by market ticker (optional)
@@ -321,12 +419,11 @@ class KalshiClient:
         Returns:
             List of recent trades
         """
-        params = {"limit": limit}
+        params = {"limit": 100}
         if ticker:
             params["ticker"] = ticker
 
-        data = await self._request("GET", "markets/trades", params=params)
-        trades = data.get("trades", [])
+        trades = await self._paginate("markets/trades", "trades", params=params, max_results=limit)
         return [Trade(**t) for t in trades]
 
     # Order Operations
@@ -340,9 +437,18 @@ class KalshiClient:
         order_type: str = "market",
         yes_price: Optional[int] = None,
         no_price: Optional[int] = None,
+        order_group_id: Optional[str] = None,
+        # Advanced parameters
+        time_in_force: Optional[str] = None,
+        expiration_ts: Optional[int] = None,
+        post_only: Optional[bool] = None,
+        reduce_only: Optional[bool] = None,
+        self_trade_prevention_type: Optional[str] = None,
+        buy_max_cost: Optional[int] = None,
+        sell_position_floor: Optional[int] = None,
     ) -> Order:
         """
-        Create an order.
+        Create an order with optional advanced parameters.
 
         Args:
             ticker: Market ticker
@@ -352,6 +458,16 @@ class KalshiClient:
             order_type: "market" or "limit" (default: "market")
             yes_price: Limit price for yes side (cents, 1-99)
             no_price: Limit price for no side (cents, 1-99)
+            order_group_id: Optional order group ID to associate order with
+
+        Advanced Parameters:
+            time_in_force: "fok" (Fill-or-Kill), "ioc" (Immediate-or-Cancel), "gtc" (Good-til-Cancel), "gtt" (Good-til-Time)
+            expiration_ts: Unix timestamp for order expiration (required if time_in_force="gtt")
+            post_only: If True, order will only be accepted as a maker order (no immediate fill)
+            reduce_only: If True, order will only reduce existing position, not increase it
+            self_trade_prevention_type: "cancel_resting", "cancel_aggressing", or "cancel_both"
+            buy_max_cost: Maximum cost in cents for buy orders (risk limit)
+            sell_position_floor: Minimum position after sell (prevents overselling)
 
         Returns:
             Created order details
@@ -369,6 +485,31 @@ class KalshiClient:
                 payload["yes_price"] = yes_price
             elif side == "no" and no_price:
                 payload["no_price"] = no_price
+
+        # Optional parameters
+        if order_group_id:
+            payload["order_group_id"] = order_group_id
+
+        if time_in_force:
+            payload["time_in_force"] = time_in_force
+
+        if expiration_ts:
+            payload["expiration_ts"] = expiration_ts
+
+        if post_only is not None:
+            payload["post_only"] = post_only
+
+        if reduce_only is not None:
+            payload["reduce_only"] = reduce_only
+
+        if self_trade_prevention_type:
+            payload["self_trade_prevention_type"] = self_trade_prevention_type
+
+        if buy_max_cost is not None:
+            payload["buy_max_cost"] = buy_max_cost
+
+        if sell_position_floor is not None:
+            payload["sell_position_floor"] = sell_position_floor
 
         data = await self._request("POST", "portfolio/orders", json_data=payload)
         return Order(**data.get("order", data))
@@ -400,11 +541,31 @@ class KalshiClient:
         Returns:
             Amended order details
         """
-        payload = {"count": new_count, "price": new_price}
+        # First get the existing order to retrieve required fields
+        order_data = await self._request("GET", f"portfolio/orders/{order_id}")
+        existing_order = order_data.get("order", order_data)
+
+        # Build payload with all required fields from API
+        payload = {
+            "ticker": existing_order["ticker"],
+            "side": existing_order["side"],
+            "action": existing_order["action"],
+            "count": new_count,
+        }
+
+        # Add price based on side
+        if existing_order["side"] == "yes":
+            payload["yes_price"] = new_price
+        else:
+            payload["no_price"] = new_price
+
+        # Call the correct endpoint (POST with /amend suffix)
         data = await self._request(
-            "PATCH", f"portfolio/orders/{order_id}", json_data=payload
+            "POST", f"portfolio/orders/{order_id}/amend", json_data=payload
         )
-        return Order(**data.get("order", data))
+
+        # API returns both old_order and new_order
+        return Order(**data.get("new_order", data))
 
     async def decrease_order(self, order_id: str, reduce_by: int) -> Order:
         """
@@ -430,7 +591,7 @@ class KalshiClient:
         limit: int = 100,
     ) -> list[Order]:
         """
-        Get orders.
+        Get orders with pagination support.
 
         Args:
             ticker: Filter by ticker (optional)
@@ -440,12 +601,11 @@ class KalshiClient:
         Returns:
             List of orders
         """
-        params = {"status": status, "limit": limit}
+        params = {"status": status, "limit": 100}
         if ticker:
             params["ticker"] = ticker
 
-        data = await self._request("GET", "portfolio/orders", params=params)
-        orders = data.get("orders", [])
+        orders = await self._paginate("portfolio/orders", "orders", params=params, max_results=limit)
         return [Order(**o) for o in orders]
 
     # Portfolio Operations
@@ -457,7 +617,7 @@ class KalshiClient:
         settlement_status: Optional[str] = None,
     ) -> list[Position]:
         """
-        Get portfolio positions.
+        Get portfolio positions with pagination support.
 
         Args:
             ticker: Filter by ticker (optional)
@@ -467,14 +627,13 @@ class KalshiClient:
         Returns:
             List of positions
         """
-        params = {"limit": limit}
+        params = {"limit": 100}
         if ticker:
             params["ticker"] = ticker
         if settlement_status:
             params["settlement_status"] = settlement_status
 
-        data = await self._request("GET", "portfolio/positions", params=params)
-        positions = data.get("positions", [])
+        positions = await self._paginate("portfolio/positions", "positions", params=params, max_results=limit)
         return [Position(**p) for p in positions]
 
     async def get_fills(
@@ -484,7 +643,7 @@ class KalshiClient:
         limit: int = 100,
     ) -> list[Fill]:
         """
-        Get trade fills.
+        Get trade fills with pagination support.
 
         Args:
             ticker: Filter by ticker (optional)
@@ -494,15 +653,183 @@ class KalshiClient:
         Returns:
             List of fills
         """
-        params = {"limit": limit}
+        params = {"limit": 100}
         if ticker:
             params["ticker"] = ticker
         if order_id:
             params["order_id"] = order_id
 
-        data = await self._request("GET", "portfolio/fills", params=params)
-        fills = data.get("fills", [])
+        fills = await self._paginate("portfolio/fills", "fills", params=params, max_results=limit)
         return [Fill(**f) for f in fills]
+
+    # Batch Operations
+
+    async def batch_create_orders(
+        self, orders: list[dict[str, Any]]
+    ) -> list[BatchOrderResponse]:
+        """
+        Create multiple orders in a single batch request.
+
+        Args:
+            orders: List of order specifications (max 20 orders)
+                   Each order dict should contain:
+                   - ticker: str
+                   - type: "market" or "limit"
+                   - action: "buy" or "sell"
+                   - side: "yes" or "no"
+                   - count: int
+                   - client_order_id: Optional[str]
+                   - yes_price/no_price: Optional[int] (for limit orders)
+
+        Returns:
+            List of batch order responses (one per order)
+
+        Note:
+            Requires advanced access from Kalshi.
+            Will raise HTTPError with 403 status if access not granted.
+        """
+        if len(orders) > 20:
+            raise ValueError(f"Batch size {len(orders)} exceeds maximum of 20 orders")
+
+        logger.info(f"Creating batch of {len(orders)} orders")
+
+        # API expects "orders" array in request body
+        data = await self._request("POST", "portfolio/orders/batched", json_data={"orders": orders})
+
+        # Parse responses
+        responses = []
+        for item in data.get("orders", []):
+            responses.append(BatchOrderResponse(**item))
+
+        # Log summary
+        successful = sum(1 for r in responses if r.is_success)
+        failed = len(responses) - successful
+        logger.info(f"Batch complete: {successful} succeeded, {failed} failed")
+
+        return responses
+
+    async def batch_cancel_orders(self, order_ids: list[str]) -> list[dict]:
+        """
+        Cancel multiple orders in a single batch request.
+
+        Args:
+            order_ids: List of order IDs to cancel (max 20 orders)
+
+        Returns:
+            List of cancellation results
+
+        Note:
+            Requires advanced access from Kalshi.
+            Will raise HTTPError with 403 status if access not granted.
+        """
+        if len(order_ids) > 20:
+            raise ValueError(f"Batch size {len(order_ids)} exceeds maximum of 20 orders")
+
+        logger.info(f"Canceling batch of {len(order_ids)} orders")
+
+        # API expects "ids" array in request body
+        data = await self._request("DELETE", "portfolio/orders/batched", json_data={"ids": order_ids})
+
+        # Log summary
+        logger.info(f"Batch cancel complete: {len(order_ids)} orders processed")
+
+        return data.get("orders", [])
+
+    # Order Groups
+
+    async def create_order_group(self, contracts_limit: int) -> OrderGroup:
+        """
+        Create an order group with contract limit.
+
+        Args:
+            contracts_limit: Maximum contracts that can be filled across all orders in group
+
+        Returns:
+            OrderGroup details
+
+        Order groups allow you to link multiple orders with a shared contract limit.
+        When the limit is reached, all remaining orders in the group are automatically canceled.
+        Use this for OCO (One-Cancels-Other) behavior.
+        """
+        logger.info(f"Creating order group with limit: {contracts_limit} contracts")
+
+        data = await self._request(
+            "POST",
+            "portfolio/order_groups/create",
+            json_data={"contracts_limit": contracts_limit}
+        )
+
+        # API returns just {"order_group_id": "..."}, not a full object
+        return OrderGroup(order_group_id=data["order_group_id"])
+
+    async def get_order_group(self, group_id: str) -> OrderGroup:
+        """
+        Get order group details.
+
+        Args:
+            group_id: Order group ID
+
+        Returns:
+            OrderGroup details
+        """
+        data = await self._request("GET", f"portfolio/order_groups/{group_id}")
+        # API returns {"is_auto_cancel_enabled": bool, "orders": [...]}
+        # Add the group_id since it's not in the response
+        return OrderGroup(order_group_id=group_id, **data)
+
+    async def get_order_groups(self, limit: int = 100) -> list[OrderGroup]:
+        """
+        Get list of order groups with pagination support.
+
+        Args:
+            limit: Maximum number of order groups to return
+
+        Returns:
+            List of order groups
+        """
+        params = {"limit": 100}
+        groups = await self._paginate(
+            "portfolio/order_groups",
+            "order_groups",
+            params=params,
+            max_results=limit
+        )
+        return [OrderGroup(**g) for g in groups]
+
+    async def reset_order_group(self, group_id: str) -> OrderGroup:
+        """
+        Reset an order group (clears filled count, allows new orders).
+
+        Args:
+            group_id: Order group ID
+
+        Returns:
+            Updated OrderGroup details
+        """
+        logger.info(f"Resetting order group: {group_id}")
+
+        await self._request(
+            "POST",
+            f"portfolio/order_groups/{group_id}/reset"
+        )
+
+        # Fetch the updated group details (API doesn't return full object on reset)
+        return await self.get_order_group(group_id)
+
+    async def delete_order_group(self, group_id: str) -> None:
+        """
+        Delete an order group.
+
+        Args:
+            group_id: Order group ID
+
+        Note:
+            This cancels all active orders in the group.
+        """
+        logger.info(f"Deleting order group: {group_id}")
+
+        await self._request("DELETE", f"portfolio/order_groups/{group_id}")
+        logger.info(f"Order group {group_id} deleted")
 
     async def close(self):
         """Close HTTP client."""
