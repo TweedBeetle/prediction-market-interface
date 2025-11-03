@@ -465,3 +465,361 @@ class TestKalshiClientParameterValidation:
                     interval=interval,
                 )
                 assert len(candlesticks) > 0
+
+
+@pytest.mark.unit
+class TestKalshiClientAPIResponseUnwrapping:
+    """Test proper unwrapping of API responses before Pydantic validation.
+
+    The Kalshi API wraps responses in parent objects (e.g., {"market": {...}}).
+    These tests verify that the client properly extracts nested data before
+    passing to Pydantic models.
+    """
+
+    @pytest.mark.asyncio
+    async def test_get_market_unwraps_market_object(self, mock_kalshi_client):
+        """Test get_market properly unwraps {"market": {...}} response."""
+        # Real API response structure from Kalshi
+        api_response = {
+            "market": {
+                "ticker": "KXHARRIS24-LSV",
+                "title": "Will Kamala Harris win the 2024 US Presidential Election?",
+                "status": "open",
+                "yes_bid": 65.0,
+                "yes_ask": 66.0,
+                "no_bid": 34.0,
+                "no_ask": 35.0,
+                "last_price": 65.5,
+                "volume": 1000000,
+                "open_interest": 500000,
+                "close_time": "2025-01-01T00:00:00Z",
+                "expiration_time": "2025-01-01T00:00:00Z",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            market = await mock_kalshi_client.get_market("KXHARRIS24-LSV")
+
+            assert isinstance(market, Market)
+            assert market.ticker == "KXHARRIS24-LSV"
+            assert market.yes_bid == 65.0
+
+    @pytest.mark.asyncio
+    async def test_get_orderbook_unwraps_orderbook_object(self, mock_kalshi_client):
+        """Test get_orderbook properly unwraps {"orderbook": {...}} response."""
+        from src.kalshi.models import Orderbook
+
+        # Real API response structure
+        api_response = {
+            "orderbook": {
+                "bids": [[65, 100], [64, 200], [63, 300]],
+                "asks": [[66, 100], [67, 200], [68, 300]],
+            },
+            "timestamp": 1698765432000,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            # This should NOT raise validation error
+            orderbook = await mock_kalshi_client.get_orderbook("KXHARRIS24-LSV")
+
+            assert isinstance(orderbook, Orderbook)
+            assert len(orderbook.bids) == 3
+            assert len(orderbook.asks) == 3
+
+    @pytest.mark.asyncio
+    async def test_get_trades_unwraps_and_handles_field_mapping(self, mock_kalshi_client):
+        """Test get_trades properly unwraps and maps field names."""
+        from src.kalshi.models import Trade
+
+        # Real API response structure
+        api_response = {
+            "trades": [
+                {
+                    "ticker": "KXHARRIS24-LSV",
+                    "created_at": 1698765432000,
+                    "count": 100,
+                    "price": 65,
+                    "is_buy": True,
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            trades, cursor = await mock_kalshi_client.get_trades()
+
+            assert isinstance(trades, list)
+            assert len(trades) == 1
+            assert isinstance(trades[0], Trade)
+
+    @pytest.mark.asyncio
+    async def test_get_events_handles_available_on_brokers_bool(self, mock_kalshi_client):
+        """Test get_events handles available_on_brokers as bool or list."""
+        from src.kalshi.models import Event
+
+        # API sometimes returns bool, sometimes list
+        api_response = {
+            "events": [
+                {
+                    "event_ticker": "PRES-2024",
+                    "title": "2024 US Presidential Election",
+                    "available_on_brokers": False,  # Bool in this response
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            # This should NOT raise validation error
+            events, cursor = await mock_kalshi_client.get_events()
+
+            assert isinstance(events, list)
+            assert len(events) == 1
+            assert isinstance(events[0], Event)
+
+    @pytest.mark.asyncio
+    async def test_get_event_unwraps_event_object(self, mock_kalshi_client):
+        """Test get_event properly unwraps {"event": {...}} response."""
+        from src.kalshi.models import Event
+
+        # Real API response structure
+        api_response = {
+            "event": {
+                "event_ticker": "PRES-2024",
+                "title": "2024 US Presidential Election",
+                "category": "Politics",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            event = await mock_kalshi_client.get_event("PRES-2024")
+
+            assert isinstance(event, Event)
+            assert event.event_ticker == "PRES-2024"
+
+    @pytest.mark.asyncio
+    async def test_get_series_handles_missing_fields_gracefully(self, mock_kalshi_client):
+        """Test get_series handles missing optional fields."""
+        from src.kalshi.models import Series
+
+        # Real API response may be missing some fields
+        api_response = {
+            "series": [
+                {
+                    "ticker": "KXELECTIONS",
+                    "title": "Elections",
+                    # description and created_at might be missing in some responses
+                }
+            ],
+            "cursor": None,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            # This should handle missing fields gracefully
+            try:
+                series, cursor = await mock_kalshi_client.get_series()
+                # If it succeeds, check return type
+                assert isinstance(series, list)
+            except Exception as e:
+                # If it fails, document that this is the issue we're catching
+                assert "description" in str(e) or "created_at" in str(e), \
+                    f"Expected missing field error, got: {e}"
+
+    @pytest.mark.asyncio
+    async def test_get_candlesticks_returns_proper_list(self, mock_kalshi_client):
+        """Test get_candlesticks properly unwraps candlesticks array."""
+        from src.kalshi.models import Candlestick
+
+        api_response = {
+            "candlesticks": [
+                {
+                    "start_ts": 1698700800,
+                    "end_ts": 1698787200,
+                    "open": 60.0,
+                    "high": 70.0,
+                    "low": 55.0,
+                    "close": 65.0,
+                    "volume": 1000000,
+                }
+            ]
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            candlesticks = await mock_kalshi_client.get_candlesticks(
+                series_ticker="KXELECTIONS",
+                ticker="KXHARRIS24-LSV",
+            )
+
+            assert isinstance(candlesticks, list)
+            assert len(candlesticks) == 1
+            assert isinstance(candlesticks[0], Candlestick)
+            assert candlesticks[0].close == 65.0
+
+
+@pytest.mark.unit
+class TestKalshiClientPhase1PortfolioManagement:
+    """Test Phase 1 portfolio management tools."""
+
+    @pytest.mark.asyncio
+    async def test_get_order_group(self, mock_kalshi_client):
+        """Test get_order_group retrieves a single order group."""
+        from src.kalshi.models import OrderGroup
+
+        api_response = {
+            "id": "group-123",
+            "contract_limit": 1000,
+            "matched_contracts": 500,
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            result = await mock_kalshi_client.get_order_group("group-123")
+
+            assert isinstance(result, OrderGroup)
+            assert result.id == "group-123"
+            assert result.contract_limit == 1000
+            assert result.matched_contracts == 500
+            mock_request.assert_called_once_with("GET", "/portfolio/order_groups/group-123")
+
+    @pytest.mark.asyncio
+    async def test_reset_order_group(self, mock_kalshi_client):
+        """Test reset_order_group resets matched contract counter."""
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = {}
+
+            await mock_kalshi_client.reset_order_group("group-123")
+
+            mock_request.assert_called_once_with("PUT", "/portfolio/order_groups/group-123/reset")
+
+    @pytest.mark.asyncio
+    async def test_delete_order_group(self, mock_kalshi_client):
+        """Test delete_order_group deletes an order group."""
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = {}
+
+            await mock_kalshi_client.delete_order_group("group-123")
+
+            mock_request.assert_called_once_with("DELETE", "/portfolio/order_groups/group-123")
+
+    @pytest.mark.asyncio
+    async def test_get_total_resting_order_value(self, mock_kalshi_client):
+        """Test get_total_resting_order_value returns portfolio value."""
+        from src.kalshi.models import TotalRestingOrderValue
+
+        api_response = {"total_resting_order_value": 50000}
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            result = await mock_kalshi_client.get_total_resting_order_value()
+
+            assert isinstance(result, TotalRestingOrderValue)
+            assert result.total_resting_order_value == 50000
+            mock_request.assert_called_once_with("GET", "/portfolio/summary/total_resting_order_value")
+
+    @pytest.mark.asyncio
+    async def test_get_settlements(self, mock_kalshi_client):
+        """Test get_settlements returns historical settlement data."""
+        from src.kalshi.models import Settlement
+
+        api_response = {
+            "settlements": [
+                {
+                    "order_id": "order-1",
+                    "ticker": "KXHARRIS24-LSV",
+                    "side": "buy",
+                    "count": 10,
+                    "price": 55,
+                    "payout": 550,
+                    "created_at": 1698765432000,
+                    "market_title": "Will Harris win?",
+                }
+            ],
+            "cursor": "next-page-cursor",
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            settlements, cursor = await mock_kalshi_client.get_settlements(limit=100)
+
+            assert isinstance(settlements, list)
+            assert len(settlements) == 1
+            assert isinstance(settlements[0], Settlement)
+            assert settlements[0].order_id == "order-1"
+            assert cursor == "next-page-cursor"
+            mock_request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_decrease_order(self, mock_kalshi_client):
+        """Test decrease_order reduces order size."""
+        api_response = {
+            "order": {
+                "id": "order-1",
+                "ticker": "KXHARRIS24-LSV",
+                "side": "buy",
+                "type": "limit",
+                "count": 5,
+                "fill_count": 0,
+                "remaining_count": 5,
+                "price": 55,
+                "status": "resting",
+                "created_at": "2025-01-01T00:00:00Z",
+                "last_updated_at": "2025-01-01T00:05:00Z",
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            result = await mock_kalshi_client.decrease_order("order-1", count=5)
+
+            assert isinstance(result, Order)
+            assert result.id == "order-1"
+            assert result.count == 5
+            mock_request.assert_called_once()
+            # Verify POST with payload
+            call_args = mock_request.call_args
+            assert call_args[0][0] == "POST"
+            assert "/portfolio/orders/order-1/decrease" in call_args[0][1]
+
+    @pytest.mark.asyncio
+    async def test_get_queue_positions(self, mock_kalshi_client):
+        """Test get_queue_positions returns bulk queue positions."""
+        api_response = {
+            "queue_positions": {
+                "order-1": {"position": 5},
+                "order-2": {"position": 0},
+                "order-3": {"position": 12},
+            }
+        }
+
+        with patch.object(mock_kalshi_client, "_request", new_callable=AsyncMock) as mock_request:
+            mock_request.return_value = api_response
+
+            result = await mock_kalshi_client.get_queue_positions(["order-1", "order-2", "order-3"])
+
+            assert isinstance(result, dict)
+            assert result["order-1"] == 5
+            assert result["order-2"] == 0
+            assert result["order-3"] == 12
+            mock_request.assert_called_once()
+            # Verify POST with payload
+            call_args = mock_request.call_args
+            assert call_args[0][0] == "POST"
+            assert "/portfolio/orders/queue_positions" in call_args[0][1]

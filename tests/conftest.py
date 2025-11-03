@@ -76,8 +76,17 @@ async def async_mock_kalshi_client(test_private_key_pem, monkeypatch):
 
 
 @pytest.fixture
-def kalshi_mcp_server():
-    """Create FastMCP server for testing."""
+def kalshi_mcp_server(test_private_key_pem, monkeypatch):
+    """Create FastMCP server for testing.
+
+    Sets up test credentials before importing the server, since the server
+    validates credentials at module load time.
+    """
+    # Set up test credentials (required by kalshi_mcp_server module)
+    monkeypatch.setenv("KALSHI_API_KEY_ID", "test-key-id-550e8400-e29b-41d4-a716-446655440000")
+    monkeypatch.setenv("KALSHI_PRIVATE_KEY_PATH", test_private_key_pem)
+
+    # Now safe to import the server (credentials are validated at module load)
     from src.kalshi.kalshi_mcp_server import mcp
 
     return mcp
