@@ -8,6 +8,7 @@ from fastmcp import FastMCP
 from loguru import logger
 
 from .client import KalshiClient
+from .websocket_client import WebSocketChannel
 from .models import (
     Market,
     Order,
@@ -1214,26 +1215,56 @@ async def kalshi_websocket_connect(
     channels: list[str],
     market_tickers: list[str],
 ) -> dict[str, Any]:
-    """Establish WebSocket connection for real-time market data.
+    """Establish persistent WebSocket connection for real-time market data.
+
+    Creates a new WebSocket connection with automatic reconnection and message routing.
+    Connection persists until explicitly closed.
+
+    Available channels:
+    - "ticker": Real-time market price updates (yes/no bids, asks, spreads)
+    - "orderbook_snapshot": Full order book state (all price levels)
+    - "orderbook_delta": Incremental order book changes (efficient for frequent updates)
+    - "trades": Public trade execution feed (timestamp, price, size)
+    - "user_fills": Authenticated user order fills (personal trades)
+    - "user_positions": Authenticated user position updates (real-time P&L)
+    - "communications": RFQ and quote notifications
 
     Args:
-        channels: List of channels to subscribe to:
-            - "ticker": Real-time price updates
-            - "orderbook_snapshot": Full order book state
-            - "orderbook_delta": Incremental order book changes
-            - "trades": Trade execution feed
-        market_tickers: List of market tickers to subscribe to
+        channels: List of channels to subscribe to (see above)
+        market_tickers: List of market tickers to stream (e.g., ["KXHARRIS24-LSV", ...])
 
     Returns:
-        Connection details with connection ID
+        Connection ID and initial status
     """
-    # Note: This requires WebSocket implementation not yet created
-    # Placeholder implementation
+    client = _ensure_client()
+
+    # Get or create WebSocket connection
+    ws_client = await client.get_websocket_connection()
+
+    # Establish connection
+    if not await ws_client.connect():
+        return {
+            "status": "error",
+            "message": "Failed to establish WebSocket connection",
+            "connection_id": None,
+        }
+
+    # Subscribe to channels
+    if not await ws_client.subscribe(channels, market_tickers):
+        await ws_client.disconnect()
+        return {
+            "status": "error",
+            "message": "Failed to subscribe to channels",
+            "connection_id": None,
+        }
+
+    status = ws_client.get_status()
     return {
-        "connection_id": "placeholder",
+        "status": "connected",
+        "connection_id": ws_client.connection_id,
         "channels": channels,
         "market_tickers": market_tickers,
-        "status": "connected",
+        "connection_details": status,
     }
 
 
@@ -1243,7 +1274,9 @@ async def kalshi_websocket_subscribe(
     channels: list[str],
     market_tickers: list[str],
 ) -> dict[str, Any]:
-    """Subscribe to additional channels on WebSocket connection.
+    """Subscribe to additional channels on an existing WebSocket connection.
+
+    Can be called multiple times to add more channels or tickers without reconnecting.
 
     Args:
         connection_id: Connection ID from kalshi_websocket_connect
@@ -1251,15 +1284,35 @@ async def kalshi_websocket_subscribe(
         market_tickers: Market tickers to subscribe to
 
     Returns:
-        Subscription confirmation
+        Subscription confirmation with updated status
     """
-    # Note: This requires WebSocket implementation not yet created
-    # Placeholder implementation
+    client = _ensure_client()
+
+    # Get existing connection
+    ws_client = await client.get_websocket_connection(connection_id)
+
+    if not ws_client.is_connected():
+        return {
+            "status": "error",
+            "message": "WebSocket connection not connected",
+            "connection_id": connection_id,
+        }
+
+    # Subscribe
+    if not await ws_client.subscribe(channels, market_tickers):
+        return {
+            "status": "error",
+            "message": "Subscription failed",
+            "connection_id": connection_id,
+        }
+
+    status = ws_client.get_status()
     return {
+        "status": "subscribed",
         "connection_id": connection_id,
         "channels": channels,
         "market_tickers": market_tickers,
-        "status": "subscribed",
+        "connection_details": status,
     }
 
 
@@ -1269,7 +1322,9 @@ async def kalshi_websocket_unsubscribe(
     channels: list[str],
     market_tickers: list[str],
 ) -> dict[str, Any]:
-    """Unsubscribe from channels on WebSocket connection.
+    """Unsubscribe from channels on an existing WebSocket connection.
+
+    Connection remains open; you can subscribe to other channels later.
 
     Args:
         connection_id: Connection ID
@@ -1277,21 +1332,44 @@ async def kalshi_websocket_unsubscribe(
         market_tickers: Market tickers to unsubscribe from
 
     Returns:
-        Unsubscribe confirmation
+        Unsubscription confirmation with updated status
     """
-    # Note: This requires WebSocket implementation not yet created
-    # Placeholder implementation
+    client = _ensure_client()
+
+    # Get existing connection
+    ws_client = await client.get_websocket_connection(connection_id)
+
+    if not ws_client.is_connected():
+        return {
+            "status": "error",
+            "message": "WebSocket connection not connected",
+            "connection_id": connection_id,
+        }
+
+    # Unsubscribe
+    if not await ws_client.unsubscribe(channels, market_tickers):
+        return {
+            "status": "error",
+            "message": "Unsubscription failed",
+            "connection_id": connection_id,
+        }
+
+    status = ws_client.get_status()
     return {
+        "status": "unsubscribed",
         "connection_id": connection_id,
         "channels": channels,
         "market_tickers": market_tickers,
-        "status": "unsubscribed",
+        "connection_details": status,
     }
 
 
 @mcp.tool()
 async def kalshi_websocket_disconnect(connection_id: str) -> dict[str, Any]:
-    """Close WebSocket connection.
+    """Close a WebSocket connection gracefully.
+
+    Disconnects from all channels and closes the socket. To reconnect, call
+    kalshi_websocket_connect with a new request.
 
     Args:
         connection_id: Connection ID to close
@@ -1299,11 +1377,18 @@ async def kalshi_websocket_disconnect(connection_id: str) -> dict[str, Any]:
     Returns:
         Disconnection confirmation
     """
-    # Note: This requires WebSocket implementation not yet created
-    # Placeholder implementation
+    client = _ensure_client()
+
+    # Get existing connection
+    ws_client = await client.get_websocket_connection(connection_id)
+
+    # Disconnect gracefully
+    await ws_client.disconnect()
+
     return {
-        "connection_id": connection_id,
         "status": "disconnected",
+        "connection_id": connection_id,
+        "message": "WebSocket connection closed",
     }
 
 
