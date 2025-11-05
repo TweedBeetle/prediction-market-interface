@@ -23,23 +23,6 @@ from src.polymarket.gamma_client import GammaClient
 from src.polymarket.models import ApiCredentials, OrderParams, OrderSide, SignatureType
 
 
-# Skip all tests by default unless --run-funded flag is passed
-pytestmark = pytest.mark.skipif(
-    not pytest.config.getoption("--run-funded", default=False),
-    reason="Requires funded wallet. Run with --run-funded to execute (USES REAL MONEY)"
-)
-
-
-def pytest_addoption(parser):
-    """Add custom pytest option for funded tests."""
-    parser.addoption(
-        "--run-funded",
-        action="store_true",
-        default=False,
-        help="Run tests that require funded wallet (USES REAL MONEY)"
-    )
-
-
 @pytest.fixture
 def test_credentials():
     """
@@ -70,6 +53,7 @@ def test_credentials():
     )
 
 
+@pytest.mark.funded
 @pytest.mark.asyncio
 class TestClobClientAuthentication:
     """Test CLOB client authentication (requires wallet, no trades)."""
@@ -103,6 +87,7 @@ class TestClobClientAuthentication:
             raise
 
 
+@pytest.mark.funded
 @pytest.mark.asyncio
 class TestClobClientPositionsAndOrders:
     """Test portfolio management endpoints (requires auth, no trading)."""
@@ -170,6 +155,7 @@ class TestClobClientPositionsAndOrders:
                 assert order.status == "LIVE"
 
 
+@pytest.mark.funded
 @pytest.mark.asyncio
 class TestClobClientOrderExecution:
     """
@@ -258,6 +244,7 @@ class TestClobClientOrderExecution:
             assert signed_order["side"] == "BUY"
 
 
+@pytest.mark.funded
 @pytest.mark.asyncio
 class TestClobClientTrades:
     """Test trade history endpoints (requires auth, no trading needed)."""
@@ -301,6 +288,7 @@ class TestClobClientTrades:
                     assert trade.market_id == market_id
 
 
+@pytest.mark.funded
 @pytest.mark.asyncio
 class TestClobClientErrorHandling:
     """Test error handling for CLOB client."""
