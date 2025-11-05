@@ -137,7 +137,8 @@ class OrderSigner:
         encoded_message = encode_typed_data(full_message=typed_data)
         signed_message = self.account.sign_message(encoded_message)
 
-        signature = signed_message.signature.hex()
+        # Add 0x prefix to signature
+        signature = "0x" + signed_message.signature.hex()
 
         logger.debug(
             f"Signed order: {order_params.side.value} {order_params.size} "
