@@ -1,0 +1,101 @@
+interactions:
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 10,
+      "type": "limit", "yes_price": 50, "buy_max_cost": 500}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '112'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"service_unavailable","message":"service_unavailable","service":"exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 21:00:00 GMT
+      Via:
+      - 1.1 28d5657972507c12375b3942c6389dea.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - whD32ptz-iwJ0bewXPBZlnrLFTd2MKak2NF3HNRtaoJAiFWScficIA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 503
+      message: Service Unavailable
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "sell", "count": 5,
+      "type": "limit", "yes_price": 50, "sell_position_floor": 10}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"invalid_order","message":"invalid order","details":"sell_position_floor
+        must be 0 if provided, use reduce_only instead"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '139'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 21:00:00 GMT
+      Via:
+      - 1.1 28d5657972507c12375b3942c6389dea.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - IcT_t9-TpkfyCZL6H2jVrekp4ARvWbDa2yLtHFkKNzP1cPZDmcdJpA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 400
+      message: Bad Request
+version: 1

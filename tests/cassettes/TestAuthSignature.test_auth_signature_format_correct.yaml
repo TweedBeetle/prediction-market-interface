@@ -18,7 +18,7 @@ interactions:
     uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/balance
   response:
     body:
-      string: '{"balance":980,"portfolio_value":0,"updated_ts":1762199165}'
+      string: '{"balance":979,"portfolio_value":0,"updated_ts":1762201671}'
     headers:
       Connection:
       - keep-alive
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:46:05 GMT
+      - Mon, 03 Nov 2025 20:27:51 GMT
       Via:
-      - 1.1 1c4d79e3b20d557bc33320b524f45fbc.cloudfront.net (CloudFront)
+      - 1.1 e18c612d6dd4d2546736ebc7db886b6a.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - usnvy62sYNlXmzD-DCaoVZeNUVKCb9jbqPZXXaZxD4MPtVhrQGggqw==
+      - Pm2VaGWsmFsBJHsiXjfNUIcjP0vGHDUKRQWmKQxTPs343Czm8TrmEg==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:

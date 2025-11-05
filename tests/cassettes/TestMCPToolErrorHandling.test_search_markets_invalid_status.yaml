@@ -15,7 +15,7 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=20&status=invalid_status
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?status=invalid_status&limit=100
   response:
     body:
       string: '{"error":{"code":"bad_request","message":"bad request"}}'
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:02:35 GMT
+      - Mon, 03 Nov 2025 20:29:34 GMT
       Via:
-      - 1.1 0a3da1730753369733bc0fce42f42a32.cloudfront.net (CloudFront)
+      - 1.1 39665d11bf385fb9aabc991f857b37dc.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - q4vrnNqk4ChVyta-FuJwF_Jnd-EuqvESsKIW73d4bd3zXV45s5BHiA==
+      - Z6Qbd5V9xVw79APMblGLI85yhf4VfTYikbcgn6dskPO3ULK-HKFpJQ==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Error from cloudfront
       content-security-policy:

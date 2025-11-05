@@ -1,0 +1,94 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/order_groups?limit=100
+  response:
+    body:
+      string: '{"order_groups":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:38 GMT
+      Via:
+      - 1.1 0263e7e10b506a4542a1515f73f15568.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - WdW8O-FCgmRc8R-KStSQ7g0zv6u_Y75ThbCcg0H1ta0jBL1Xg-Uigw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/order_groups?limit=100
+  response:
+    body:
+      string: '{"order_groups":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:38 GMT
+      Via:
+      - 1.1 eeaffe33600b94a3095dd45999e7f000.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Nls68NQ4nDkj77bmz30rKJZtaZvj6zR2Rw5-lMH2iuWJT8DvSRsgBA==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1

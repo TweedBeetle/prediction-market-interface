@@ -29,13 +29,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:02:36 GMT
+      - Mon, 03 Nov 2025 20:29:35 GMT
       Via:
-      - 1.1 b7f2a0d159557daec861a3f723614294.cloudfront.net (CloudFront)
+      - 1.1 f9e9a2e2a630392daf40b42b49debe88.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - DCQP5qEua8q4O-dtMGfbGyjEquImbN9w7qsrGZ-uinQpucR0sAurKg==
+      - OSNwdzbgqZgdddN7as-b9iuNG2yL-dv8TyEJpK667wLHcBfV1F8ojQ==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:
@@ -66,7 +66,7 @@ interactions:
     uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/balance
   response:
     body:
-      string: '{"balance":980,"portfolio_value":0,"updated_ts":1762196556}'
+      string: '{"balance":979,"portfolio_value":0,"updated_ts":1762201776}'
     headers:
       Connection:
       - keep-alive
@@ -75,13 +75,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:02:36 GMT
+      - Mon, 03 Nov 2025 20:29:36 GMT
       Via:
-      - 1.1 b7f2a0d159557daec861a3f723614294.cloudfront.net (CloudFront)
+      - 1.1 f9e9a2e2a630392daf40b42b49debe88.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - 8pjdyKe2OpPt77kny08vENyBI67RchaloZYN4sQcHRaRMya7zTdm6A==
+      - EZ_-T2oJar9mBvfakmhxAPolV-HRclGeJpCHou56otDGZQW9pG0Y6g==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:

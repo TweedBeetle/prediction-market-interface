@@ -18,22 +18,22 @@ interactions:
     uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=100
   response:
     body:
-      string: '{"cursor":"","event_positions":[{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXCSGOGAME-FURG225","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":3,"total_cost":0,"total_cost_dollars":"0.0000"}],"market_positions":[{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T18:02:01.971208Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":3,"ticker":"KXCSGOGAME-FURG225-G2","total_traded":0,"total_traded_dollars":"0.0000"}]}'
+      string: '{"cursor":"","event_positions":[{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXATPMATCH-25NOV04CAZNOR","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":0,"total_cost":0,"total_cost_dollars":"0.0000"},{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXQUICKSETTLE-25NOV03H1530","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":5,"total_cost":0,"total_cost_dollars":"0.0000"},{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXQUICKSETTLE-25NOV03H1520","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":0,"total_cost":0,"total_cost_dollars":"0.0000"},{"event_exposure":0,"event_exposure_dollars":"0.0000","event_ticker":"KXCSGOGAME-FURG225","fees_paid":0,"fees_paid_dollars":"0.0000","realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_order_count":3,"total_cost":0,"total_cost_dollars":"0.0000"}],"market_positions":[{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T20:27:56.306763Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":0,"ticker":"KXATPMATCH-25NOV04CAZNOR-NOR","total_traded":0,"total_traded_dollars":"0.0000"},{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T20:21:59.128617Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":5,"ticker":"KXQUICKSETTLE-25NOV03H1530-3","total_traded":0,"total_traded_dollars":"0.0000"},{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T20:20:00.351685Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":0,"ticker":"KXQUICKSETTLE-25NOV03H1520-2","total_traded":0,"total_traded_dollars":"0.0000"},{"fees_paid":0,"fees_paid_dollars":"0.0000","last_updated_ts":"2025-11-03T18:02:01.971208Z","market_exposure":0,"market_exposure_dollars":"0.0000","position":0,"realized_pnl":0,"realized_pnl_dollars":"0.0000","resting_orders_count":3,"ticker":"KXCSGOGAME-FURG225-G2","total_traded":0,"total_traded_dollars":"0.0000"}]}'
     headers:
       Connection:
       - keep-alive
-      Content-Length:
-      - '623'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:12:10 GMT
+      - Mon, 03 Nov 2025 20:28:12 GMT
+      Transfer-Encoding:
+      - chunked
       Via:
-      - 1.1 851425d2e2023c33a5b8292e20a02270.cloudfront.net (CloudFront)
+      - 1.1 f9e65f6efaf09565a6c3bbb6d064bfca.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - yj0xp6AJ4LFMF53j4lbsGzmHfTHfPQr55jLtG7ipmPO0uHbFZgfLHw==
+      - 8zFt9b6T9hMVNdQCRtfIXa9eN0BUW8NHqGD9h-NA1bzxpfe9yFDVuw==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:

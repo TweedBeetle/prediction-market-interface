@@ -1,0 +1,149 @@
+interactions:
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 1, "type":
+      "limit", "yes_price": 1, "self_trade_prevention_type": "cancel_resting"}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '137'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"service_unavailable","message":"service_unavailable","service":"exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:59 GMT
+      Via:
+      - 1.1 e7f30276a09360ada66d3c283ba7f0de.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - X4wMdwMnlpXhCt-U2i9tahTW0kjAkFC-UcuHxk8TNf5gnkG0nqgSzQ==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 503
+      message: Service Unavailable
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 1, "type":
+      "limit", "yes_price": 1, "self_trade_prevention_type": "cancel_aggressing"}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '140'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"service_unavailable","message":"service_unavailable","service":"exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:59 GMT
+      Via:
+      - 1.1 e7f30276a09360ada66d3c283ba7f0de.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - mhBg3YmtY04pq8JHArHpymyjWKF2jvl7wYaxDZFN9Kc-ZbMpUAmOKg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 503
+      message: Service Unavailable
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 1, "type":
+      "limit", "yes_price": 1, "self_trade_prevention_type": "allow"}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '128'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"service_unavailable","message":"service_unavailable","service":"exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 21:00:00 GMT
+      Via:
+      - 1.1 e7f30276a09360ada66d3c283ba7f0de.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - -Th-paSNbCdMpVigCOpBBrh8n71N1tPw-sRCqBKjRA9uNkP3XLeAqg==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 503
+      message: Service Unavailable
+version: 1

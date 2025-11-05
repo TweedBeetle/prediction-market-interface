@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: '{"orders": [{"ticker": "HIGHTEST-24", "type": "limit", "action": "buy",
+      "side": "yes", "count": 1, "yes_price": 1}]}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '104'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders/batched
+  response:
+    body:
+      string: '{"orders":[{"client_order_id":null,"error":{"code":"market_not_found","details":"","message":"market
+        not found","service":"exchange"},"order":null}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '149'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:27 GMT
+      Via:
+      - 1.1 0263e7e10b506a4542a1515f73f15568.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - PX-UId-TniJQAmqrYrCtj1QT_ShR14LXND6xgzYctoA5Ot_gdxmCYw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 201
+      message: Created
+version: 1

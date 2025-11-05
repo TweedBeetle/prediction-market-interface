@@ -1,0 +1,53 @@
+interactions:
+- request:
+    body: '{"ticker": "HIGHTEST-24", "side": "yes", "action": "buy", "count": 1, "type":
+      "limit", "yes_price": 1, "time_in_force": "ioc", "post_only": true, "reduce_only":
+      false, "self_trade_prevention_type": "cancel_resting", "buy_max_cost": 100,
+      "sell_position_floor": 0}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '239'
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders
+  response:
+    body:
+      string: '{"error":{"code":"service_unavailable","message":"service_unavailable","service":"exchange"}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '93'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:59:58 GMT
+      Via:
+      - 1.1 0263e7e10b506a4542a1515f73f15568.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 0J760ZSrwK5KEacTILuCJ1Y5yfHlviMQiDPLNEs0mwhCG7IRCJt0Dw==
+      X-Amz-Cf-Pop:
+      - FRA50-P1
+      X-Cache:
+      - Error from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 503
+      message: Service Unavailable
+version: 1

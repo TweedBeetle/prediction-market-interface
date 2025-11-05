@@ -15,12 +15,12 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXQUICKSETTLE-25NOV03H1420-2
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXQUICKSETTLE-25NOV03H1540-3
   response:
     body:
-      string: '{"market":{"can_close_early":true,"category":"","close_time":"2025-11-03T19:20:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1420","expected_expiration_time":"2025-11-03T19:20:00Z","expiration_time":"2025-11-03T19:20:00Z","expiration_value":"","last_price":17,"last_price_dollars":"0.1700","latest_expiration_time":"2025-11-03T19:20:00Z","liquidity":43925,"liquidity_dollars":"439.2500","market_type":"binary","no_ask":83,"no_ask_dollars":"0.8300","no_bid":2,"no_bid_dollars":"0.0200","no_sub_title":"2","notional_value":100,"notional_value_dollars":"1.0000","open_interest":176,"open_time":"2025-11-03T19:10:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
-        1+1 equals 2 on Nov 03 at 14:20 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1420-2","title":"Will
-        1+1 equal 2 on Nov 03 at 14:20?","volume":264,"volume_24h":139,"yes_ask":98,"yes_ask_dollars":"0.9800","yes_bid":17,"yes_bid_dollars":"0.1700","yes_sub_title":"2"}}
+      string: '{"market":{"can_close_early":true,"category":"","close_time":"2025-11-03T20:40:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1540","expected_expiration_time":"2025-11-03T20:40:00Z","expiration_time":"2025-11-03T20:40:00Z","expiration_value":"","last_price":99,"last_price_dollars":"0.9900","latest_expiration_time":"2025-11-03T20:40:00Z","liquidity":40559,"liquidity_dollars":"405.5900","market_type":"binary","no_ask":33,"no_ask_dollars":"0.3300","no_bid":1,"no_bid_dollars":"0.0100","no_sub_title":"3","notional_value":100,"notional_value_dollars":"1.0000","open_interest":92,"open_time":"2025-11-03T20:30:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 3 on Nov 03 at 15:40 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"open","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1540-3","title":"Will
+        1+1 equal 3 on Nov 03 at 15:40?","volume":93,"volume_24h":92,"yes_ask":99,"yes_ask_dollars":"0.9900","yes_bid":67,"yes_bid_dollars":"0.6700","yes_sub_title":"3"}}
 
         '
     headers:
@@ -29,21 +29,21 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 03 Nov 2025 19:19:31 GMT
+      - Mon, 03 Nov 2025 20:38:52 GMT
       Transfer-Encoding:
       - chunked
       Vary:
       - accept-encoding
       Via:
-      - 1.1 f1cc28ba63ebb19f91ae18ece8bb16dc.cloudfront.net (CloudFront)
+      - 1.1 258e5fe72bfca83e099f880853f68ab4.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - 2yitKFfAhBLNFM-sWABzUikMRhC02l2Ba7A_sttq5UghQ5zSN1ta_g==
+      - 01utBAjGNjgMMdSRpb9l5Cj3f26g2kydP8ML0Ooo6OKAOBC1WgSl9Q==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-length:
-      - '1347'
+      - '1344'
       content-security-policy:
       - default-src 'none';
       strict-transport-security:

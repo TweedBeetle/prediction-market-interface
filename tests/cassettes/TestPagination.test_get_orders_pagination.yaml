@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - demo-api.kalshi.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders?status=filled&limit=100
+  response:
+    body:
+      string: '{"cursor":"","orders":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '25'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 03 Nov 2025 20:28:26 GMT
+      Via:
+      - 1.1 50a920ee7e446bd07188dda00cda68a2.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - _bu9NmhsT47KDNfIQjpEzmCWhR3wf07UmiQm8EVqxaIPCRMHmaDr2Q==
+      X-Amz-Cf-Pop:
+      - MUC50-P5
+      X-Cache:
+      - Miss from cloudfront
+      content-security-policy:
+      - default-src 'none';
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1
