@@ -8,11 +8,12 @@ These models provide type-safe data validation and serialization for:
 - Authentication credentials
 """
 
+import json
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class OrderSide(str, Enum):
@@ -45,34 +46,63 @@ class Market(BaseModel):
     Represents a binary outcome market with pricing, volume, and metadata.
     """
 
+    # Allow both camelCase and snake_case field names from API
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str = Field(..., description="Unique market ID")
-    condition_id: str = Field(..., description="Condition ID for on-chain settlement")
+    condition_id: str = Field(..., alias="conditionId", description="Condition ID for on-chain settlement")
     question: str = Field(..., description="Market question")
     description: Optional[str] = Field(None, description="Detailed market description")
 
     # Token IDs for trading (YES/NO outcomes)
-    clob_token_ids: List[str] = Field(..., description="CLOB token IDs [YES, NO]")
+    # API returns as JSON string, we parse to list
+    # Some markets may not have token IDs (not tradeable)
+    clob_token_ids: List[str] = Field(default_factory=list, alias="clobTokenIds", description="CLOB token IDs [YES, NO]")
 
     # Pricing
     best_bid: Optional[float] = Field(None, description="Best bid price (0-1)")
     best_ask: Optional[float] = Field(None, description="Best ask price (0-1)")
     last_price: Optional[float] = Field(None, description="Last trade price (0-1)")
 
-    # Volume and liquidity
-    volume: Optional[float] = Field(None, description="Total volume in USD")
-    volume_24h: Optional[float] = Field(None, description="24h volume in USD")
-    liquidity: Optional[float] = Field(None, description="Total liquidity in USD")
+    # Volume and liquidity (can be string or float from API)
+    volume: Optional[Union[float, str]] = Field(None, description="Total volume in USD")
+    volume_24h: Optional[Union[float, str]] = Field(None, alias="volume24hr", description="24h volume in USD")
+    liquidity: Optional[Union[float, str]] = Field(None, description="Total liquidity in USD")
 
     # Metadata
     active: bool = Field(..., description="Whether market is active")
     closed: bool = Field(..., description="Whether market is closed")
     archived: bool = Field(False, description="Whether market is archived")
 
-    end_date_iso: Optional[str] = Field(None, description="Market end date (ISO format)")
+    end_date_iso: Optional[str] = Field(None, alias="endDateIso", description="Market end date (ISO format)")
     game_start_time: Optional[str] = Field(None, description="Game start time for sports markets")
 
     # Tags and categorization
     tags: List[str] = Field(default_factory=list, description="Market tags")
+
+    @field_validator("clob_token_ids", mode="before")
+    @classmethod
+    def parse_clob_token_ids(cls, v: Union[str, List[str]]) -> List[str]:
+        """Parse clobTokenIds from JSON string to list."""
+        if isinstance(v, str):
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                return []
+        return v if v is not None else []
+
+    @field_validator("volume", "volume_24h", "liquidity", mode="before")
+    @classmethod
+    def parse_numeric(cls, v: Union[str, float, int, None]) -> Optional[float]:
+        """Convert string numbers to float."""
+        if v is None or v == "":
+            return None
+        if isinstance(v, (int, float)):
+            return float(v)
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            return None
 
     @property
     def yes_token_id(self) -> str:
