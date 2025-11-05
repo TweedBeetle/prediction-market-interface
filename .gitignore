@@ -4,6 +4,7 @@
 .env.*.local
 .env.kalshi.demo
 .env.kalshi.prod
+.env.polymarket
 
 # Python
 __pycache__/
