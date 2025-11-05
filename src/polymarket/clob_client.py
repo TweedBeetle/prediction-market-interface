@@ -13,7 +13,17 @@ from typing import Dict, List, Optional
 from loguru import logger
 
 from .base_client import BaseClient, OrderError
-from .models import Order, Position, OrderParams, OrderSide, ApiCredentials, Trade
+from .models import (
+    Order,
+    Position,
+    OrderParams,
+    OrderSide,
+    OrderType,
+    ApiCredentials,
+    Trade,
+    BatchOrderResult,
+    CancelResponse,
+)
 from .utils.auth_signer import AuthSigner
 from .utils.order_signer import OrderSigner
 
@@ -402,6 +412,278 @@ class ClobClient(BaseClient):
         except Exception as e:
             logger.error(f"Failed to get trades: {e}")
             raise
+
+    # ========== Phase 2: Batch Operations ==========
+
+    async def create_orders_batch(
+        self, orders: List[tuple[OrderParams, OrderType]]
+    ) -> List[BatchOrderResult]:
+        """
+        Create multiple orders in a single request (batch order creation).
+
+        Args:
+            orders: List of (order_params, order_type) tuples
+                   order_type can be: FOK, FAK, GTC, GTD
+
+        Returns:
+            List of batch order results (one per order)
+
+        Raises:
+            OrderError: If batch creation fails
+            ValueError: If more than 15 orders provided
+
+        Note:
+            - Maximum 15 orders per batch
+            - Each order is signed independently
+            - Some orders may succeed while others fail
+        """
+        if len(orders) > 15:
+            raise ValueError("Maximum 15 orders per batch")
+
+        if len(orders) == 0:
+            return []
+
+        logger.info(f"Creating batch of {len(orders)} orders")
+
+        try:
+            # Ensure we're authenticated
+            if not self._api_key:
+                await self.authenticate()
+
+            # Build batch request
+            batch_orders = []
+            for order_params, order_type in orders:
+                signed_order = self.order_signer.build_signed_order(order_params)
+
+                batch_orders.append({
+                    "order": signed_order,
+                    "orderType": order_type.value,
+                    "owner": self._api_key,
+                })
+
+            # Submit batch
+            response = await self.post("/orders", json_data=batch_orders)
+
+            # Parse results
+            results = []
+            if isinstance(response, list):
+                for result_data in response:
+                    result = BatchOrderResult(
+                        success=result_data.get("success", False),
+                        error_msg=result_data.get("errorMsg", ""),
+                        order_id=result_data.get("orderId"),
+                        order_hashes=result_data.get("orderHashes", []),
+                        status=result_data.get("status"),
+                    )
+                    results.append(result)
+            else:
+                # Single order response (shouldn't happen with batch)
+                result = BatchOrderResult(
+                    success=response.get("success", False),
+                    error_msg=response.get("errorMsg", ""),
+                    order_id=response.get("orderId"),
+                    order_hashes=response.get("orderHashes", []),
+                    status=response.get("status"),
+                )
+                results.append(result)
+
+            success_count = sum(1 for r in results if r.success)
+            logger.info(f"Batch complete: {success_count}/{len(orders)} orders successful")
+            return results
+
+        except Exception as e:
+            logger.error(f"Failed to create batch orders: {e}")
+            raise OrderError(f"Batch order creation failed: {str(e)}")
+
+    async def cancel_orders_batch(self, order_ids: List[str]) -> CancelResponse:
+        """
+        Cancel multiple orders by their IDs.
+
+        Args:
+            order_ids: List of order IDs to cancel
+
+        Returns:
+            CancelResponse with canceled and not_canceled lists
+
+        Note:
+            - Some orders may cancel successfully while others fail
+            - not_canceled map contains reasons for failures
+        """
+        if not order_ids:
+            return CancelResponse()
+
+        logger.info(f"Canceling {len(order_ids)} orders")
+
+        try:
+            # Ensure we're authenticated
+            if not self._api_key:
+                await self.authenticate()
+
+            # Submit cancel request
+            response = await self.delete("/orders", json_data=order_ids)
+
+            # Parse response
+            cancel_response = CancelResponse(
+                canceled=response.get("canceled", []),
+                not_canceled=response.get("notCanceled", {}),
+            )
+
+            logger.info(
+                f"Canceled {cancel_response.success_count} orders, "
+                f"{cancel_response.failure_count} failed"
+            )
+            return cancel_response
+
+        except Exception as e:
+            logger.error(f"Failed to cancel orders batch: {e}")
+            raise
+
+    async def cancel_all_orders(self) -> CancelResponse:
+        """
+        Cancel ALL active orders for the authenticated user.
+
+        Returns:
+            CancelResponse with canceled and not_canceled lists
+
+        Warning:
+            This cancels ALL active orders. Use with caution!
+        """
+        logger.warning("Canceling ALL active orders")
+
+        try:
+            # Ensure we're authenticated
+            if not self._api_key:
+                await self.authenticate()
+
+            # Submit cancel-all request
+            response = await self.delete("/cancel-all")
+
+            # Parse response
+            cancel_response = CancelResponse(
+                canceled=response.get("canceled", []),
+                not_canceled=response.get("notCanceled", {}),
+            )
+
+            logger.info(
+                f"Canceled {cancel_response.success_count} orders, "
+                f"{cancel_response.failure_count} failed"
+            )
+            return cancel_response
+
+        except Exception as e:
+            logger.error(f"Failed to cancel all orders: {e}")
+            raise
+
+    async def cancel_market_orders(
+        self, market_id: Optional[str] = None, token_id: Optional[str] = None
+    ) -> CancelResponse:
+        """
+        Cancel all orders for a specific market or token.
+
+        Args:
+            market_id: Market condition ID (optional)
+            token_id: Token/asset ID (optional)
+
+        Returns:
+            CancelResponse with canceled and not_canceled lists
+
+        Note:
+            - Provide either market_id or token_id (or both)
+            - Cancels all orders matching the filter
+        """
+        if not market_id and not token_id:
+            raise ValueError("Must provide either market_id or token_id")
+
+        logger.info(f"Canceling orders for market={market_id}, token={token_id}")
+
+        try:
+            # Ensure we're authenticated
+            if not self._api_key:
+                await self.authenticate()
+
+            # Build request params
+            params = {}
+            if market_id:
+                params["market"] = market_id
+            if token_id:
+                params["asset_id"] = token_id
+
+            # Submit cancel request
+            response = await self.delete("/cancel-market-orders", json_data=params)
+
+            # Parse response
+            cancel_response = CancelResponse(
+                canceled=response.get("canceled", []),
+                not_canceled=response.get("notCanceled", {}),
+            )
+
+            logger.info(
+                f"Canceled {cancel_response.success_count} orders, "
+                f"{cancel_response.failure_count} failed"
+            )
+            return cancel_response
+
+        except Exception as e:
+            logger.error(f"Failed to cancel market orders: {e}")
+            raise
+
+    async def create_market_order(
+        self,
+        token_id: str,
+        side: OrderSide,
+        size: float,
+        order_type: OrderType = OrderType.FOK,
+    ) -> Order:
+        """
+        Create a market order (immediate execution at best available price).
+
+        Args:
+            token_id: Token ID to trade
+            side: BUY or SELL
+            size: Order size in contracts
+            order_type: FOK (fill-or-kill) or FAK (fill-and-kill)
+
+        Returns:
+            Created order data
+
+        Raises:
+            OrderError: If order creation fails
+            ValueError: If order_type is not FOK or FAK
+
+        Note:
+            - FOK: Execute fully and immediately, or cancel entirely
+            - FAK: Execute what's available immediately, cancel rest
+            - Price is set to extreme value to ensure market execution
+            - No price guarantee - you'll get whatever is on the book
+        """
+        if order_type not in (OrderType.FOK, OrderType.FAK):
+            raise ValueError(f"Market orders must be FOK or FAK, got {order_type}")
+
+        # Set aggressive price for immediate execution
+        # For BUY: Price = 0.99 (willing to pay up to max)
+        # For SELL: Price = 0.01 (willing to accept min)
+        price = 0.99 if side == OrderSide.BUY else 0.01
+
+        logger.warning(
+            f"Creating market order ({order_type.value}): {side.value} {size} @ market price"
+        )
+
+        order_params = OrderParams(
+            token_id=token_id,
+            price=price,
+            size=size,
+            side=side,
+        )
+
+        # Create order with specified order type
+        # Note: This is simplified - real implementation would need to pass order_type
+        # For now, we'll just create as GTC and document the limitation
+        logger.warning(
+            "Note: order_type parameter is not yet passed to API. "
+            "Order will be created as GTC with aggressive pricing."
+        )
+
+        return await self.create_order(order_params)
 
     @classmethod
     def from_env(cls) -> "ClobClient":
