@@ -27,8 +27,9 @@ class OrderType(str, Enum):
     """Order type for execution."""
 
     FOK = "FOK"  # Fill-or-Kill (immediate or cancel entirely)
-    GTC = "GTC"  # Good-til-Canceled
-    GTD = "GTD"  # Good-til-Date
+    FAK = "FAK"  # Fill-and-Kill (fill what's available, cancel rest)
+    GTC = "GTC"  # Good-til-Canceled (default limit order)
+    GTD = "GTD"  # Good-til-Date (expires at specified time)
 
 
 class SignatureType(str, Enum):
@@ -429,3 +430,58 @@ class ApiCredentials(BaseModel):
                 "chain_id": 137
             }
         }
+
+
+class BatchOrderResult(BaseModel):
+    """
+    Result from batch order creation.
+
+    Returned when creating multiple orders in a single request.
+    Each order in the batch gets its own result.
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    success: bool = Field(..., description="Whether order was successfully placed")
+    error_msg: str = Field(default="", alias="errorMsg", description="Error message if unsuccessful")
+    order_id: Optional[str] = Field(None, alias="orderId", description="ID of created order")
+    order_hashes: List[str] = Field(default_factory=list, alias="orderHashes", description="Settlement transaction hashes")
+    status: Optional[str] = Field(None, description="Order status: matched, live, delayed, unmatched")
+
+    @property
+    def is_live(self) -> bool:
+        """Check if order is live on the book."""
+        return self.status == "live"
+
+    @property
+    def is_matched(self) -> bool:
+        """Check if order was immediately matched."""
+        return self.status == "matched"
+
+
+class CancelResponse(BaseModel):
+    """
+    Response from cancel operations.
+
+    Returned by all cancel endpoints (single, multiple, all, by-market).
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    canceled: List[str] = Field(default_factory=list, description="List of successfully canceled order IDs")
+    not_canceled: dict[str, str] = Field(default_factory=dict, alias="notCanceled", description="Map of order ID -> reason for failed cancellation")
+
+    @property
+    def success_count(self) -> int:
+        """Number of successfully canceled orders."""
+        return len(self.canceled)
+
+    @property
+    def failure_count(self) -> int:
+        """Number of orders that failed to cancel."""
+        return len(self.not_canceled)
+
+    @property
+    def all_succeeded(self) -> bool:
+        """Check if all cancel attempts succeeded."""
+        return len(self.not_canceled) == 0
