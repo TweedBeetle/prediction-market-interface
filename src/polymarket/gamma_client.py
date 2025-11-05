@@ -151,6 +151,9 @@ class GammaClient(BaseClient):
         """
         Get orderbook snapshot for a token.
 
+        Note: This endpoint is actually on the CLOB API but doesn't require authentication.
+        We proxy it here for convenience since it's market data.
+
         Args:
             token_id: CLOB token ID (YES or NO outcome)
 
@@ -160,11 +163,21 @@ class GammaClient(BaseClient):
         logger.info(f"Fetching orderbook for token {token_id}")
 
         try:
-            response = await self.get(f"/book", params={"token_id": token_id})
+            # Orderbook is on CLOB API, not Gamma API
+            # Use a direct HTTP request to CLOB endpoint
+            import httpx
+
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(
+                    "https://clob.polymarket.com/book",
+                    params={"token_id": token_id}
+                )
+                response.raise_for_status()
+                data = response.json()
 
             # Parse orderbook data
-            bids_data = response.get("bids", [])
-            asks_data = response.get("asks", [])
+            bids_data = data.get("bids", [])
+            asks_data = data.get("asks", [])
 
             bids = [
                 OrderBookLevel(price=float(level["price"]), size=float(level["size"]))
@@ -176,11 +189,11 @@ class GammaClient(BaseClient):
             ]
 
             orderbook = OrderBook(
-                market_id=response.get("market_id", ""),
+                market_id=data.get("market", ""),
                 token_id=token_id,
                 bids=bids,
                 asks=asks,
-                timestamp=response.get("timestamp"),
+                timestamp=data.get("timestamp"),
             )
 
             logger.info(f"Retrieved orderbook with {len(bids)} bids and {len(asks)} asks")
@@ -188,65 +201,6 @@ class GammaClient(BaseClient):
 
         except Exception as e:
             logger.error(f"Failed to get orderbook for token {token_id}: {e}")
-            raise
-
-    async def get_trades(
-        self,
-        market_id: Optional[str] = None,
-        token_id: Optional[str] = None,
-        limit: int = 100,
-    ) -> List[Trade]:
-        """
-        Get recent trades.
-
-        Args:
-            market_id: Filter by market ID
-            token_id: Filter by token ID
-            limit: Maximum number of trades
-
-        Returns:
-            List of recent trades
-        """
-        params = {"limit": limit}
-
-        if market_id:
-            params["market_id"] = market_id
-        if token_id:
-            params["token_id"] = token_id
-
-        logger.info(f"Fetching trades (limit={limit})")
-
-        try:
-            response = await self.get("/trades", params=params)
-
-            # Parse trades
-            trades_data = response if isinstance(response, list) else response.get("trades", [])
-
-            trades = []
-            for trade_data in trades_data:
-                try:
-                    trade = Trade(
-                        trade_id=trade_data.get("id", ""),
-                        market_id=trade_data.get("market_id", market_id or ""),
-                        token_id=trade_data.get("token_id", token_id or ""),
-                        price=float(trade_data.get("price", 0)),
-                        size=float(trade_data.get("size", 0)),
-                        side=trade_data.get("side", "BUY"),
-                        outcome=trade_data.get("outcome", "YES"),
-                        timestamp=trade_data.get("timestamp"),
-                        maker_address=trade_data.get("maker_address"),
-                        taker_address=trade_data.get("taker_address"),
-                    )
-                    trades.append(trade)
-                except Exception as e:
-                    logger.warning(f"Failed to parse trade: {e}")
-                    continue
-
-            logger.info(f"Retrieved {len(trades)} trades")
-            return trades
-
-        except Exception as e:
-            logger.error(f"Failed to get trades: {e}")
             raise
 
     async def get_events(

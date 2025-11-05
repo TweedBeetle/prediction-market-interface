@@ -259,6 +259,49 @@ class TestClobClientOrderExecution:
 
 
 @pytest.mark.asyncio
+class TestClobClientTrades:
+    """Test trade history endpoints (requires auth, no trading needed)."""
+
+    async def test_get_trades(self, test_credentials):
+        """Test getting trade history."""
+        async with ClobClient(test_credentials) as client:
+            trades = await client.get_trades(limit=10)
+
+            # Should return list (may be empty if no trades)
+            assert isinstance(trades, list)
+
+            # If we have trades, verify structure
+            if trades:
+                trade = trades[0]
+                assert hasattr(trade, 'trade_id')
+                assert hasattr(trade, 'market_id')
+                assert hasattr(trade, 'price')
+                assert hasattr(trade, 'size')
+                assert hasattr(trade, 'side')
+
+    async def test_get_trades_for_market(self, test_credentials):
+        """Test getting trades filtered by market."""
+        # First get a market ID
+        async with GammaClient() as gamma:
+            markets = await gamma.search_markets(active=True, limit=1)
+            if not markets:
+                pytest.skip("No active markets")
+            market_id = markets[0].condition_id  # Use condition_id for CLOB API
+
+        # Get trades for that market
+        async with ClobClient(test_credentials) as client:
+            trades = await client.get_trades(market_id=market_id, limit=10)
+
+            assert isinstance(trades, list)
+
+            # All trades should be for the requested market (if any)
+            for trade in trades:
+                # Market may be empty if user has no trades for this market
+                if trade.market_id:
+                    assert trade.market_id == market_id
+
+
+@pytest.mark.asyncio
 class TestClobClientErrorHandling:
     """Test error handling for CLOB client."""
 

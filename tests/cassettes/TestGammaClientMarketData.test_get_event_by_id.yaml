@@ -18,52 +18,17 @@ interactions:
     uri: https://gamma-api.polymarket.com/events?limit=1&offset=0&active=true&closed=false
   response:
     body:
-      string: "[{\"id\":\"16084\",\"ticker\":\"fed-rate-hike-in-2025\",\"slug\":\"fed-rate-hike-in-2025\",\"title\":\"Fed
-        rate hike in 2025?\",\"description\":\"This market will resolve to \u201CYes\u201D
-        if the upper bound of the target federal funds rate is increased at any point
-        between January 1, 2025 and the Fed's December 2025 meeting, currently scheduled
-        for December 9-10. Otherwise, this market will resolve to \u201CNo\u201D.\\n\\nThis
-        market may not resolve to \\\"No\\\" until the Fed has released its rate changes
-        information following its December meeting.\\n\\nThe primary resolution source
-        for this market will be the official website of the Federal Reserve (https://www.federalreserve.gov/monetarypolicy/openmarket.htm),
-        however a consensus of credible reporting may also be used.\",\"startDate\":\"2024-12-29T22:50:44.013518Z\",\"creationDate\":\"2024-12-29T22:50:44.013516Z\",\"endDate\":\"2025-12-10T12:00:00Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"active\":true,\"closed\":false,\"archived\":false,\"new\":false,\"featured\":false,\"restricted\":true,\"liquidity\":21550.58194,\"volume\":719008.296086,\"openInterest\":0,\"createdAt\":\"2024-12-29T17:37:59.684632Z\",\"updatedAt\":\"2025-11-05T11:00:57.680668Z\",\"competitive\":0.815910249872514,\"volume24hr\":31055.893281999997,\"volume1wk\":57145.08385700001,\"volume1mo\":170193.85486900003,\"volume1yr\":718848.4133289979,\"enableOrderBook\":true,\"liquidityClob\":21550.58194,\"commentCount\":22,\"markets\":[{\"id\":\"516706\",\"question\":\"Fed
-        rate hike in 2025?\",\"conditionId\":\"0x4319532e181605cb15b1bd677759a3bc7f7394b2fdf145195b700eeaedfd5221\",\"slug\":\"fed-rate-hike-in-2025\",\"resolutionSource\":\"\",\"endDate\":\"2025-12-10T12:00:00Z\",\"liquidity\":\"21176.26508\",\"startDate\":\"2024-12-29T22:50:33.584839Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"description\":\"This
-        market will resolve to \u201CYes\u201D if the upper bound of the target federal
-        funds rate is increased at any point between January 1, 2025 and the Fed's
-        December 2025 meeting, currently scheduled for December 9-10. Otherwise, this
-        market will resolve to \u201CNo\u201D.\\n\\nThis market may not resolve to
-        \\\"No\\\" until the Fed has released its rate changes information following
-        its December meeting.\\n\\nThe primary resolution source for this market will
-        be the official website of the Federal Reserve (https://www.federalreserve.gov/monetarypolicy/openmarket.htm),
-        however a consensus of credible reporting may also be used.\",\"outcomes\":\"[\\\"Yes\\\",
-        \\\"No\\\"]\",\"outcomePrices\":\"[\\\"0.0265\\\", \\\"0.9735\\\"]\",\"volume\":\"719008.296086\",\"active\":true,\"closed\":false,\"marketMakerAddress\":\"\",\"createdAt\":\"2024-12-29T17:38:00.916304Z\",\"updatedAt\":\"2025-11-05T11:06:13.084315Z\",\"new\":false,\"featured\":false,\"submitted_by\":\"0x91430CaD2d3975766499717fA0D66A78D814E5c5\",\"archived\":false,\"resolvedBy\":\"0x6A9D222616C90FcA5754cd1333cFD9b7fb6a4F74\",\"restricted\":true,\"groupItemTitle\":\"\",\"groupItemThreshold\":\"0\",\"questionID\":\"0x8428884817cbc26422ec451101fcedfc5995907a8df6e5905bc29cd30d2867e7\",\"enableOrderBook\":true,\"orderPriceMinTickSize\":0.001,\"orderMinSize\":5,\"volumeNum\":719008.296086,\"liquidityNum\":21176.26508,\"endDateIso\":\"2025-12-10\",\"startDateIso\":\"2024-12-29\",\"hasReviewedDates\":true,\"volume24hr\":31055.893281999997,\"volume1wk\":57145.08385700001,\"volume1mo\":170193.85486900003,\"volume1yr\":718848.4133289979,\"clobTokenIds\":\"[\\\"60487116984468020978247225474488676749601001829886755968952521846780452448915\\\",
-        \\\"81104637750588840860328515305303028259865221573278091453716127842023614249200\\\"]\",\"umaBond\":\"500\",\"umaReward\":\"5\",\"volume24hrClob\":31055.893281999997,\"volume1wkClob\":57145.08385700001,\"volume1moClob\":170193.85486900003,\"volume1yrClob\":718848.4133289979,\"volumeClob\":719008.296086,\"liquidityClob\":21176.26508,\"acceptingOrders\":true,\"negRisk\":false,\"ready\":false,\"funded\":false,\"acceptingOrdersTimestamp\":\"2024-12-29T22:49:15Z\",\"cyom\":false,\"competitive\":0.8168584888648914,\"pagerDutyNotificationEnabled\":false,\"approved\":true,\"rewardsMinSize\":100,\"rewardsMaxSpread\":3.5,\"spread\":0.003,\"oneDayPriceChange\":0.007,\"oneHourPriceChange\":-0.0005,\"oneWeekPriceChange\":0.01,\"lastTradePrice\":0.022,\"bestBid\":0.025,\"bestAsk\":0.028,\"automaticallyActive\":true,\"clearBookOnStart\":true,\"manualActivation\":false,\"negRiskOther\":false,\"umaResolutionStatuses\":\"[]\",\"pendingDeployment\":false,\"deploying\":false,\"rfqEnabled\":false,\"holdingRewardsEnabled\":false,\"feesEnabled\":false}],\"tags\":[{\"id\":\"100196\",\"label\":\"Fed
-        Rates\",\"slug\":\"fed-rates\",\"forceShow\":true,\"updatedAt\":\"2024-04-10T13:45:50.469564Z\"},{\"id\":\"107\",\"label\":\"Business\",\"slug\":\"business\",\"forceShow\":false,\"publishedAt\":\"2023-11-02
-        21:20:37.48+00\",\"createdAt\":\"2023-11-02T21:20:37.488Z\",\"updatedAt\":\"2024-07-05T21:07:24.910181Z\"},{\"id\":\"101588\",\"label\":\"2025
-        Predictions\",\"slug\":\"2025-predictions\",\"forceShow\":false,\"createdAt\":\"2024-12-30T20:11:13.144816Z\",\"updatedAt\":\"2024-12-30T20:19:11.195161Z\"},{\"id\":\"101800\",\"label\":\"Economic
-        Policy\",\"slug\":\"economic-policy\",\"forceShow\":false,\"createdAt\":\"2025-02-06T18:05:50.554703Z\"},{\"id\":\"101550\",\"label\":\"Jerome
-        Powell\",\"slug\":\"jerome-powell\",\"createdAt\":\"2024-12-18T23:06:40.410115Z\"},{\"id\":\"159\",\"label\":\"Fed\",\"slug\":\"fed\",\"forceShow\":false,\"publishedAt\":\"2023-11-02
-        21:27:18.98+00\",\"createdAt\":\"2023-11-02T21:27:18.986Z\",\"updatedAt\":\"2025-07-15T20:06:08.797075Z\",\"isCarousel\":false}],\"cyom\":false,\"showAllOutcomes\":true,\"showMarketImages\":true,\"enableNegRisk\":false,\"automaticallyActive\":true,\"negRiskAugmented\":false,\"pendingDeployment\":false,\"deploying\":false}]\n"
+      string: 'upstream connect error or disconnect/reset before headers. reset reason:
+        remote connection failure, transport failure reason: TLS_error:|268435581:SSL
+        routines:OPENSSL_internal:CERTIFICATE_VERIFY_FAILED:TLS_error_end'
     headers:
-      cf-cache-status:
-      - DYNAMIC
-      cf-ray:
-      - 999be4a43d21118f-ORD
       content-length:
-      - '5781'
+      - '216'
       content-type:
-      - application/json
+      - text/plain
       date:
-      - Wed, 05 Nov 2025 11:08:25 GMT
-      server:
-      - cloudflare
-      strict-transport-security:
-      - max-age=7776000; includeSubDomains
-      transfer-encoding:
-      - chunked
-      vary:
-      - Accept-Encoding
+      - Wed, 05 Nov 2025 11:19:22 GMT
     status:
-      code: 200
-      message: OK
+      code: 503
+      message: Service Unavailable
 version: 1
