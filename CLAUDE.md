@@ -49,16 +49,25 @@
 
 ### Product Requirements
 
-- @docs/kalshi-mcp-prd.md — **Kalshi MCP Server PRD** - Complete product requirements, Phase 1 completion status, implementation statistics, and roadmap for future phases.
+- docs/kalshi-mcp-prd.md — **Kalshi MCP Server PRD** - Complete product requirements, Phase 1 completion status, implementation statistics, and roadmap for future phases.
+- docs/polymarket-mcp-prd.md — **Polymarket MCP Server PRD** - 4-phase development plan (12 → 36+ tools), authentication via EIP-712 signing, dual API architecture (Gamma + CLOB), LLM-friendly design patterns, and 15-17 week timeline estimate.
+
+### Implementation Plans
+
+- docs/polymarket-implementation-plan.md — **Polymarket Technical Implementation** - Complete project structure, Pydantic model definitions, dual-client architecture, EIP-712 signing utilities, and code examples for authentication and order execution workflows.
+
+### Platform Comparison
+
+- docs/PREDICTION-MARKETS-COMPARISON.md — **Kalshi vs Polymarket Comparison** - Feature-by-feature analysis, implementation status tracking, use case recommendations, cross-platform arbitrage opportunities, and configuration examples.
 
 ### Agent Documentation
 
 Refer to the curated docs for detailed guidance:
 
-- @docs/kalshi/index.md and related subpages — Kalshi agent architecture, SDK usage, and API reference.
-- @docs/kalshi/gotchas/CLAUDE.md — **Known Kalshi API gotchas and workarounds** - Critical issues, undocumented behaviors, and cost traps (action/side semantics, MVE market explosion, market orders deprecated, negative liquidity in settled markets)
-- @docs/polymarket/index.md and related subpages — Polymarket agent overview, quickstarts, and developer guides.
-- @docs/gofastmcp/INDEX.md and related subpages— Complete FastMCP framework documentation mirror including servers, clients, deployment, integrations, and Python SDK reference.
+- docs/kalshi/index.md and related subpages — Kalshi agent architecture, SDK usage, and API reference.
+- docs/kalshi/gotchas/CLAUDE.md — **Known Kalshi API gotchas and workarounds** - Critical issues, undocumented behaviors, and cost traps (action/side semantics, MVE market explosion, market orders deprecated, negative liquidity in settled markets)
+- docs/polymarket/index.md and related subpages — Polymarket agent overview, quickstarts, and developer guides.
+- docs/gofastmcp/INDEX.md and related subpages— Complete FastMCP framework documentation mirror including servers, clients, deployment, integrations, and Python SDK reference.
 
 ## MCP Server Setup - FastMCP
 
