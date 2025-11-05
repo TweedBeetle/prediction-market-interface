@@ -18,7 +18,7 @@ from loguru import logger
 
 from .gamma_client import GammaClient
 from .clob_client import ClobClient
-from .models import OrderSide, OrderParams, SignatureType
+from .models import OrderSide, OrderParams, OrderType, SignatureType
 
 # Initialize FastMCP server
 mcp = FastMCP(
@@ -42,6 +42,12 @@ Use this server to:
 - Market discovery (search, get details, orderbook, trades, events)
 - Order execution (create, cancel)
 - Portfolio management (positions, order history)
+
+**Phase 2 Features** (8 additional tools):
+- Batch operations (create multiple orders, cancel multiple orders)
+- Market orders (FOK/FAK for immediate execution)
+- Advanced cancellation (cancel all, cancel by market)
+- Position closing helpers
 """
 )
 
@@ -726,6 +732,569 @@ async def polymarket_get_order_history(
         logger.error(f"Failed to get order history: {e}")
         if ctx:
             await ctx.error(f"Failed to get order history: {e}")
+        raise
+
+
+# ============================================================================
+# PHASE 2: BATCH OPERATIONS (3 tools)
+# ============================================================================
+
+@mcp.tool
+async def polymarket_create_orders_batch(
+    orders: List[dict] = Field(..., description="List of orders, each with: token_id, price, size, side, order_type"),
+    ctx: Context = None,
+) -> List[dict]:
+    """
+    Create multiple orders in a single request (up to 15 orders).
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+    ⚠️ **USES REAL MONEY** - Places actual orders on Polygon mainnet.
+
+    Batch order creation is useful for:
+    - Spread trading (buy and sell related markets simultaneously)
+    - Portfolio rebalancing (close multiple positions at once)
+    - OCO strategies (place conditional orders)
+    - Efficiency (reduce API calls and latency)
+
+    Args:
+        orders: List of order dictionaries with fields:
+            - token_id (str): Token ID to trade
+            - price (float): Limit price (0.001-0.999)
+            - size (float): Order size in contracts
+            - side (str): "BUY" or "SELL"
+            - order_type (str): "FOK", "FAK", "GTC", or "GTD"
+
+    Returns:
+        List of batch results with success status for each order
+
+    Example:
+        orders = [
+            {"token_id": "123", "price": 0.55, "size": 10, "side": "BUY", "order_type": "GTC"},
+            {"token_id": "456", "price": 0.45, "size": 10, "side": "SELL", "order_type": "GTC"}
+        ]
+        results = await polymarket_create_orders_batch(orders=orders)
+    """
+    if ctx:
+        await ctx.info(f"Creating batch of {len(orders)} orders...")
+
+    if len(orders) > 15:
+        error_msg = f"Maximum 15 orders per batch, got {len(orders)}"
+        if ctx:
+            await ctx.error(error_msg)
+        raise ValueError(error_msg)
+
+    try:
+        async with get_clob_client() as clob:
+            # Parse orders
+            order_tuples = []
+            for i, order_dict in enumerate(orders):
+                try:
+                    order_params = OrderParams(
+                        token_id=order_dict["token_id"],
+                        price=float(order_dict["price"]),
+                        size=float(order_dict["size"]),
+                        side=OrderSide(order_dict["side"].upper()),
+                    )
+                    order_type = OrderType(order_dict.get("order_type", "GTC").upper())
+                    order_tuples.append((order_params, order_type))
+
+                    if ctx:
+                        await ctx.info(
+                            f"Order {i+1}: {order_params.side.value} {order_params.size} "
+                            f"@ {order_params.price} ({order_type.value})"
+                        )
+                except Exception as e:
+                    if ctx:
+                        await ctx.error(f"Invalid order {i+1}: {e}")
+                    raise ValueError(f"Invalid order {i+1}: {e}")
+
+            # Create batch
+            results = await clob.create_orders_batch(order_tuples)
+
+            # Report results
+            if ctx:
+                success_count = sum(1 for r in results if r.success)
+                await ctx.info(f"Batch complete: {success_count}/{len(results)} successful")
+
+                for i, result in enumerate(results):
+                    if result.success:
+                        await ctx.info(
+                            f"✓ Order {i+1}: {result.status} (ID: {result.order_id})"
+                        )
+                    else:
+                        await ctx.error(f"✗ Order {i+1}: {result.error_msg}")
+
+            return [
+                {
+                    "success": r.success,
+                    "error_msg": r.error_msg,
+                    "order_id": r.order_id,
+                    "status": r.status,
+                }
+                for r in results
+            ]
+
+    except Exception as e:
+        logger.error(f"Failed to create batch orders: {e}")
+        if ctx:
+            await ctx.error(f"Failed to create batch orders: {e}")
+        raise
+
+
+@mcp.tool
+async def polymarket_cancel_orders_batch(
+    order_ids: List[str] = Field(..., description="List of order IDs to cancel"),
+    ctx: Context = None,
+) -> dict:
+    """
+    Cancel multiple orders by their IDs.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+
+    Useful for quickly exiting multiple positions or cleaning up
+    old orders.
+
+    Args:
+        order_ids: List of order IDs to cancel
+
+    Returns:
+        Dictionary with:
+        - canceled: List of successfully canceled order IDs
+        - not_canceled: Map of order ID -> failure reason
+        - success_count: Number of successful cancellations
+        - failure_count: Number of failed cancellations
+
+    Example:
+        result = await polymarket_cancel_orders_batch(
+            order_ids=["0x123...", "0x456...", "0x789..."]
+        )
+    """
+    if ctx:
+        await ctx.info(f"Canceling {len(order_ids)} order(s)...")
+
+    try:
+        async with get_clob_client() as clob:
+            response = await clob.cancel_orders_batch(order_ids)
+
+            if ctx:
+                await ctx.info(
+                    f"Canceled {response.success_count} order(s), "
+                    f"{response.failure_count} failed"
+                )
+
+                for order_id in response.canceled[:5]:  # Show first 5
+                    await ctx.info(f"✓ Canceled: {order_id[:16]}...")
+
+                for order_id, reason in list(response.not_canceled.items())[:5]:
+                    await ctx.error(f"✗ Failed {order_id[:16]}...: {reason}")
+
+            return {
+                "canceled": response.canceled,
+                "not_canceled": response.not_canceled,
+                "success_count": response.success_count,
+                "failure_count": response.failure_count,
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to cancel orders batch: {e}")
+        if ctx:
+            await ctx.error(f"Failed to cancel orders batch: {e}")
+        raise
+
+
+@mcp.tool
+async def polymarket_cancel_all_orders(ctx: Context = None) -> dict:
+    """
+    Cancel ALL active orders for the authenticated user.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+    ⚠️ **WARNING**: This cancels ALL active orders. Use with caution!
+
+    Useful for emergency exits or resetting your order book.
+
+    Returns:
+        Dictionary with:
+        - canceled: List of successfully canceled order IDs
+        - not_canceled: Map of order ID -> failure reason
+        - success_count: Number of successful cancellations
+        - failure_count: Number of failed cancellations
+
+    Example:
+        result = await polymarket_cancel_all_orders()
+        # Cancels all active orders
+    """
+    if ctx:
+        await ctx.warn("⚠️ Canceling ALL active orders...")
+
+    try:
+        async with get_clob_client() as clob:
+            response = await clob.cancel_all_orders()
+
+            if ctx:
+                await ctx.info(
+                    f"Canceled {response.success_count} order(s), "
+                    f"{response.failure_count} failed"
+                )
+
+                if response.success_count > 0:
+                    await ctx.info(f"✓ Successfully canceled {response.success_count} order(s)")
+
+                if response.failure_count > 0:
+                    await ctx.error(f"✗ Failed to cancel {response.failure_count} order(s)")
+
+            return {
+                "canceled": response.canceled,
+                "not_canceled": response.not_canceled,
+                "success_count": response.success_count,
+                "failure_count": response.failure_count,
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to cancel all orders: {e}")
+        if ctx:
+            await ctx.error(f"Failed to cancel all orders: {e}")
+        raise
+
+
+# ============================================================================
+# PHASE 2: MARKET ORDERS (2 tools)
+# ============================================================================
+
+@mcp.tool
+async def polymarket_create_market_order(
+    token_id: str = Field(..., description="Token ID to trade"),
+    side: str = Field(..., description="Order side: BUY or SELL"),
+    size: float = Field(..., description="Order size in contracts", gt=0),
+    order_type: str = Field(default="FOK", description="Order type: FOK (fill-or-kill) or FAK (fill-and-kill)"),
+    ctx: Context = None,
+) -> dict:
+    """
+    Create a market order for immediate execution at best available price.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+    ⚠️ **USES REAL MONEY** - Executes immediately with NO PRICE GUARANTEE.
+
+    Market orders execute immediately against the current orderbook:
+    - **FOK (Fill-Or-Kill)**: Execute fully and immediately, or cancel entirely
+    - **FAK (Fill-And-Kill)**: Execute what's available immediately, cancel rest
+
+    **RISK**: You get whatever price is available on the book. In illiquid
+    markets, you may get unfavorable execution.
+
+    Args:
+        token_id: Token ID to trade
+        side: "BUY" or "SELL"
+        size: Order size in contracts
+        order_type: "FOK" (default) or "FAK"
+
+    Returns:
+        Order details with execution status
+
+    Example:
+        order = await polymarket_create_market_order(
+            token_id="123...",
+            side="BUY",
+            size=10,
+            order_type="FOK"
+        )
+    """
+    if ctx:
+        await ctx.warn(f"⚠️ Creating MARKET order: {side} {size} ({order_type})")
+        await ctx.warn("No price guarantee - will execute at best available price")
+
+    try:
+        # Validate order type
+        if order_type.upper() not in ("FOK", "FAK"):
+            raise ValueError(f"Market orders must be FOK or FAK, got {order_type}")
+
+        async with get_clob_client() as clob:
+            order = await clob.create_market_order(
+                token_id=token_id,
+                side=OrderSide(side.upper()),
+                size=size,
+                order_type=OrderType(order_type.upper()),
+            )
+
+            if ctx:
+                await ctx.info(f"Market order created: {order.order_id}")
+                await ctx.info(f"Status: {order.status}")
+                await ctx.info(
+                    f"Fill: {order.fill_percentage:.1f}% "
+                    f"({order.size_matched}/{order.size})"
+                )
+
+            return order.model_dump()
+
+    except Exception as e:
+        logger.error(f"Failed to create market order: {e}")
+        if ctx:
+            await ctx.error(f"Failed to create market order: {e}")
+        raise
+
+
+@mcp.tool
+async def polymarket_close_position(
+    market_id: str = Field(..., description="Market ID to close position in"),
+    ctx: Context = None,
+) -> dict:
+    """
+    Close a position by creating an opposite-side market order.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+    ⚠️ **USES REAL MONEY** - Creates market order to close position.
+
+    This is a helper that:
+    1. Gets your current position in the market
+    2. Fetches current orderbook to find best price
+    3. Creates opposite-side market order to close position
+    4. Returns execution details
+
+    Args:
+        market_id: Market condition ID to close position in
+
+    Returns:
+        Dictionary with:
+        - position: Original position details
+        - order: Closing order details
+        - success: Whether position was closed
+
+    Example:
+        result = await polymarket_close_position(market_id="0xabc...")
+    """
+    if ctx:
+        await ctx.info(f"Closing position in market {market_id[:16]}...")
+
+    try:
+        async with get_clob_client() as clob:
+            # Get positions for this market
+            positions = await clob.get_positions(market_id=market_id)
+
+            if not positions:
+                if ctx:
+                    await ctx.error("No position found in this market")
+                return {"success": False, "error": "No position found"}
+
+            position = positions[0]
+
+            if ctx:
+                await ctx.info(
+                    f"Position: {position.outcome} {position.size} @ {position.entry_price:.3f}"
+                )
+                await ctx.info(f"Current P&L: ${position.pnl_dollars:.2f}")
+
+            # Determine opposite side
+            # If holding YES tokens (outcome="YES"), we SELL
+            # If holding NO tokens (outcome="NO"), we SELL
+            side = OrderSide.SELL  # We're always selling our position
+
+            if ctx:
+                await ctx.info(f"Creating closing order: {side.value} {position.size}")
+
+            # Create market order to close
+            order = await clob.create_market_order(
+                token_id=position.token_id if hasattr(position, 'token_id') else "",
+                side=side,
+                size=abs(position.size),
+                order_type=OrderType.FOK,
+            )
+
+            if ctx:
+                await ctx.info(f"Closing order created: {order.order_id}")
+                await ctx.info(f"Status: {order.status}")
+
+                if order.is_filled:
+                    await ctx.info("✓ Position closed successfully")
+                else:
+                    await ctx.warn("⚠️ Position may not be fully closed - check status")
+
+            return {
+                "success": order.is_filled,
+                "position": position.model_dump(),
+                "order": order.model_dump(),
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to close position: {e}")
+        if ctx:
+            await ctx.error(f"Failed to close position: {e}")
+        raise
+
+
+# ============================================================================
+# PHASE 2: ADVANCED CANCELLATION (2 tools)
+# ============================================================================
+
+@mcp.tool
+async def polymarket_cancel_market_orders(
+    market_id: Optional[str] = Field(None, description="Market condition ID to cancel orders for"),
+    token_id: Optional[str] = Field(None, description="Token/asset ID to cancel orders for"),
+    ctx: Context = None,
+) -> dict:
+    """
+    Cancel all orders for a specific market or token.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+
+    Useful for exiting a specific market while keeping other orders active.
+
+    Args:
+        market_id: Market condition ID (optional)
+        token_id: Token/asset ID (optional)
+
+    Note: Provide either market_id or token_id (or both)
+
+    Returns:
+        Dictionary with:
+        - canceled: List of successfully canceled order IDs
+        - not_canceled: Map of order ID -> failure reason
+        - success_count: Number of successful cancellations
+        - failure_count: Number of failed cancellations
+
+    Example:
+        result = await polymarket_cancel_market_orders(market_id="0xabc...")
+    """
+    if not market_id and not token_id:
+        error_msg = "Must provide either market_id or token_id"
+        if ctx:
+            await ctx.error(error_msg)
+        raise ValueError(error_msg)
+
+    if ctx:
+        filter_desc = f"market={market_id[:16] if market_id else 'None'}, token={token_id[:16] if token_id else 'None'}"
+        await ctx.info(f"Canceling orders for {filter_desc}...")
+
+    try:
+        async with get_clob_client() as clob:
+            response = await clob.cancel_market_orders(
+                market_id=market_id,
+                token_id=token_id,
+            )
+
+            if ctx:
+                await ctx.info(
+                    f"Canceled {response.success_count} order(s), "
+                    f"{response.failure_count} failed"
+                )
+
+            return {
+                "canceled": response.canceled,
+                "not_canceled": response.not_canceled,
+                "success_count": response.success_count,
+                "failure_count": response.failure_count,
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to cancel market orders: {e}")
+        if ctx:
+            await ctx.error(f"Failed to cancel market orders: {e}")
+        raise
+
+
+@mcp.tool
+async def polymarket_close_all_positions(ctx: Context = None) -> dict:
+    """
+    Close all open positions by creating market orders.
+
+    **REQUIRES AUTHENTICATION** via polymarket_authenticate().
+    ⚠️ **USES REAL MONEY** - Creates market orders for all positions.
+    ⚠️ **WARNING**: This closes ALL positions. Use with caution!
+
+    This helper:
+    1. Gets all current positions
+    2. For each position, creates closing market order
+    3. Returns summary of closed positions
+
+    Returns:
+        Dictionary with:
+        - total_positions: Number of positions to close
+        - closed: List of successfully closed positions
+        - failed: List of positions that failed to close
+        - total_pnl: Total realized P&L
+
+    Example:
+        result = await polymarket_close_all_positions()
+    """
+    if ctx:
+        await ctx.warn("⚠️ Closing ALL positions...")
+
+    try:
+        async with get_clob_client() as clob:
+            # Get all positions
+            positions = await clob.get_positions()
+
+            if not positions:
+                if ctx:
+                    await ctx.info("No positions to close")
+                return {
+                    "total_positions": 0,
+                    "closed": [],
+                    "failed": [],
+                    "total_pnl": 0.0,
+                }
+
+            if ctx:
+                await ctx.info(f"Found {len(positions)} position(s) to close")
+
+            # Close each position
+            closed = []
+            failed = []
+            total_pnl = 0.0
+
+            for position in positions:
+                try:
+                    if ctx:
+                        await ctx.info(
+                            f"Closing: {position.outcome} {position.size} @ "
+                            f"{position.entry_price:.3f} (P&L: ${position.pnl_dollars:.2f})"
+                        )
+
+                    # Create closing order
+                    order = await clob.create_market_order(
+                        token_id=position.token_id if hasattr(position, 'token_id') else "",
+                        side=OrderSide.SELL,
+                        size=abs(position.size),
+                        order_type=OrderType.FOK,
+                    )
+
+                    closed.append({
+                        "market_id": position.market_id,
+                        "size": position.size,
+                        "pnl": position.pnl_dollars,
+                        "order_id": order.order_id,
+                    })
+
+                    total_pnl += position.pnl_dollars or 0.0
+
+                    if ctx:
+                        await ctx.info(f"✓ Closed position (Order: {order.order_id})")
+
+                except Exception as e:
+                    logger.warning(f"Failed to close position: {e}")
+                    failed.append({
+                        "market_id": position.market_id,
+                        "error": str(e),
+                    })
+
+                    if ctx:
+                        await ctx.error(f"✗ Failed to close: {e}")
+
+            if ctx:
+                await ctx.info(
+                    f"Summary: {len(closed)} closed, {len(failed)} failed, "
+                    f"Total P&L: ${total_pnl:.2f}"
+                )
+
+            return {
+                "total_positions": len(positions),
+                "closed": closed,
+                "failed": failed,
+                "total_pnl": total_pnl,
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to close all positions: {e}")
+        if ctx:
+            await ctx.error(f"Failed to close all positions: {e}")
         raise
 
 
