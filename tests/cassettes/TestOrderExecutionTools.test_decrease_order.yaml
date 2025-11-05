@@ -20,23 +20,22 @@ interactions:
     uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/orders/invalid-order-id/decrease
   response:
     body:
-      string: '{"error":{"code":"authentication_error","message":"authentication_error","details":"rpc
-        error: code = Unauthenticated desc = INCORRECT_API_KEY_SIGNATURE"}}'
+      string: '{"error":{"code":"not_found","message":"not found"}}'
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '155'
+      - '52'
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:08:22 GMT
+      - Mon, 03 Nov 2025 20:28:10 GMT
       Via:
-      - 1.1 87f659bbdb661ec91ff93c2d839305ea.cloudfront.net (CloudFront)
+      - 1.1 f9e9a2e2a630392daf40b42b49debe88.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - OO9ozMkmR0KkFOrLs-xN_hyXq6ueOoxlvgt4nfSi_uW_8fdkxbwbQA==
+      - I3HUCudhJ0ZGAx3cxqfQQM_esKgeTkZGKrE1gnbCTlPeecEZZTlGwQ==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Error from cloudfront
       content-security-policy:
@@ -46,6 +45,6 @@ interactions:
       x-content-type-options:
       - nosniff
     status:
-      code: 401
-      message: Unauthorized
+      code: 404
+      message: Not Found
 version: 1

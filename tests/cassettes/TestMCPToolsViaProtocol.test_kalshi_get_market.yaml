@@ -15,17 +15,23 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXNCAAMBSPREAD-25NOV03BRADSBON-SBON8
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/KXATPMATCH-25NOV04CAZNOR-NOR
   response:
     body:
-      string: '{"market":{"can_close_early":true,"category":"","close_time":"2025-11-17T16:00:00Z","custom_strike":{"basketball_team":"120ce01a-73f9-4863-b6a8-b5a3afc64d78"},"early_close_condition":"This
-        market will close and expire after a winner is declared.","event_ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON","expected_expiration_time":"2025-11-03T19:00:00Z","expiration_time":"2025-11-17T16:00:00Z","expiration_value":"","floor_strike":8.5,"last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-17T16:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":100,"no_bid_dollars":"1.0000","no_sub_title":"St.
-        Bonaventure wins by over 8.5 Points","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T18:24:48Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
-        St. Bonaventure wins by more than 8.5 points in the Bradley at St. Bonaventure
-        college basketball game originally scheduled for Nov 3, 2025, then the market
-        resolves to Yes.","rules_secondary":"","settlement_timer_seconds":300,"status":"open","strike_type":"greater","subtitle":"","tick_size":1,"ticker":"KXNCAAMBSPREAD-25NOV03BRADSBON-SBON8","title":"St.
-        Bonaventure wins by over 8.5 Points?","volume":0,"volume_24h":0,"yes_ask":0,"yes_ask_dollars":"0.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"St.
-        Bonaventure wins by over 8.5 Points"}}
+      string: '{"market":{"can_close_early":true,"category":"","close_time":"2025-11-18T18:10:00Z","custom_strike":{"tennis_competitor":"b524322e-690c-4f3d-b71e-d7b7b4eb3e36"},"early_close_condition":"This
+        market will close and expire after a winner is declared.","event_ticker":"KXATPMATCH-25NOV04CAZNOR","expected_expiration_time":"2025-11-04T21:10:00Z","expiration_time":"2025-11-18T18:10:00Z","expiration_value":"","last_price":0,"last_price_dollars":"0.0000","latest_expiration_time":"2025-11-18T18:10:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"Cameron
+        Norrie","notional_value":100,"notional_value_dollars":"1.0000","open_interest":0,"open_time":"2025-11-03T20:27:31Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        Cameron Norrie wins the Cazaux vs Norrie professional tennis match in the
+        2025 ATP Metz Round Of 16 after a ball has been played, then the market resolves
+        to Yes.","rules_secondary":"The following market refers to the Cazaux vs Norrie
+        professional tennis match in the 2025 ATP Metz Round Of 16 after a ball has
+        been played. If the match does not occur (signaled by a ball being played)
+        due to a player injury, walkover, forfeiture, or any other cancellation (all
+        before the match starts), the market will resolve to a fair price in accordance
+        with the rules. If this match is postponed or delayed, the market will remain
+        open and close after the rescheduled match has finished (within two weeks).","settlement_timer_seconds":300,"status":"open","strike_type":"structured","subtitle":"","tick_size":1,"ticker":"KXATPMATCH-25NOV04CAZNOR-NOR","title":"Will
+        Cameron Norrie win the Cazaux vs Norrie match?","volume":0,"volume_24h":0,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"Cameron
+        Norrie"}}
 
         '
     headers:
@@ -34,21 +40,17 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 03 Nov 2025 19:02:28 GMT
+      - Mon, 03 Nov 2025 20:28:18 GMT
       Transfer-Encoding:
       - chunked
-      Vary:
-      - accept-encoding
       Via:
-      - 1.1 c63f7bee69dd1275337db8198495f82c.cloudfront.net (CloudFront)
+      - 1.1 f9e9a2e2a630392daf40b42b49debe88.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - 9j-HGetpgJ06Tb7NzhBiv11KnX17JERk78lGK_zoNaHNhv5YUVqApA==
+      - 91vRdpLxWvyKcZ1RsD2-HOmLSkkukv5y5Ok0BJ2XcGM29Msm-BSOQA==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
-      content-length:
-      - '1748'
       content-security-policy:
       - default-src 'none';
       strict-transport-security:

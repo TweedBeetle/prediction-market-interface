@@ -15,10 +15,14 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/markets?limit=10&status=closed
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets?status=closed&limit=100
   response:
     body:
-      string: '{"cursor":"CgwI1_ygyAYQyOjLsQMSGUtYRVRIRC0yNU5PVjAzMDktVDQyNTkuOTk","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4439.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,440
+      string: '{"cursor":"CgwI1vygyAYQuMvMxwMSGUtYRVRIRC0yNU5PVjAzMTAtVDM5NzkuOTk","markets":[{"can_close_early":true,"category":"","close_time":"2025-11-03T20:20:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1520","expected_expiration_time":"2025-11-03T20:20:00Z","expiration_time":"2025-11-03T20:20:00Z","expiration_value":"","last_price":98,"last_price_dollars":"0.9800","latest_expiration_time":"2025-11-03T20:20:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"3","notional_value":100,"notional_value_dollars":"1.0000","open_interest":84,"open_time":"2025-11-03T20:10:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 3 on Nov 03 at 15:20 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"closed","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1520-3","title":"Will
+        1+1 equal 3 on Nov 03 at 15:20?","volume":120,"volume_24h":120,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"3"},{"can_close_early":true,"category":"","close_time":"2025-11-03T20:20:00Z","event_ticker":"KXQUICKSETTLE-25NOV03H1520","expected_expiration_time":"2025-11-03T20:20:00Z","expiration_time":"2025-11-03T20:20:00Z","expiration_value":"","last_price":2,"last_price_dollars":"0.0200","latest_expiration_time":"2025-11-03T20:20:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"2","notional_value":100,"notional_value_dollars":"1.0000","open_interest":156,"open_time":"2025-11-03T20:10:00Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        1+1 equals 2 on Nov 03 at 15:20 the market resolves to Yes.","rules_secondary":"","settlement_timer_seconds":60,"status":"closed","subtitle":"","tick_size":1,"ticker":"KXQUICKSETTLE-25NOV03H1520-2","title":"Will
+        1+1 equal 2 on Nov 03 at 15:20?","volume":229,"volume_24h":229,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"2"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4439.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,440
         or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1182,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
         the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
         Index (ERTI) before 9 AM EST is above 4439.99 at 9 AM EST on Nov 3, 2025,
@@ -138,6 +142,1062 @@ interactions:
         is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,260
         or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4259.99","title":"Ethereum
         price at Nov 3, 2025 at 9am EST?","volume":3157,"volume_24h":3157,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,260
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4239.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,240
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1884,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4239.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,240
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4239.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5128,"volume_24h":5128,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,240
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4219.99,"last_price":2,"last_price_dollars":"0.0200","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,220
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1248,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4219.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,220
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4219.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4560,"volume_24h":4560,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,220
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4199.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,200
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1821,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4199.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,200
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4199.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3754,"volume_24h":3754,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,200
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4179.99,"last_price":3,"last_price_dollars":"0.0300","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,180
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1422,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4179.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,180
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4179.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4407,"volume_24h":4407,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,180
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4159.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,160
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1120,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4159.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,160
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4159.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":6011,"volume_24h":6011,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,160
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4139.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,140
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2974,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4139.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,140
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4139.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5787,"volume_24h":5787,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,140
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4119.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":-99,"liquidity_dollars":"-0.9900","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,120
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1619,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4119.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,120
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4119.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4377,"volume_24h":4377,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,120
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4099.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,100
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1515,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4099.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,100
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4099.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4619,"volume_24h":4619,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,100
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4079.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,080
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1526,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4079.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,080
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4079.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4364,"volume_24h":4364,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,080
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4059.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,060
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2576,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4059.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,060
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4059.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5182,"volume_24h":5182,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,060
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4039.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,040
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1314,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4039.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,040
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4039.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4484,"volume_24h":4484,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,040
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":4019.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,020
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":527,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 4019.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,020
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T4019.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3887,"volume_24h":3887,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,020
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3999.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,000
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1221,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3999.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,000
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3999.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5334,"volume_24h":5334,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,000
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3979.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,980
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":880,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3979.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,980
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3979.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3491,"volume_24h":3491,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,980
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3959.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,960
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1168,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3959.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,960
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3959.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4521,"volume_24h":4521,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,960
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3939.99,"last_price":41,"last_price_dollars":"0.4100","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,940
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":20000,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3939.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,940
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3939.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":23440,"volume_24h":23440,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,940
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3919.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,920
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":3006,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3919.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,920
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3919.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5545,"volume_24h":5545,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,920
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3899.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,900
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":950,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3899.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,900
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3899.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4304,"volume_24h":4304,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,900
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3879.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,880
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":333,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3879.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,880
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3879.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3491,"volume_24h":3491,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,880
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3859.99,"last_price":3,"last_price_dollars":"0.0300","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,860
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1952,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3859.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,860
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3859.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4068,"volume_24h":4068,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,860
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3839.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,840
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":772,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3839.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,840
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3839.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3535,"volume_24h":3535,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,840
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3819.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,820
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1931,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3819.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,820
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3819.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4340,"volume_24h":4340,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,820
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3799.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,800
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2607,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3799.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,800
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3799.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4674,"volume_24h":4674,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,800
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3779.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,780
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":806,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3779.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,780
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3779.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4174,"volume_24h":4174,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,780
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3759.99,"last_price":6,"last_price_dollars":"0.0600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,760
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1627,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3759.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,760
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3759.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4215,"volume_24h":4215,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,760
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3739.99,"last_price":11,"last_price_dollars":"0.1100","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,740
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1115,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3739.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,740
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3739.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4096,"volume_24h":4096,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,740
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3699.99,"last_price":89,"last_price_dollars":"0.8900","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,700
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1580,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3699.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,700
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3699.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3439,"volume_24h":3439,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,700
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3679.99,"last_price":67,"last_price_dollars":"0.6700","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,680
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":20005,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3679.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,680
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3679.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":22880,"volume_24h":22880,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,680
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3659.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,660
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1875,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3659.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,660
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3659.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3710,"volume_24h":3710,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,660
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3639.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,640
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2487,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3639.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,640
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3639.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4767,"volume_24h":4767,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,640
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3619.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,620
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2056,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3619.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,620
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3619.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4657,"volume_24h":4657,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,620
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3599.99,"last_price":97,"last_price_dollars":"0.9700","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,600
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2056,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3599.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,600
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3599.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3160,"volume_24h":3160,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,600
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3579.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,580
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2735,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3579.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,580
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3579.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4037,"volume_24h":4037,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,580
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3559.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,560
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1461,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3559.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,560
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3559.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4666,"volume_24h":4666,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,560
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3539.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,540
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1271,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3539.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,540
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3539.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":2564,"volume_24h":2564,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,540
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3519.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,520
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2647,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3519.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,520
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3519.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3590,"volume_24h":3590,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,520
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3499.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,500
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2082,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3499.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,500
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3499.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3566,"volume_24h":3566,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,500
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3479.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,480
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1797,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3479.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,480
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3479.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4447,"volume_24h":4447,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,480
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3459.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,460
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1935,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3459.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,460
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3459.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4451,"volume_24h":4451,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,460
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3439.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,440
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1963,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3439.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,440
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3439.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4249,"volume_24h":4249,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,440
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3419.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,420
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1565,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3419.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,420
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3419.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":2802,"volume_24h":2802,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,420
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3399.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,400
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1938,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3399.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,400
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3399.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4065,"volume_24h":4065,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,400
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3379.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,380
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1287,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3379.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,380
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3379.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4244,"volume_24h":4244,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,380
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3359.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,360
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2079,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3359.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,360
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3359.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3493,"volume_24h":3493,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,360
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3339.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,340
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":3458,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3339.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,340
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3339.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":7175,"volume_24h":7175,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,340
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3319.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,320
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2301,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3319.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,320
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3319.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3403,"volume_24h":3403,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,320
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3299.99,"last_price":97,"last_price_dollars":"0.9700","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,300
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1814,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3299.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,300
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3299.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3650,"volume_24h":3650,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,300
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3279.99,"last_price":98,"last_price_dollars":"0.9800","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,280
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2028,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3279.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,280
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3279.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":5030,"volume_24h":5030,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,280
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3259.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,260
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2153,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3259.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,260
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3259.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3311,"volume_24h":3311,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,260
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3239.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,240
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2806,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3239.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,240
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3239.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3826,"volume_24h":3826,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,240
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3219.99,"last_price":98,"last_price_dollars":"0.9800","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,220
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2383,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3219.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,220
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3219.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4071,"volume_24h":4071,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,220
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3199.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,200
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2167,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3199.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,200
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3199.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4164,"volume_24h":4164,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,200
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3179.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,180
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":868,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3179.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,180
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3179.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3671,"volume_24h":3671,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,180
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3159.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,160
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1867,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3159.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,160
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3159.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4928,"volume_24h":4928,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,160
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3139.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,140
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2234,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3139.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,140
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3139.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4575,"volume_24h":4575,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,140
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3119.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,120
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1140,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3119.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,120
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3119.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3693,"volume_24h":3693,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,120
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3099.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,100
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1703,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3099.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,100
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3099.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3767,"volume_24h":3767,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,100
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3079.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,080
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1881,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3079.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,080
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3079.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3467,"volume_24h":3467,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,080
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3059.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,060
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2191,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3059.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,060
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3059.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4002,"volume_24h":4002,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,060
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3039.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,040
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1022,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3039.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,040
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3039.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3727,"volume_24h":3727,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,040
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":3019.99,"last_price":95,"last_price_dollars":"0.9500","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,020
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1699,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 3019.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,020
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T3019.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4554,"volume_24h":4554,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,020
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":2999.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,000
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1564,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 2999.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,000
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T2999.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3479,"volume_24h":3479,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,000
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":2979.99,"last_price":96,"last_price_dollars":"0.9600","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$2,980
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":838,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 2979.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$2,980
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T2979.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":3605,"volume_24h":3605,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$2,980
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T14:00:00Z","event_ticker":"KXETHD-25NOV0309","expected_expiration_time":"2025-11-03T14:05:00Z","expiration_time":"2025-11-10T14:00:00Z","expiration_value":"","floor_strike":2959.99,"last_price":98,"last_price_dollars":"0.9800","latest_expiration_time":"2025-11-10T14:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$2,960
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1163,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 9 AM EST is above 2959.99 at 9 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$2,960
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0309-T2959.99","title":"Ethereum
+        price at Nov 3, 2025 at 9am EST?","volume":4071,"volume_24h":4071,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$2,960
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4439.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,440
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1317,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4439.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,440
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4439.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3738,"volume_24h":3738,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,440
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4419.99,"last_price":2,"last_price_dollars":"0.0200","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,420
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2091,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4419.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,420
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4419.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4238,"volume_24h":4238,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,420
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4399.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,400
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2341,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4399.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,400
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4399.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3530,"volume_24h":3530,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,400
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4379.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,380
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":951,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4379.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,380
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4379.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3192,"volume_24h":3192,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,380
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4359.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,360
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1441,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4359.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,360
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4359.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4029,"volume_24h":4029,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,360
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4339.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,340
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1530,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4339.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,340
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4339.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4099,"volume_24h":4099,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,340
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4319.99,"last_price":2,"last_price_dollars":"0.0200","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,320
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1247,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4319.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,320
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4319.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3289,"volume_24h":3289,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,320
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4299.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,300
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1109,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4299.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,300
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4299.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3074,"volume_24h":3074,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,300
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4279.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,280
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1314,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4279.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,280
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4279.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4007,"volume_24h":4007,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,280
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4259.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,260
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1116,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4259.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,260
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4259.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3827,"volume_24h":3827,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,260
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4239.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,240
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1106,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4239.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,240
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4239.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3969,"volume_24h":3969,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,240
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4219.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,220
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1024,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4219.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,220
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4219.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4077,"volume_24h":4077,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,220
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4199.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,200
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2972,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4199.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,200
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4199.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4438,"volume_24h":4438,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,200
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4179.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,180
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1812,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4179.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,180
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4179.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4006,"volume_24h":4006,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,180
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4159.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,160
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1138,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4159.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,160
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4159.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3050,"volume_24h":3050,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,160
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4139.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,140
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1058,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4139.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,140
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4139.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3268,"volume_24h":3268,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,140
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4119.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,120
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2431,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4119.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,120
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4119.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4387,"volume_24h":4387,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,120
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4099.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,100
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2171,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4099.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,100
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4099.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":2988,"volume_24h":2988,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,100
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4079.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,080
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2105,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4079.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,080
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4079.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3368,"volume_24h":3368,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,080
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4059.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,060
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":1091,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4059.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,060
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4059.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3395,"volume_24h":3395,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,060
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4039.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,040
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":756,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4039.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,040
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4039.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":4200,"volume_24h":4200,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,040
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":4019.99,"last_price":4,"last_price_dollars":"0.0400","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,020
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":2044,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 4019.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,020
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T4019.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3758,"volume_24h":3758,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,020
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":3999.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$4,000
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":3005,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 3999.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$4,000
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T3999.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3858,"volume_24h":3858,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$4,000
+        or above"},{"can_close_early":true,"category":"","close_time":"2025-11-03T15:00:00Z","event_ticker":"KXETHD-25NOV0310","expected_expiration_time":"2025-11-03T15:05:00Z","expiration_time":"2025-11-10T15:00:00Z","expiration_value":"","floor_strike":3979.99,"last_price":5,"last_price_dollars":"0.0500","latest_expiration_time":"2025-11-10T15:00:00Z","liquidity":0,"liquidity_dollars":"0.0000","market_type":"binary","no_ask":100,"no_ask_dollars":"1.0000","no_bid":0,"no_bid_dollars":"0.0000","no_sub_title":"$3,980
+        or above","notional_value":100,"notional_value_dollars":"1.0000","open_interest":3074,"open_time":"2025-11-03T06:00:01Z","previous_price":0,"previous_price_dollars":"0.0000","previous_yes_ask":0,"previous_yes_ask_dollars":"0.0000","previous_yes_bid":0,"previous_yes_bid_dollars":"0.0000","price_level_structure":"linear_cent","price_ranges":[{"end":"1.0000","start":"0.0000","step":"0.0100"}],"response_price_units":"usd_cent","result":null,"risk_limit_cents":0,"rules_primary":"If
+        the simple average of the sixty seconds of CF Benchmarks'' Ethereum Real-Time
+        Index (ERTI) before 10 AM EST is above 3979.99 at 10 AM EST on Nov 3, 2025,
+        then the market resolves to Yes.","rules_secondary":"Not all cryptocurrency
+        price data is the same. While checking a source like Google or Coinbase may
+        help guide your decision, the price used to determine this market is based
+        on CF Benchmarks'' corresponding Real Time Index (RTI). At the last minute
+        before expiration, 60 RTI prices are collected. The official and final value
+        is the average of these prices.","settlement_timer_seconds":60,"status":"closed","strike_type":"greater","subtitle":"$3,980
+        or above","tick_size":1,"ticker":"KXETHD-25NOV0310-T3979.99","title":"Ethereum
+        price at Nov 3, 2025 at 10am EST?","volume":3913,"volume_24h":3913,"yes_ask":100,"yes_ask_dollars":"1.0000","yes_bid":0,"yes_bid_dollars":"0.0000","yes_sub_title":"$3,980
         or above"}]}
 
         '
@@ -147,15 +1207,15 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Mon, 03 Nov 2025 19:02:33 GMT
+      - Mon, 03 Nov 2025 20:29:31 GMT
       Transfer-Encoding:
       - chunked
       Via:
-      - 1.1 b7f2a0d159557daec861a3f723614294.cloudfront.net (CloudFront)
+      - 1.1 2a656139082dc5343337bc64ea362630.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - xJKCopUCDkvNR12bcfII1_6a0XKtH48qwsxk9Lnfz6Pxaq2AMeIkhw==
+      - GHbutJXErg5p0oyQhIPJCtuGnVKeTCaSXzNaltKFsqf0ByTUB6HiCw==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:

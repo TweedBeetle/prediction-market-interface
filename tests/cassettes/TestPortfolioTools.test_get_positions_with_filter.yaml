@@ -15,7 +15,7 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=10&ticker=HIGHTEST
+    uri: https://demo-api.kalshi.co/trade-api/v2/portfolio/positions?limit=100&ticker=HIGHTEST
   response:
     body:
       string: '{"cursor":"","event_positions":[],"market_positions":[]}'
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:12:11 GMT
+      - Mon, 03 Nov 2025 20:28:12 GMT
       Via:
-      - 1.1 05e25fe9389d9c05dea8635f0696b51a.cloudfront.net (CloudFront)
+      - 1.1 2a656139082dc5343337bc64ea362630.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - MR4H7rMnbS3xQv7jN0oLiXWUb2Nsb98IEy13FXFXKv6m7ktfpxRpnQ==
+      - tUq_EaIljnGepSzuriolZvkA7Tn3voXDRxDW0btVfSoxTzrMLyYTQg==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:

@@ -219,11 +219,13 @@ Both `.env` files and the `secrets/` directory are gitignored for security.
 
 ### Environment File Format
 
+**Option 1: File-based private key (recommended for local development)**
+
 **Production (.env.kalshi.prod):**
 ```bash
 # Kalshi Production API Credentials
 KALSHI_API_KEY=your_prod_api_key_here
-KALSHI_PRIVATE_KEY_PATH=./secrets/kalshi_prod_private_key.txt
+KALSHI_PRIVATE_KEY_PATH=/path/to/secrets/kalshi_prod_private_key.pem
 KALSHI_ENVIRONMENT=production
 
 # API Configuration
@@ -237,11 +239,13 @@ KALSHI_LARGE_ORDER_THRESHOLD=50
 KALSHI_MAX_BALANCE_USAGE_PCT=25
 ```
 
+**Option 2: Direct private key content (recommended for CI/CD)**
+
 **Demo (.env.kalshi.demo):**
 ```bash
 # Kalshi Demo API Credentials
 KALSHI_API_KEY=your_demo_api_key_here
-KALSHI_PRIVATE_KEY_PATH=./secrets/kalshi_demo_private_key.txt
+KALSHI_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG...key_content_here...\n-----END PRIVATE KEY-----"
 KALSHI_ENVIRONMENT=demo
 
 # API Configuration
@@ -257,14 +261,31 @@ KALSHI_MAX_BALANCE_USAGE_PCT=100
 
 ### Private Keys
 
-Private keys are stored in `secrets/` directory and referenced by path in `.env` files.
+**Two Approaches:**
+
+1. **File-based (Recommended for local development):**
+   - Private keys stored in `secrets/` directory
+   - Referenced by path in `.env` files using `KALSHI_PRIVATE_KEY_PATH`
+   - Example: `KALSHI_PRIVATE_KEY_PATH=/path/to/secrets/kalshi_demo_private_key.pem`
+
+2. **Direct content (Recommended for CI/CD):**
+   - Private key content provided directly via `KALSHI_PRIVATE_KEY` env var
+   - Useful for secrets managers, cloud deployments
+   - Example: `KALSHI_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...key content...\n-----END PRIVATE KEY-----"`
+
+**Priority:** If both are set, `KALSHI_PRIVATE_KEY` (direct content) takes precedence.
 
 **Obtaining Private Keys:**
 1. Log into Kalshi (production or demo environment)
 2. Navigate to API settings
 3. Generate API key pair
-4. Save private key to `secrets/kalshi_{env}_private_key.txt`
-5. Add public key to `.env.kalshi.{env}` as `KALSHI_API_KEY`
+4. For file-based approach:
+   - Save private key to `secrets/kalshi_{env}_private_key.pem`
+   - Add path to `.env.kalshi.{env}` as `KALSHI_PRIVATE_KEY_PATH`
+5. For direct content approach:
+   - Copy PEM-encoded private key
+   - Add to `.env.kalshi.{env}` as `KALSHI_PRIVATE_KEY="...key content..."`
+6. Add public key to `.env.kalshi.{env}` as `KALSHI_API_KEY`
 
 ### Wrapper Scripts Load Environment
 

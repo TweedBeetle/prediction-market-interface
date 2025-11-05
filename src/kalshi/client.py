@@ -36,24 +36,57 @@ class KalshiClient:
     def __init__(
         self,
         api_key: str,
-        private_key_path: str,
+        private_key: Optional[str] = None,
+        private_key_path: Optional[str] = None,
         base_url: str = "https://trading-api.kalshi.com",
         api_version: str = "v2",
     ):
+        """
+        Initialize Kalshi API client.
+
+        Args:
+            api_key: Kalshi API key
+            private_key: Private key content as PEM-encoded string (NEW)
+            private_key_path: Path to private key file (EXISTING)
+            base_url: API base URL
+            api_version: API version
+
+        Note:
+            Must provide either private_key (direct content) or private_key_path (file).
+            private_key takes precedence if both are provided.
+        """
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.api_version = api_version
         self.client = httpx.AsyncClient(timeout=30.0)
 
         # Load private key for request signing
-        private_key_path = Path(private_key_path).expanduser()
-        if not private_key_path.exists():
-            raise FileNotFoundError(f"Private key not found: {private_key_path}")
+        # Try direct key content first, then fall back to file path
+        key_bytes = None
 
-        with open(private_key_path, "rb") as f:
-            self.private_key = serialization.load_pem_private_key(
-                f.read(), password=None, backend=default_backend()
+        if private_key:
+            # Direct key content - encode string to bytes
+            logger.info("Loading private key from KALSHI_PRIVATE_KEY environment variable")
+            key_bytes = private_key.encode('utf-8')
+        elif private_key_path:
+            # File path - read from file
+            logger.info(f"Loading private key from file: {private_key_path}")
+            key_path = Path(private_key_path).expanduser()
+            if not key_path.exists():
+                raise FileNotFoundError(f"Private key file not found: {key_path}")
+
+            with open(key_path, "rb") as f:
+                key_bytes = f.read()
+        else:
+            raise ValueError(
+                "Must provide either 'private_key' (direct content) or "
+                "'private_key_path' (file path)"
             )
+
+        # Parse PEM-encoded key (works for both sources)
+        self.private_key = serialization.load_pem_private_key(
+            key_bytes, password=None, backend=default_backend()
+        )
 
         logger.info(f"Initialized Kalshi client: {self.base_url}")
 
@@ -65,6 +98,14 @@ class KalshiClient:
         Args:
             environment: Override environment ("demo" or "production")
                         If None, uses KALSHI_ENVIRONMENT env var
+
+        Environment Variables:
+            KALSHI_API_KEY: API key (required)
+            KALSHI_PRIVATE_KEY: Private key content as PEM string (NEW - takes precedence)
+            KALSHI_PRIVATE_KEY_PATH: Path to private key file (EXISTING - fallback)
+            KALSHI_ENVIRONMENT: Environment name ("demo" or "production")
+            KALSHI_BASE_URL: API base URL (optional, auto-selected based on environment)
+            KALSHI_API_VERSION: API version (default: "v2")
         """
         env = environment or os.getenv("KALSHI_ENVIRONMENT", "demo")
 
@@ -72,9 +113,15 @@ class KalshiClient:
         if not api_key:
             raise ValueError("KALSHI_API_KEY environment variable not set")
 
+        # Try direct key first (new), then fall back to file path (existing)
+        private_key = os.getenv("KALSHI_PRIVATE_KEY")
         private_key_path = os.getenv("KALSHI_PRIVATE_KEY_PATH")
-        if not private_key_path:
-            raise ValueError("KALSHI_PRIVATE_KEY_PATH environment variable not set")
+
+        if not private_key and not private_key_path:
+            raise ValueError(
+                "Must set either KALSHI_PRIVATE_KEY (direct key content) or "
+                "KALSHI_PRIVATE_KEY_PATH (file path)"
+            )
 
         base_url = os.getenv(
             "KALSHI_BASE_URL",
@@ -88,6 +135,7 @@ class KalshiClient:
         logger.info(f"Loading Kalshi client from environment: {env}")
         return cls(
             api_key=api_key,
+            private_key=private_key,
             private_key_path=private_key_path,
             base_url=base_url,
             api_version=api_version,

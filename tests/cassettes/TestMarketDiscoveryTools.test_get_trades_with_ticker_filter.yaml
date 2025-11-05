@@ -15,7 +15,7 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://demo-api.kalshi.co/trade-api/v2/markets/trades?limit=10&ticker=HIGHTEST-24
+    uri: https://demo-api.kalshi.co/trade-api/v2/markets/trades?limit=100&ticker=HIGHTEST-24
   response:
     body:
       string: '{"cursor":"","trades":[]}'
@@ -27,13 +27,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 03 Nov 2025 19:17:31 GMT
+      - Mon, 03 Nov 2025 20:28:06 GMT
       Via:
-      - 1.1 68a32dce20d0762e3778fb28ca194854.cloudfront.net (CloudFront)
+      - 1.1 f9e9a2e2a630392daf40b42b49debe88.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - jpBYwmFDJsfOyucSdhzvVqbAzOd9wTlguuokuJfRZEy96_TNmzMfxA==
+      - K78m3LB8Zmry1vG692rzhrFpTY7jTMTFr57o3R95BoVvvchIvQSmiQ==
       X-Amz-Cf-Pop:
-      - FRA50-P1
+      - MUC50-P5
       X-Cache:
       - Miss from cloudfront
       content-security-policy:
