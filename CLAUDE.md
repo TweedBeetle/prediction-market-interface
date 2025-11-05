@@ -47,6 +47,20 @@
 
 ## Project Documentation
 
+### Development Journal
+
+The `journal/` directory contains timestamped chronological records of development progress:
+
+- **journal/CLAUDE.md** — Explains journal organization and guidelines
+- **journal/polymarket/** — Polymarket development milestones
+  - `2025-11-05-phase1-completion.md` — Phase 1 implementation summary (12 tools)
+  - `2025-11-05-phase2-scope.md` — Phase 2 planning and feature analysis
+  - `2025-11-05-phase2-completion.md` — Phase 2 implementation summary (7 additional tools)
+
+**Journal vs Docs:**
+- **Journal** = Timestamped snapshots of progress, milestones, and decisions (never modified)
+- **Docs** = Living reference documentation that gets updated over time
+
 ### Product Requirements
 
 - docs/kalshi-mcp-prd.md — **Kalshi MCP Server PRD** - Complete product requirements, Phase 1 completion status, implementation statistics, and roadmap for future phases.
