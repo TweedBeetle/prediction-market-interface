@@ -13,7 +13,7 @@ from typing import Dict, List, Optional
 from loguru import logger
 
 from .base_client import BaseClient, OrderError
-from .models import Order, Position, OrderParams, OrderSide, ApiCredentials
+from .models import Order, Position, OrderParams, OrderSide, ApiCredentials, Trade
 from .utils.auth_signer import AuthSigner
 from .utils.order_signer import OrderSigner
 
