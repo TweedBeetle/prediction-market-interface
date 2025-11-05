@@ -68,3 +68,8 @@ fastmcp.json
 mcp-servers/
 secrets/
 *.pem
+*_private_key.txt
+*_private_key
+kalshi_private_key.txt
+kalshi_demo_private_key.txt
+kalshi_prod_private_key.txt
