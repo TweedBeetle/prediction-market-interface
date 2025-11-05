@@ -104,44 +104,8 @@ class TestGammaClientMarketData:
                 assert hasattr(ask, 'size')
                 assert 0 < ask.price < 1
 
-    async def test_get_trades(self):
-        """Test getting recent trades."""
-        async with GammaClient() as client:
-            # Get trades without filters
-            trades = await client.get_trades(limit=10)
-
-            assert isinstance(trades, list)
-            assert len(trades) <= 10
-
-            # If we have trades, verify structure
-            if trades:
-                trade = trades[0]
-                assert hasattr(trade, 'trade_id')
-                assert hasattr(trade, 'price')
-                assert hasattr(trade, 'size')
-                assert hasattr(trade, 'side')
-                assert 0 < trade.price < 1
-
-    async def test_get_trades_for_market(self):
-        """Test getting trades filtered by market."""
-        async with GammaClient() as client:
-            # First get a market
-            markets = await client.search_markets(active=True, limit=1)
-
-            if not markets:
-                pytest.skip("No active markets available")
-
-            market_id = markets[0].id
-
-            # Get trades for that market
-            trades = await client.get_trades(market_id=market_id, limit=5)
-
-            assert isinstance(trades, list)
-            assert len(trades) <= 5
-
-            # All trades should be for the requested market
-            for trade in trades:
-                assert trade.market_id == market_id or trade.market_id == ""
+    # NOTE: Trades endpoint moved to ClobClient (requires authentication)
+    # See tests/polymarket/integration/test_clob_client.py for trades tests
 
     async def test_get_events(self):
         """Test listing events."""
@@ -259,12 +223,7 @@ class TestGammaClientPagination:
 
             assert len(markets) <= 3
 
-    async def test_get_trades_respects_limit(self):
-        """Test trades limit parameter."""
-        async with GammaClient() as client:
-            trades = await client.get_trades(limit=5)
-
-            assert len(trades) <= 5
+    # NOTE: Trades tests removed (moved to ClobClient)
 
     async def test_get_events_respects_limit(self):
         """Test events limit parameter."""

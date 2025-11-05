@@ -333,6 +333,76 @@ class ClobClient(BaseClient):
             logger.error(f"Failed to get positions: {e}")
             raise
 
+    async def get_trades(
+        self,
+        market_id: Optional[str] = None,
+        maker_address: Optional[str] = None,
+        limit: int = 100,
+    ) -> List[Trade]:
+        """
+        Get user's trade history.
+
+        Args:
+            market_id: Filter by market ID (condition ID)
+            maker_address: Filter by maker address (defaults to user's address)
+            limit: Maximum number of trades
+
+        Returns:
+            List of trades
+
+        Note:
+            This endpoint requires authentication via L2 headers.
+        """
+        logger.info(f"Fetching trades (limit={limit})")
+
+        try:
+            # Ensure we're authenticated
+            if not self._api_key:
+                await self.authenticate()
+
+            params = {"limit": limit}
+
+            if market_id:
+                params["market"] = market_id  # API uses "market" not "market_id"
+
+            if maker_address:
+                params["maker"] = maker_address
+            elif self.credentials:
+                # Default to user's address
+                params["maker"] = self.credentials.wallet_address
+
+            response = await self.get("/data/trades", params=params)
+
+            # Parse trades - API returns array or dict with trades key
+            trades_data = response if isinstance(response, list) else response.get("trades", [])
+
+            trades = []
+            for trade_data in trades_data:
+                try:
+                    trade = Trade(
+                        trade_id=trade_data.get("id", ""),
+                        market_id=trade_data.get("market", market_id or ""),
+                        token_id=trade_data.get("asset_id", ""),
+                        price=float(trade_data.get("price", 0)),
+                        size=float(trade_data.get("size", 0)),
+                        side=OrderSide.BUY if trade_data.get("side", "").upper() == "BUY" else OrderSide.SELL,
+                        outcome=trade_data.get("outcome", "YES"),
+                        timestamp=trade_data.get("match_time"),
+                        maker_address=trade_data.get("maker_address"),
+                        taker_address=None,  # Not in CLOB trade response
+                    )
+                    trades.append(trade)
+                except Exception as e:
+                    logger.warning(f"Failed to parse trade: {e}")
+                    continue
+
+            logger.info(f"Retrieved {len(trades)} trades")
+            return trades
+
+        except Exception as e:
+            logger.error(f"Failed to get trades: {e}")
+            raise
+
     @classmethod
     def from_env(cls) -> "ClobClient":
         """

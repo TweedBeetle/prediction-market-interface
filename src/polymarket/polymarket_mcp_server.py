@@ -369,50 +369,58 @@ async def polymarket_get_orderbook(
 
 @mcp.tool
 async def polymarket_get_market_trades(
-    market_id: str = Field(default=None, description="Filter by market ID"),
-    token_id: str = Field(default=None, description="Filter by token ID"),
+    market_id: str = Field(default=None, description="Filter by market ID (condition ID)"),
     limit: int = Field(default=100, ge=1, le=500, description="Maximum number of trades"),
     ctx: Context = None
 ) -> List[dict]:
     """
-    Get recent trades for a market or token.
+    Get your trade history for a market.
 
-    Returns trade history with prices, sizes, and timestamps.
-    Useful for analyzing recent price action and volume.
+    **REQUIRES AUTHENTICATION**: You must authenticate first via polymarket_authenticate().
+
+    Returns your trade history with prices, sizes, and timestamps.
+    Useful for analyzing your trading activity and P&L.
 
     Args:
-        market_id: Filter by specific market
-        token_id: Filter by specific token
+        market_id: Filter by specific market (condition ID)
         limit: Maximum trades to return (1-500)
 
     Returns:
-        List of recent trades with execution details
+        List of your recent trades with execution details
+
+    Raises:
+        AuthenticationError: If not authenticated
 
     Example:
-        trades = await polymarket_get_market_trades(market_id="12345", limit=50)
-        # Returns list of recent trades
+        # First authenticate
+        await polymarket_authenticate()
+
+        # Then get trades
+        trades = await polymarket_get_market_trades(market_id="0x...", limit=50)
+        # Returns list of your trades
     """
     if ctx:
-        await ctx.info(f"Fetching recent trades (limit={limit})...")
+        await ctx.info(f"Fetching your trade history (limit={limit})...")
 
     try:
-        async with get_gamma_client() as gamma:
-            trades = await gamma.get_trades(
+        async with get_clob_client() as clob:
+            trades = await clob.get_trades(
                 market_id=market_id,
-                token_id=token_id,
                 limit=limit
             )
 
             results = [trade.model_dump() for trade in trades]
 
             if ctx:
-                await ctx.info(f"Retrieved {len(results)} trades")
                 if trades:
+                    await ctx.info(f"Retrieved {len(results)} trades")
                     # Show most recent trade
                     latest = trades[0]
                     await ctx.info(
                         f"Latest: {latest.side.value} {latest.size:.0f} @ {latest.price:.3f}"
                     )
+                else:
+                    await ctx.info("No trades found for your account")
 
             return results
 
