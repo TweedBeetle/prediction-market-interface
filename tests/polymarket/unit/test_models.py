@@ -20,6 +20,8 @@ from src.polymarket.models import (
     Event,
     ApiCredentials,
     SignatureType,
+    BatchOrderResult,
+    CancelResponse,
 )
 
 
@@ -552,6 +554,7 @@ class TestEnums:
     def test_order_type_enum(self):
         """Test OrderType enum."""
         assert OrderType.FOK.value == "FOK"
+        assert OrderType.FAK.value == "FAK"
         assert OrderType.GTC.value == "GTC"
         assert OrderType.GTD.value == "GTD"
 
@@ -560,3 +563,174 @@ class TestEnums:
         assert SignatureType.EOA.value == "EOA"
         assert SignatureType.POLY_PROXY.value == "POLY_PROXY"
         assert SignatureType.POLY_GNOSIS_SAFE.value == "POLY_GNOSIS_SAFE"
+
+
+# ============================================================================
+# Phase 2 Models
+# ============================================================================
+
+
+class TestBatchOrderResultModel:
+    """Test BatchOrderResult model (Phase 2)."""
+
+    def test_batch_result_success(self):
+        """Test successful batch order result."""
+        result = BatchOrderResult(
+            success=True,
+            error_msg="",
+            order_id="0x123abc",
+            order_hashes=["0xhash1", "0xhash2"],
+            status="live",
+        )
+
+        assert result.success is True
+        assert result.order_id == "0x123abc"
+        assert len(result.order_hashes) == 2
+        assert result.status == "live"
+
+    def test_batch_result_failure(self):
+        """Test failed batch order result."""
+        result = BatchOrderResult(
+            success=False,
+            error_msg="Insufficient balance",
+            order_id=None,
+            order_hashes=[],
+            status=None,
+        )
+
+        assert result.success is False
+        assert result.error_msg == "Insufficient balance"
+        assert result.order_id is None
+
+    def test_batch_result_is_live_property(self):
+        """Test is_live helper property."""
+        live_result = BatchOrderResult(
+            success=True,
+            order_id="0x123",
+            status="live",
+        )
+        matched_result = BatchOrderResult(
+            success=True,
+            order_id="0x456",
+            status="matched",
+        )
+
+        assert live_result.is_live is True
+        assert matched_result.is_live is False
+
+    def test_batch_result_is_matched_property(self):
+        """Test is_matched helper property."""
+        matched_result = BatchOrderResult(
+            success=True,
+            order_id="0x123",
+            status="matched",
+        )
+        live_result = BatchOrderResult(
+            success=True,
+            order_id="0x456",
+            status="live",
+        )
+
+        assert matched_result.is_matched is True
+        assert live_result.is_matched is False
+
+    def test_batch_result_camelcase_parsing(self):
+        """Test camelCase field parsing from API."""
+        # Simulating API response with camelCase
+        result = BatchOrderResult(
+            success=True,
+            errorMsg="",  # camelCase
+            orderId="0x789",  # camelCase
+            orderHashes=["0xhash"],  # camelCase
+            status="matched",
+        )
+
+        assert result.error_msg == ""
+        assert result.order_id == "0x789"
+        assert result.order_hashes == ["0xhash"]
+
+
+class TestCancelResponseModel:
+    """Test CancelResponse model (Phase 2)."""
+
+    def test_cancel_response_all_success(self):
+        """Test cancel response with all successes."""
+        response = CancelResponse(
+            canceled=["0x123", "0x456", "0x789"],
+            not_canceled={},
+        )
+
+        assert len(response.canceled) == 3
+        assert len(response.not_canceled) == 0
+        assert response.success_count == 3
+        assert response.failure_count == 0
+        assert response.all_succeeded is True
+
+    def test_cancel_response_partial_success(self):
+        """Test cancel response with partial success."""
+        response = CancelResponse(
+            canceled=["0x123", "0x456"],
+            not_canceled={"0x789": "Order already filled"},
+        )
+
+        assert response.success_count == 2
+        assert response.failure_count == 1
+        assert response.all_succeeded is False
+
+    def test_cancel_response_all_failures(self):
+        """Test cancel response with all failures."""
+        response = CancelResponse(
+            canceled=[],
+            not_canceled={
+                "0x123": "Order not found",
+                "0x456": "Order already canceled",
+            },
+        )
+
+        assert response.success_count == 0
+        assert response.failure_count == 2
+        assert response.all_succeeded is False
+
+    def test_cancel_response_empty(self):
+        """Test empty cancel response."""
+        response = CancelResponse()
+
+        assert response.canceled == []
+        assert response.not_canceled == {}
+        assert response.success_count == 0
+        assert response.failure_count == 0
+        assert response.all_succeeded is True  # Vacuously true
+
+    def test_cancel_response_camelcase_parsing(self):
+        """Test camelCase field parsing from API."""
+        # Simulating API response with camelCase
+        response = CancelResponse(
+            canceled=["0x123"],
+            notCanceled={"0x456": "Order already filled"},  # camelCase
+        )
+
+        assert len(response.canceled) == 1
+        assert len(response.not_canceled) == 1
+        assert "0x456" in response.not_canceled
+
+    def test_cancel_response_success_count_property(self):
+        """Test success_count computed property."""
+        response = CancelResponse(
+            canceled=["0x1", "0x2", "0x3", "0x4", "0x5"],
+            not_canceled={},
+        )
+
+        assert response.success_count == 5
+
+    def test_cancel_response_failure_count_property(self):
+        """Test failure_count computed property."""
+        response = CancelResponse(
+            canceled=[],
+            not_canceled={
+                "0x1": "Error 1",
+                "0x2": "Error 2",
+                "0x3": "Error 3",
+            },
+        )
+
+        assert response.failure_count == 3
