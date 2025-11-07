@@ -1,0 +1,34 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - gamma-api.polymarket.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/events?limit=1&offset=0&active=true&closed=false
+  response:
+    body:
+      string: 'upstream connect error or disconnect/reset before headers. reset reason:
+        remote connection failure, transport failure reason: TLS_error:|268435581:SSL
+        routines:OPENSSL_internal:CERTIFICATE_VERIFY_FAILED:TLS_error_end'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - text/plain
+      date:
+      - Wed, 05 Nov 2025 11:19:22 GMT
+    status:
+      code: 503
+      message: Service Unavailable
+version: 1

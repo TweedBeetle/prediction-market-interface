@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - gamma-api.polymarket.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/trades?limit=5
+  response:
+    body:
+      string: '404 page not found
+
+        '
+    headers:
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 999be4ad9ade6183-ORD
+      content-length:
+      - '19'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Wed, 05 Nov 2025 11:08:27 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+    status:
+      code: 404
+      message: Not Found
+version: 1

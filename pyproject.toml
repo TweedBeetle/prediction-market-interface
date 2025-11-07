@@ -12,6 +12,8 @@ dependencies = [
     "loguru>=0.7.0",
     "python-dotenv>=1.0.0",
     "websockets>=14.0.0",
+    "eth-account>=0.11.0",  # For Polymarket EIP-712 signing
+    "web3>=6.0.0",  # For Ethereum utilities (dependency of eth-account)
 ]
 
 [project.optional-dependencies]

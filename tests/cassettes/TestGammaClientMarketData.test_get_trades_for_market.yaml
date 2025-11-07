@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - gamma-api.polymarket.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/markets?limit=1&offset=0&active=true&closed=false
+  response:
+    body:
+      string: '[{"id":"502517","question":"ARCH Will the match be a draw?","conditionId":"","slug":"will-the-match-be-a-draw-romania-ukraine","resolutionSource":"","endDate":"2024-06-17T12:00:00Z","startDate":"2024-06-17T03:51:23.112Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png","description":"This
+        market refers to the 2024 UEFA European Football Championship match between
+        Romania and Ukraine scheduled for June 17, 9:00 AM ET.\n\nIf the match ends
+        in a draw this market will resolve to \"Yes\". Otherwise this market will
+        resolve to \"No\". ","outcomes":"[\"Yes\", \"No\"]","active":true,"closed":false,"marketMakerAddress":"","createdAt":"2024-06-17T03:48:24.497656Z","updatedAt":"2024-06-17T04:02:23.459057Z","new":false,"featured":false,"submitted_by":"0x91430CaD2d3975766499717fA0D66A78D814E5c5","archived":false,"restricted":true,"groupItemTitle":"Draw","groupItemThreshold":"2","enableOrderBook":true,"orderPriceMinTickSize":0.01,"orderMinSize":5,"startDateIso":"2024-06-17","volume1wk":0,"volume1mo":0,"volume1yr":0,"umaBond":"500","umaReward":"5","volume24hrAmm":0,"volume1wkAmm":0,"volume1moAmm":0,"volume1yrAmm":0,"volume24hrClob":0,"volume1wkClob":0,"volume1moClob":0,"volume1yrClob":0,"volumeAmm":0,"volumeClob":0,"liquidityAmm":0,"liquidityClob":0,"negRisk":true,"events":[{"id":"11120","ticker":"arch-euro-2024-romania-vs-ukraine","slug":"arch-euro-2024-romania-vs-ukraine","title":"ARch
+        Euro 2024: Romania  vs. Ukraine","description":"sad ","endDate":"2024-06-17T12:00:00Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png","active":false,"closed":false,"archived":true,"new":false,"featured":false,"restricted":true,"createdAt":"2024-06-17T03:44:37.055982Z","updatedAt":"2024-06-17T04:02:23.068199Z","competitive":0,"volume1wk":0,"volume1mo":0,"volume1yr":0,"enableOrderBook":true,"liquidityAmm":0,"liquidityClob":0,"negRisk":true,"negRiskMarketID":"0xc6d45ab690e5bc573c5870662d3b9ea278a4ab988388bf4e7966addfd99b3200","commentCount":0,"cyom":false,"showAllOutcomes":true,"showMarketImages":true,"enableNegRisk":true,"negRiskAugmented":false,"pendingDeployment":false,"deploying":false}],"ready":false,"funded":false,"cyom":false,"competitive":0,"pagerDutyNotificationEnabled":false,"approved":true,"rewardsMinSize":0,"rewardsMaxSpread":0,"spread":1,"oneDayPriceChange":0,"oneHourPriceChange":0,"oneWeekPriceChange":0,"oneMonthPriceChange":0,"oneYearPriceChange":0,"lastTradePrice":0,"bestBid":0,"bestAsk":1,"clearBookOnStart":true,"manualActivation":false,"negRiskOther":false,"umaResolutionStatuses":"[]","pendingDeployment":false,"deploying":false,"rfqEnabled":false,"holdingRewardsEnabled":false,"feesEnabled":false}]
+
+        '
+    headers:
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 999be4a00de9514c-ORD
+      content-length:
+      - '2958'
+      content-type:
+      - application/json
+      date:
+      - Wed, 05 Nov 2025 11:08:25 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+version: 1

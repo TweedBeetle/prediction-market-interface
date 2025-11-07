@@ -67,6 +67,10 @@ class KalshiClient:
         if private_key:
             # Direct key content - encode string to bytes
             logger.info("Loading private key from KALSHI_PRIVATE_KEY environment variable")
+            # Strip surrounding quotes if present and decode escape sequences
+            private_key = private_key.strip('"').strip("'")
+            # Replace literal \n with actual newlines
+            private_key = private_key.replace('\\n', '\n')
             key_bytes = private_key.encode('utf-8')
         elif private_key_path:
             # File path - read from file
