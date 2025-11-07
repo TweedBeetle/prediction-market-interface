@@ -1,0 +1,109 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+      host:
+      - gamma-api.polymarket.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/markets?limit=3&offset=0&active=true&closed=false
+  response:
+    body:
+      string: "[{\"id\":\"502517\",\"question\":\"ARCH Will the match be a draw?\",\"conditionId\":\"\",\"slug\":\"will-the-match-be-a-draw-romania-ukraine\",\"resolutionSource\":\"\",\"endDate\":\"2024-06-17T12:00:00Z\",\"startDate\":\"2024-06-17T03:51:23.112Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png\",\"description\":\"This
+        market refers to the 2024 UEFA European Football Championship match between
+        Romania and Ukraine scheduled for June 17, 9:00 AM ET.\\n\\nIf the match ends
+        in a draw this market will resolve to \\\"Yes\\\". Otherwise this market will
+        resolve to \\\"No\\\". \",\"outcomes\":\"[\\\"Yes\\\", \\\"No\\\"]\",\"active\":true,\"closed\":false,\"marketMakerAddress\":\"\",\"createdAt\":\"2024-06-17T03:48:24.497656Z\",\"updatedAt\":\"2024-06-17T04:02:23.459057Z\",\"new\":false,\"featured\":false,\"submitted_by\":\"0x91430CaD2d3975766499717fA0D66A78D814E5c5\",\"archived\":false,\"restricted\":true,\"groupItemTitle\":\"Draw\",\"groupItemThreshold\":\"2\",\"enableOrderBook\":true,\"orderPriceMinTickSize\":0.01,\"orderMinSize\":5,\"startDateIso\":\"2024-06-17\",\"volume1wk\":0,\"volume1mo\":0,\"volume1yr\":0,\"umaBond\":\"500\",\"umaReward\":\"5\",\"volume24hrAmm\":0,\"volume1wkAmm\":0,\"volume1moAmm\":0,\"volume1yrAmm\":0,\"volume24hrClob\":0,\"volume1wkClob\":0,\"volume1moClob\":0,\"volume1yrClob\":0,\"volumeAmm\":0,\"volumeClob\":0,\"liquidityAmm\":0,\"liquidityClob\":0,\"negRisk\":true,\"events\":[{\"id\":\"11120\",\"ticker\":\"arch-euro-2024-romania-vs-ukraine\",\"slug\":\"arch-euro-2024-romania-vs-ukraine\",\"title\":\"ARch
+        Euro 2024: Romania  vs. Ukraine\",\"description\":\"sad \",\"endDate\":\"2024-06-17T12:00:00Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/euro-2024-spain-vs-croatia-hMVrh1C7sGqw.png\",\"active\":false,\"closed\":false,\"archived\":true,\"new\":false,\"featured\":false,\"restricted\":true,\"createdAt\":\"2024-06-17T03:44:37.055982Z\",\"updatedAt\":\"2024-06-17T04:02:23.068199Z\",\"competitive\":0,\"volume1wk\":0,\"volume1mo\":0,\"volume1yr\":0,\"enableOrderBook\":true,\"liquidityAmm\":0,\"liquidityClob\":0,\"negRisk\":true,\"negRiskMarketID\":\"0xc6d45ab690e5bc573c5870662d3b9ea278a4ab988388bf4e7966addfd99b3200\",\"commentCount\":0,\"cyom\":false,\"showAllOutcomes\":true,\"showMarketImages\":true,\"enableNegRisk\":true,\"negRiskAugmented\":false,\"pendingDeployment\":false,\"deploying\":false}],\"ready\":false,\"funded\":false,\"cyom\":false,\"competitive\":0,\"pagerDutyNotificationEnabled\":false,\"approved\":true,\"rewardsMinSize\":0,\"rewardsMaxSpread\":0,\"spread\":1,\"oneDayPriceChange\":0,\"oneHourPriceChange\":0,\"oneWeekPriceChange\":0,\"oneMonthPriceChange\":0,\"oneYearPriceChange\":0,\"lastTradePrice\":0,\"bestBid\":0,\"bestAsk\":1,\"clearBookOnStart\":true,\"manualActivation\":false,\"negRiskOther\":false,\"umaResolutionStatuses\":\"[]\",\"pendingDeployment\":false,\"deploying\":false,\"rfqEnabled\":false,\"holdingRewardsEnabled\":false,\"feesEnabled\":false},{\"id\":\"516706\",\"question\":\"Fed
+        rate hike in 2025?\",\"conditionId\":\"0x4319532e181605cb15b1bd677759a3bc7f7394b2fdf145195b700eeaedfd5221\",\"slug\":\"fed-rate-hike-in-2025\",\"resolutionSource\":\"\",\"endDate\":\"2025-12-10T12:00:00Z\",\"liquidity\":\"21176.26508\",\"startDate\":\"2024-12-29T22:50:33.584839Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"description\":\"This
+        market will resolve to \u201CYes\u201D if the upper bound of the target federal
+        funds rate is increased at any point between January 1, 2025 and the Fed's
+        December 2025 meeting, currently scheduled for December 9-10. Otherwise, this
+        market will resolve to \u201CNo\u201D.\\n\\nThis market may not resolve to
+        \\\"No\\\" until the Fed has released its rate changes information following
+        its December meeting.\\n\\nThe primary resolution source for this market will
+        be the official website of the Federal Reserve (https://www.federalreserve.gov/monetarypolicy/openmarket.htm),
+        however a consensus of credible reporting may also be used.\",\"outcomes\":\"[\\\"Yes\\\",
+        \\\"No\\\"]\",\"outcomePrices\":\"[\\\"0.0265\\\", \\\"0.9735\\\"]\",\"volume\":\"719008.296086\",\"active\":true,\"closed\":false,\"marketMakerAddress\":\"\",\"createdAt\":\"2024-12-29T17:38:00.916304Z\",\"updatedAt\":\"2025-11-05T11:06:13.084315Z\",\"new\":false,\"featured\":false,\"submitted_by\":\"0x91430CaD2d3975766499717fA0D66A78D814E5c5\",\"archived\":false,\"resolvedBy\":\"0x6A9D222616C90FcA5754cd1333cFD9b7fb6a4F74\",\"restricted\":true,\"groupItemTitle\":\"\",\"groupItemThreshold\":\"0\",\"questionID\":\"0x8428884817cbc26422ec451101fcedfc5995907a8df6e5905bc29cd30d2867e7\",\"enableOrderBook\":true,\"orderPriceMinTickSize\":0.001,\"orderMinSize\":5,\"volumeNum\":719008.296086,\"liquidityNum\":21176.26508,\"endDateIso\":\"2025-12-10\",\"startDateIso\":\"2024-12-29\",\"hasReviewedDates\":true,\"volume24hr\":31055.893281999997,\"volume1wk\":57145.08385700001,\"volume1mo\":170193.85486900003,\"volume1yr\":718848.4133289979,\"clobTokenIds\":\"[\\\"60487116984468020978247225474488676749601001829886755968952521846780452448915\\\",
+        \\\"81104637750588840860328515305303028259865221573278091453716127842023614249200\\\"]\",\"umaBond\":\"500\",\"umaReward\":\"5\",\"volume24hrClob\":31055.893281999997,\"volume1wkClob\":57145.08385700001,\"volume1moClob\":170193.85486900003,\"volume1yrClob\":718848.4133289979,\"volumeClob\":719008.296086,\"liquidityClob\":21176.26508,\"acceptingOrders\":true,\"negRisk\":false,\"events\":[{\"id\":\"16084\",\"ticker\":\"fed-rate-hike-in-2025\",\"slug\":\"fed-rate-hike-in-2025\",\"title\":\"Fed
+        rate hike in 2025?\",\"description\":\"This market will resolve to \u201CYes\u201D
+        if the upper bound of the target federal funds rate is increased at any point
+        between January 1, 2025 and the Fed's December 2025 meeting, currently scheduled
+        for December 9-10. Otherwise, this market will resolve to \u201CNo\u201D.\\n\\nThis
+        market may not resolve to \\\"No\\\" until the Fed has released its rate changes
+        information following its December meeting.\\n\\nThe primary resolution source
+        for this market will be the official website of the Federal Reserve (https://www.federalreserve.gov/monetarypolicy/openmarket.htm),
+        however a consensus of credible reporting may also be used.\",\"startDate\":\"2024-12-29T22:50:44.013518Z\",\"creationDate\":\"2024-12-29T22:50:44.013516Z\",\"endDate\":\"2025-12-10T12:00:00Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-fed-raise-interest-rates-in-2025-PQTEYZMvmAGr.jpg\",\"active\":true,\"closed\":false,\"archived\":false,\"new\":false,\"featured\":false,\"restricted\":true,\"liquidity\":21550.58194,\"volume\":719008.296086,\"openInterest\":0,\"createdAt\":\"2024-12-29T17:37:59.684632Z\",\"updatedAt\":\"2025-11-05T11:00:57.680668Z\",\"competitive\":0.815910249872514,\"volume24hr\":31055.893281999997,\"volume1wk\":57145.08385700001,\"volume1mo\":170193.85486900003,\"volume1yr\":718848.4133289979,\"enableOrderBook\":true,\"liquidityClob\":21550.58194,\"commentCount\":22,\"cyom\":false,\"showAllOutcomes\":true,\"showMarketImages\":true,\"enableNegRisk\":false,\"automaticallyActive\":true,\"negRiskAugmented\":false,\"pendingDeployment\":false,\"deploying\":false}],\"ready\":false,\"funded\":false,\"acceptingOrdersTimestamp\":\"2024-12-29T22:49:15Z\",\"cyom\":false,\"competitive\":0.8168584888648914,\"pagerDutyNotificationEnabled\":false,\"approved\":true,\"rewardsMinSize\":100,\"rewardsMaxSpread\":3.5,\"spread\":0.003,\"oneDayPriceChange\":0.007,\"oneHourPriceChange\":-0.0005,\"oneWeekPriceChange\":0.01,\"lastTradePrice\":0.022,\"bestBid\":0.025,\"bestAsk\":0.028,\"automaticallyActive\":true,\"clearBookOnStart\":true,\"manualActivation\":false,\"negRiskOther\":false,\"umaResolutionStatuses\":\"[]\",\"pendingDeployment\":false,\"deploying\":false,\"rfqEnabled\":false,\"holdingRewardsEnabled\":false,\"feesEnabled\":false},{\"id\":\"516710\",\"question\":\"US
+        recession in 2025?\",\"conditionId\":\"0xfa48a99317daef1654d5b03e30557c4222f276657275628d9475e141c64b545d\",\"slug\":\"us-recession-in-2025\",\"resolutionSource\":\"\",\"endDate\":\"2026-02-28T12:00:00Z\",\"liquidity\":\"85876.82064\",\"startDate\":\"2025-01-08T01:33:54.924Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/us-recession-in-2025-01ZjnLjvO4a3.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/us-recession-in-2025-01ZjnLjvO4a3.jpg\",\"description\":\"This
+        market will resolve to \u201CYes\u201D, if either of the following conditions
+        are met:\\n\\n1.  The National Bureau of Economic Research (NBER) publicly
+        announces that a recession has occurred in the United States, at any point
+        in 2025, with the announcement made by December 31, 2025, 11:59 PM ET.\\n\\n2.
+        \ The seasonally adjusted annualized percent change in quarterly U.S. real
+        GDP from the previous quarter is less than 0.0 for two consecutive quarters
+        between Q4 2024 and Q4 2025 (inclusive), as reported by the Bureau of Economic
+        Analysis (BEA). \\n\\nOtherwise, this market will resolve to \\\"No\\\". \\n\\nNote
+        that advance estimates will be considered. For example, if upon release, the
+        advance estimate for Q2 2025 was negative, and the Q1 2025's most recent,
+        up-to-date estimate was also negative, this market would resolve to \\\"Yes\\\".
+        If on December 31, 2025 the latest estimate for quarterly GDP in Q3 2025 was
+        negative, this market will stay open until the Advance estimate of Q4 2025
+        is published, at which point it will resolve to \\\"Yes\\\" if Q4 2025 was
+        negative or if the NBER declares a recession by then.\\n\\nThe resolution
+        source will be the official announcements from the NBER and the BEA\u2019s
+        estimate of seasonally adjusted annualized percent change in quarterly US
+        real GDP from previous quarters as released by the Bureau of Economic Analysis
+        (BEA), https://www.bea.gov/data/gdp/gross-domestic-product\",\"outcomes\":\"[\\\"Yes\\\",
+        \\\"No\\\"]\",\"outcomePrices\":\"[\\\"0.0455\\\", \\\"0.9545\\\"]\",\"volume\":\"9951025.408822\",\"active\":true,\"closed\":false,\"marketMakerAddress\":\"\",\"createdAt\":\"2024-12-29T18:04:31.897422Z\",\"updatedAt\":\"2025-11-05T11:06:21.747385Z\",\"new\":false,\"featured\":true,\"submitted_by\":\"0x91430CaD2d3975766499717fA0D66A78D814E5c5\",\"archived\":false,\"resolvedBy\":\"0x6A9D222616C90FcA5754cd1333cFD9b7fb6a4F74\",\"restricted\":true,\"groupItemTitle\":\"\",\"groupItemThreshold\":\"0\",\"questionID\":\"0xd87778fac13b570524bc8e8056bc235b3d696ecfcbe39afd754daca0741c419b\",\"enableOrderBook\":true,\"orderPriceMinTickSize\":0.001,\"orderMinSize\":5,\"volumeNum\":9951025.408822,\"liquidityNum\":85876.82064,\"endDateIso\":\"2026-02-28\",\"startDateIso\":\"2025-01-08\",\"hasReviewedDates\":true,\"volume24hr\":13134.539990000005,\"volume1wk\":72490.81308699999,\"volume1mo\":239809.4635319994,\"volume1yr\":9950275.559047025,\"clobTokenIds\":\"[\\\"104173557214744537570424345347209544585775842950109756851652855913015295701992\\\",
+        \\\"44528029102356085806317866371026691780796471200782980570839327755136990994869\\\"]\",\"umaBond\":\"500\",\"umaReward\":\"5\",\"volume24hrClob\":13134.539990000005,\"volume1wkClob\":72490.81308699999,\"volume1moClob\":239809.4635319994,\"volume1yrClob\":9950275.559047025,\"volumeClob\":9951025.408822,\"liquidityClob\":85876.82064,\"acceptingOrders\":true,\"negRisk\":false,\"events\":[{\"id\":\"16092\",\"ticker\":\"us-recession-in-2025\",\"slug\":\"us-recession-in-2025\",\"title\":\"US
+        recession in 2025?\",\"description\":\"This market will resolve to \u201CYes\u201D,
+        if either of the following conditions are met:\\n\\n1.  The National Bureau
+        of Economic Research (NBER) publicly announces that a recession has occurred
+        in the United States, at any point in 2025, with the announcement made by
+        December 31, 2025, 11:59 PM ET.\\n\\n2.  The seasonally adjusted annualized
+        percent change in quarterly U.S. real GDP from the previous quarter is less
+        than 0.0 for two consecutive quarters between Q4 2024 and Q4 2025 (inclusive),
+        as reported by the Bureau of Economic Analysis (BEA). \\n\\nOtherwise, this
+        market will resolve to \\\"No\\\". \\n\\nNote that advance estimates will
+        be considered. For example, if upon release, the advance estimate for Q2 2025
+        was negative, and the Q1 2025's most recent, up-to-date estimate was also
+        negative, this market would resolve to \\\"Yes\\\". If on December 31, 2025
+        the latest estimate for quarterly GDP in Q3 2025 was negative, this market
+        will stay open until the Advance estimate of Q4 2025 is published, at which
+        point it will resolve to \\\"Yes\\\" if Q4 2025 was negative or if the NBER
+        declares a recession by then.\\n\\nThe resolution source will be the official
+        announcements from the NBER and the BEA\u2019s estimate of seasonally adjusted
+        annualized percent change in quarterly US real GDP from previous quarters
+        as released by the Bureau of Economic Analysis (BEA), https://www.bea.gov/data/gdp/gross-domestic-product\",\"resolutionSource\":\"\",\"startDate\":\"2025-01-08T01:35:22.579138Z\",\"creationDate\":\"2025-01-08T01:35:22.579136Z\",\"endDate\":\"2026-02-28T12:00:00Z\",\"image\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/us-recession-in-2025-01ZjnLjvO4a3.jpg\",\"icon\":\"https://polymarket-upload.s3.us-east-2.amazonaws.com/us-recession-in-2025-01ZjnLjvO4a3.jpg\",\"active\":true,\"closed\":false,\"archived\":false,\"new\":false,\"featured\":false,\"restricted\":true,\"liquidity\":85658.28507,\"volume\":9950451.607519,\"openInterest\":0,\"createdAt\":\"2024-12-29T18:04:31.198623Z\",\"updatedAt\":\"2025-11-05T11:00:51.530578Z\",\"competitive\":0.8287955052762158,\"volume24hr\":13134.539990000005,\"volume1wk\":72490.81308699999,\"volume1mo\":239809.4635319994,\"volume1yr\":9950275.559047025,\"enableOrderBook\":true,\"liquidityClob\":85658.28507,\"commentCount\":710,\"cyom\":false,\"showAllOutcomes\":true,\"showMarketImages\":true,\"enableNegRisk\":false,\"automaticallyActive\":true,\"negRiskAugmented\":false,\"pendingDeployment\":false,\"deploying\":false}],\"ready\":false,\"funded\":false,\"acceptingOrdersTimestamp\":\"2025-01-08T01:32:33Z\",\"cyom\":false,\"competitive\":0.8287955052762158,\"pagerDutyNotificationEnabled\":false,\"approved\":true,\"clobRewards\":[{\"id\":\"12951\",\"conditionId\":\"0xfa48a99317daef1654d5b03e30557c4222f276657275628d9475e141c64b545d\",\"assetAddress\":\"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174\",\"rewardsAmount\":0,\"rewardsDailyRate\":5,\"startDate\":\"2025-01-06\",\"endDate\":\"2500-12-31\"}],\"rewardsMinSize\":200,\"rewardsMaxSpread\":3.5,\"spread\":0.001,\"oneDayPriceChange\":0.0115,\"oneHourPriceChange\":-0.001,\"oneWeekPriceChange\":-0.0005,\"oneMonthPriceChange\":-0.0105,\"lastTradePrice\":0.046,\"bestBid\":0.045,\"bestAsk\":0.046,\"automaticallyActive\":true,\"clearBookOnStart\":true,\"manualActivation\":false,\"negRiskOther\":false,\"umaResolutionStatuses\":\"[]\",\"pendingDeployment\":false,\"deploying\":false,\"rfqEnabled\":true,\"holdingRewardsEnabled\":false,\"feesEnabled\":false}]\n"
+    headers:
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 999be4abbecb10d5-ORD
+      content-length:
+      - '14496'
+      content-type:
+      - application/json
+      date:
+      - Wed, 05 Nov 2025 11:08:26 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+version: 1
