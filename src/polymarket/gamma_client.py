@@ -59,38 +59,84 @@ class GammaClient(BaseClient):
         """
         Search for markets.
 
+        Note: The Gamma API does not support text search. When a query is provided,
+        this method fetches markets and filters client-side by matching the query
+        against market questions and descriptions.
+
         Args:
-            query: Search query (searches title, description)
+            query: Search query (case-insensitive, searches question and description)
             active: Include active markets
             closed: Include closed markets
-            limit: Maximum number of results
-            offset: Pagination offset
+            limit: Maximum number of results to return
+            offset: Starting offset for non-query searches
 
         Returns:
             List of matching markets
         """
-        params = {
-            "limit": limit,
-            "offset": offset,
-            "active": str(active).lower(),
-            "closed": str(closed).lower(),
-        }
-
-        if query:
-            params["query"] = query
-
         logger.info(f"Searching markets with query='{query}', limit={limit}")
 
-        try:
+        # If no query, return directly from API (no filtering needed)
+        if not query:
+            params = {
+                "limit": limit,
+                "offset": offset,
+                "active": str(active).lower(),
+                "closed": str(closed).lower(),
+            }
+
             response = await self.get("/markets", params=params)
-
-            # Parse response - Gamma API returns list directly or under "markets" key
             markets_data = response if isinstance(response, list) else response.get("markets", [])
-
             markets = [Market(**m) for m in markets_data]
 
-            logger.info(f"Found {len(markets)} markets")
+            logger.info(f"Found {len(markets)} markets (no query filter)")
             return markets
+
+        # Client-side filtering for query searches
+        # (Gamma API ignores query parameter)
+        matches = []
+        page_offset = 0
+        page_size = 100  # Fetch in larger pages for efficiency
+        query_lower = query.lower()
+
+        logger.info(f"Using client-side filtering for query: '{query}'")
+
+        try:
+            while len(matches) < limit:
+                # Fetch next page
+                params = {
+                    "limit": page_size,
+                    "offset": page_offset,
+                    "active": str(active).lower(),
+                    "closed": str(closed).lower(),
+                }
+
+                response = await self.get("/markets", params=params)
+                markets_data = response if isinstance(response, list) else response.get("markets", [])
+
+                if not markets_data:
+                    # No more results
+                    break
+
+                # Filter markets that match query
+                for market_data in markets_data:
+                    market = Market(**market_data)
+
+                    # Match against question and description (case-insensitive)
+                    if (query_lower in market.question.lower() or
+                        (market.description and query_lower in market.description.lower())):
+                        matches.append(market)
+
+                        if len(matches) >= limit:
+                            break
+
+                # If we got fewer results than requested, no more pages
+                if len(markets_data) < page_size:
+                    break
+
+                page_offset += page_size
+
+            logger.info(f"Found {len(matches)} markets matching query '{query}'")
+            return matches[:limit]
 
         except Exception as e:
             logger.error(f"Failed to search markets: {e}")

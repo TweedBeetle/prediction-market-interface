@@ -81,7 +81,164 @@ Refer to the curated docs for detailed guidance:
 - docs/kalshi/index.md and related subpages — Kalshi agent architecture, SDK usage, and API reference.
 - docs/kalshi/gotchas/CLAUDE.md — **Known Kalshi API gotchas and workarounds** - Critical issues, undocumented behaviors, and cost traps (action/side semantics, MVE market explosion, market orders deprecated, negative liquidity in settled markets)
 - docs/polymarket/index.md and related subpages — Polymarket agent overview, quickstarts, and developer guides.
+- **docs/polymarket/streaming-guide.md** — **WebSocket Streaming Guide** - Real-time market data streaming architecture, agent workflow patterns, and examples for combining MCP tools with WebSocket client.
 - docs/gofastmcp/INDEX.md and related subpages— Complete FastMCP framework documentation mirror including servers, clients, deployment, integrations, and Python SDK reference.
+
+## Real-Time Data Streaming (Polymarket)
+
+### Architecture: MCP Tools + WebSocket Client
+
+**Design Decision**: Real-time streaming uses **Python WebSocket client** (not MCP tools) for optimal performance and agent flexibility.
+
+#### Why Separate WebSocket Client?
+
+**MCP Protocol Limitations**:
+- MCP is request/response oriented (not designed for continuous streaming)
+- Tools must complete and return (can't stream indefinitely)
+- Server notifications exist for metadata changes, not data streams
+
+**WebSocket Client Benefits**:
+- ✅ Direct WebSocket connection (no MCP overhead)
+- ✅ Agent has full control over streaming logic
+- ✅ Natural async/await patterns
+- ✅ Easy to test independently
+- ✅ Aligns with MCP design principles
+
+#### Agent Usage Pattern
+
+**MCP Tools = Request/Response Operations**:
+```python
+# Discovery
+markets = await polymarket_search_markets("Bitcoin")
+
+# Execution
+order = await polymarket_create_order(...)
+
+# Queries
+positions = await polymarket_get_positions()
+```
+
+**WebSocket Client = Streaming Operations**:
+```python
+from polymarket.websocket_client import PolymarketWebSocketClient
+
+async with PolymarketWebSocketClient() as ws:
+    await ws.subscribe_market(market["condition_id"])
+
+    async for event in ws:
+        if event.price > threshold:
+            # Agent takes action via MCP tool
+            await polymarket_create_order(...)
+            break
+```
+
+#### When to Use Which
+
+| Operation | Use MCP Tool | Use WebSocket Client |
+|-----------|--------------|----------------------|
+| Search markets | ✅ `polymarket_search_markets` | ❌ |
+| Get current price | ✅ `polymarket_get_market` | ❌ (snapshot) |
+| Stream price updates | ❌ | ✅ `subscribe_market` |
+| Place order | ✅ `polymarket_create_order` | ❌ |
+| Monitor fills | ❌ (polling) | ✅ `subscribe_user` |
+| Real-time arbitrage | ❌ (too slow) | ✅ (streaming) |
+
+**Rule**: One-time operations → MCP tools. Continuous monitoring → WebSocket client.
+
+#### Common Patterns
+
+**Pattern 1: Price Alert**
+```python
+# MCP: Discovery → WebSocket: Monitoring → MCP: Action
+market = await polymarket_get_market(...)
+async with WebSocketClient() as ws:
+    await ws.subscribe_market(market["condition_id"])
+    async for event in ws:
+        if event.price > threshold:
+            await polymarket_create_order(...)
+```
+
+**Pattern 2: Arbitrage Detection**
+```python
+# WebSocket: Monitor multiple → MCP: Batch execution
+async with WebSocketClient() as ws:
+    await ws.subscribe_market(market1)
+    await ws.subscribe_market(market2)
+    # Calculate arbitrage → execute via MCP batch order
+```
+
+**Pattern 3: Position Monitoring**
+```python
+# MCP: Check position → WebSocket: Monitor → MCP: Close
+position = await polymarket_get_positions()
+async with WebSocketClient() as ws:
+    await ws.subscribe_market(position["market_id"])
+    # Monitor P&L → close via MCP when target hit
+```
+
+#### Implementation Files
+
+**Core Client**:
+- `src/polymarket/websocket_client.py` - Main WebSocket client
+- `src/polymarket/websocket_models.py` - Pydantic event models
+
+**Documentation**:
+- `docs/polymarket/streaming-guide.md` - Complete guide with examples
+- `examples/polymarket_streaming_examples.py` - Runnable examples
+
+**Tests**:
+- `tests/polymarket/unit/test_websocket_client.py` - Unit tests (mocked)
+- `tests/polymarket/integration/test_websocket_integration.py` - Integration tests (real API)
+
+#### Key Features
+
+**Automatic Reconnection**:
+- Exponential backoff retry logic
+- Automatic resubscription to all channels
+- Message queuing during reconnects
+
+**Event Types**:
+- Market data: `price_change`, `last_trade_price`, `book` (order book)
+- User events: `user_order`, `user_fill`, `user_balance` (authenticated)
+- System events: `subscribed`, `unsubscribed`, `error`
+
+**Type-Safe Parsing**:
+- All events parsed into Pydantic models
+- Invalid messages logged and skipped
+- Helper properties (e.g., `probability_pct`, `spread`)
+
+#### Testing
+
+```bash
+# Unit tests (mocked WebSocket)
+uv run pytest tests/polymarket/unit/test_websocket_client.py -v
+
+# Integration tests (real API)
+export TEST_MARKET_ID="0xabc123..."
+uv run pytest tests/polymarket/integration/test_websocket_integration.py -v
+
+# Skip integration tests
+SKIP_WEBSOCKET_INTEGRATION=true uv run pytest tests/polymarket/integration/
+```
+
+#### Examples
+
+Run example scripts:
+```bash
+# Basic price monitoring
+python examples/polymarket_streaming_examples.py --example price_monitor --market-id 0xabc...
+
+# Price alert system
+python examples/polymarket_streaming_examples.py --example price_alert --market-id 0xabc...
+
+# Arbitrage detection
+python examples/polymarket_streaming_examples.py --example arbitrage --market-id 0xabc...
+
+# All examples
+python examples/polymarket_streaming_examples.py --all --market-id 0xabc...
+```
+
+---
 
 ## MCP Server Setup - FastMCP
 

@@ -17,6 +17,15 @@
         "cd /Users/christo/projects/prediction-market-interface && uv run run_kalshi_mcp_prod.py"
       ],
       "env": {}
+    },
+    "polymarket": {
+      "type": "stdio",
+      "command": "bash",
+      "args": [
+        "-c",
+        "cd /Users/christo/projects/prediction-market-interface && uv run run_polymarket_mcp.py"
+      ],
+      "env": {}
     }
   }
 }

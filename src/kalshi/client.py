@@ -349,6 +349,202 @@ class KalshiClient:
             )
             return [Market(**m) for m in markets_data]
 
+    async def search_series(
+        self, query: str, limit: int = 20
+    ) -> list[dict[str, Any]]:
+        """
+        Search for series by title (client-side filtering).
+
+        Args:
+            query: Text to search in series titles (case-insensitive)
+            limit: Maximum number of results
+
+        Returns:
+            List of matching series (not Series model - raw dicts)
+        """
+        query_lower = query.lower()
+        matched_series = []
+        cursor = None
+        params = {"limit": 100}
+        max_pages = 50
+
+        for page in range(max_pages):
+            if cursor:
+                params["cursor"] = cursor
+
+            data = await self._request("GET", "series", params=params)
+            series_list = data.get("series", [])
+
+            for s in series_list:
+                title = s.get("title", "").lower()
+                if query_lower in title:
+                    matched_series.append(s)
+                    if len(matched_series) >= limit:
+                        return matched_series
+
+            cursor = data.get("cursor")
+            if not cursor:
+                break
+
+        return matched_series
+
+    async def search_events_by_text(
+        self, query: str, limit: int = 20, status: str = "open"
+    ) -> list[Event]:
+        """
+        Search for events by title (client-side filtering).
+
+        Args:
+            query: Text to search in event titles (case-insensitive)
+            limit: Maximum number of results
+            status: Event status filter
+
+        Returns:
+            List of matching events
+        """
+        query_lower = query.lower()
+        matched_events = []
+        cursor = None
+        params = {"status": status, "limit": 100}
+        max_pages = 50
+
+        for page in range(max_pages):
+            if cursor:
+                params["cursor"] = cursor
+
+            data = await self._request("GET", "events", params=params)
+            events_list = data.get("events", [])
+
+            for e in events_list:
+                title = e.get("title", "").lower()
+                sub_title = e.get("sub_title", "").lower()
+                if query_lower in title or query_lower in sub_title:
+                    matched_events.append(Event(**e))
+                    if len(matched_events) >= limit:
+                        return matched_events
+
+            cursor = data.get("cursor")
+            if not cursor:
+                break
+
+        return matched_events
+
+    async def get_markets_by_series(
+        self, series_ticker: str, limit: int = 100, status: str = "open"
+    ) -> list[Market]:
+        """
+        Get all markets for a specific series.
+
+        This is how you find MVE (Mutually Exclusive) markets!
+
+        Args:
+            series_ticker: Series ticker (e.g., "KXRATECUTCOUNT")
+            limit: Maximum number of markets
+            status: Market status filter
+
+        Returns:
+            List of markets in this series
+        """
+        params = {"series_ticker": series_ticker, "status": status, "limit": 100}
+        markets_data = await self._paginate(
+            "markets", "markets", params=params, max_results=limit
+        )
+        return [Market(**m) for m in markets_data]
+
+    async def get_markets_by_event(
+        self, event_ticker: str, limit: int = 100, status: str = "open"
+    ) -> list[Market]:
+        """
+        Get all markets for a specific event.
+
+        Args:
+            event_ticker: Event ticker (e.g., "KXFEDDECISION-25DEC")
+            limit: Maximum number of markets
+            status: Market status filter
+
+        Returns:
+            List of markets in this event
+        """
+        params = {"event_ticker": event_ticker, "status": status, "limit": 100}
+        markets_data = await self._paginate(
+            "markets", "markets", params=params, max_results=limit
+        )
+        return [Market(**m) for m in markets_data]
+
+    async def search_markets_comprehensive(
+        self, query: str, limit: int = 20, status: str = "open",
+        include_mve: bool = True
+    ) -> list[Market]:
+        """
+        Comprehensive search across markets, series, and events.
+
+        This solves the MVE market discovery problem by searching:
+        1. Regular markets (direct listing)
+        2. Series titles → then fetch their markets
+        3. Event titles → then fetch their markets
+
+        Args:
+            query: Text to search (case-insensitive)
+            limit: Maximum total results
+            status: Market status filter
+            include_mve: Whether to search series/events (slower but finds MVE markets)
+
+        Returns:
+            List of matching markets (deduplicated by ticker)
+        """
+        logger.info(f"Comprehensive search for '{query}' (include_mve={include_mve})")
+        all_markets = {}  # Use dict to deduplicate by ticker
+
+        # 1. Search regular markets (fast, current behavior)
+        logger.info("Searching regular markets...")
+        regular_markets = await self.search_markets(query, limit=limit, status=status)
+        for m in regular_markets:
+            all_markets[m.ticker] = m
+        logger.info(f"Found {len(regular_markets)} regular markets")
+
+        if not include_mve or len(all_markets) >= limit:
+            return list(all_markets.values())[:limit]
+
+        # 2. Search series (finds MVE markets!)
+        logger.info("Searching series...")
+        series_list = await self.search_series(query, limit=10)
+        logger.info(f"Found {len(series_list)} matching series")
+
+        for series in series_list:
+            series_ticker = series.get("ticker")
+            logger.info(f"Fetching markets for series: {series_ticker}")
+            markets = await self.get_markets_by_series(
+                series_ticker, limit=50, status=status
+            )
+            for m in markets:
+                all_markets[m.ticker] = m
+
+            if len(all_markets) >= limit:
+                break
+
+        if len(all_markets) >= limit:
+            return list(all_markets.values())[:limit]
+
+        # 3. Search events
+        logger.info("Searching events...")
+        events = await self.search_events_by_text(query, limit=10, status=status)
+        logger.info(f"Found {len(events)} matching events")
+
+        for event in events:
+            logger.info(f"Fetching markets for event: {event.event_ticker}")
+            markets = await self.get_markets_by_event(
+                event.event_ticker, limit=50, status=status
+            )
+            for m in markets:
+                all_markets[m.ticker] = m
+
+            if len(all_markets) >= limit:
+                break
+
+        result_list = list(all_markets.values())[:limit]
+        logger.info(f"Comprehensive search complete: {len(result_list)} total markets")
+        return result_list
+
     async def get_market(self, ticker: str) -> Market:
         """
         Get detailed market information.

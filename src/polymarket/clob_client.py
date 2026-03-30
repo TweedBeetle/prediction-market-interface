@@ -104,18 +104,19 @@ class ClobClient(BaseClient):
         """
         logger.info(f"Authenticating wallet {self.credentials.wallet_address}")
 
-        # Sign auth message
-        signature, nonce = self.auth_signer.sign_api_creds_message()
+        # Sign auth message (get signature, timestamp, nonce)
+        signature, timestamp, nonce = self.auth_signer.sign_api_creds_message()
 
-        # Request API credentials
-        auth_payload = {
-            "address": self.credentials.wallet_address,
-            "signature": signature,
-            "nonce": nonce,
+        # L1 authentication headers (required by Polymarket CLOB)
+        l1_headers = {
+            "POLY_ADDRESS": self.credentials.wallet_address,
+            "POLY_SIGNATURE": signature,
+            "POLY_TIMESTAMP": str(timestamp),
+            "POLY_NONCE": str(nonce),
         }
 
         try:
-            response = await self.post("/auth/api-key", json_data=auth_payload)
+            response = await self.post("/auth/api-key", headers=l1_headers)
 
             # Extract credentials
             api_key = response.get("apiKey")

@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - gamma-api.polymarket.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/markets/0x4319532e181605cb15b1bd677759a3bc7f7394b2fdf145195b700eeaedfd5221
+  response:
+    body:
+      string: '{"type":"validation error","error":"id is invalid"}
+
+        '
+    headers:
+      CF-RAY:
+      - 99b6828ddfff3e95-MUC
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '52'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 08 Nov 2025 16:40:03 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=7776000; includeSubDomains
+      cf-cache-status:
+      - DYNAMIC
+    status:
+      code: 422
+      message: Unprocessable Entity
+version: 1

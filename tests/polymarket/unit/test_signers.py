@@ -38,9 +38,10 @@ class TestAuthSigner:
     def test_create_api_creds_message_structure(self):
         """Test API credentials message structure matches Polymarket spec."""
         signer = AuthSigner(TEST_PRIVATE_KEY, chain_id=137)
-        nonce = 1000000
+        timestamp = 1000000
+        nonce = 0
 
-        typed_data = signer.create_api_creds_message(nonce)
+        typed_data = signer.create_api_creds_message(timestamp, nonce)
 
         # Verify EIP-712 structure
         assert "types" in typed_data
@@ -53,54 +54,63 @@ class TestAuthSigner:
 
         # Verify domain
         domain = typed_data["domain"]
-        assert domain["name"] == "Polymarket"
+        assert domain["name"] == "ClobAuthDomain"  # Updated to correct domain name
         assert domain["version"] == "1"
         assert domain["chainId"] == 137
 
         # Verify message structure
         message = typed_data["message"]
-        assert message["account"] == TEST_WALLET_ADDRESS
+        assert message["address"] == TEST_WALLET_ADDRESS  # Changed from "account"
+        assert message["timestamp"] == str(timestamp)  # New field
         assert message["nonce"] == nonce
+        assert message["message"] == "This message attests that I control the given wallet"  # New field
 
         # Verify type definitions
         types = typed_data["types"]
         assert "EIP712Domain" in types
         assert "ClobAuth" in types
 
-        # Verify ClobAuth type structure
+        # Verify ClobAuth type structure (now has 4 fields)
         clob_auth_type = types["ClobAuth"]
-        assert len(clob_auth_type) == 2
-        assert clob_auth_type[0] == {"name": "account", "type": "address"}
-        assert clob_auth_type[1] == {"name": "nonce", "type": "uint256"}
+        assert len(clob_auth_type) == 4
+        assert clob_auth_type[0] == {"name": "address", "type": "address"}
+        assert clob_auth_type[1] == {"name": "timestamp", "type": "string"}
+        assert clob_auth_type[2] == {"name": "nonce", "type": "uint256"}
+        assert clob_auth_type[3] == {"name": "message", "type": "string"}
 
     def test_sign_api_creds_message(self):
         """Test signing API credentials message."""
         signer = AuthSigner(TEST_PRIVATE_KEY, chain_id=137)
-        nonce = 1000000
+        timestamp = 1000000
+        nonce = 0
 
-        signature, returned_nonce = signer.sign_api_creds_message(nonce)
+        signature, returned_timestamp, returned_nonce = signer.sign_api_creds_message(timestamp, nonce)
 
         # Verify signature format
         assert isinstance(signature, str)
         assert signature.startswith("0x")
         assert len(signature) == 132  # 0x + 130 hex chars (65 bytes)
 
-        # Verify nonce returned
+        # Verify values returned
+        assert returned_timestamp == timestamp
         assert returned_nonce == nonce
 
     def test_sign_api_creds_message_auto_nonce(self):
-        """Test signing with auto-generated nonce."""
+        """Test signing with auto-generated timestamp and nonce."""
         signer = AuthSigner(TEST_PRIVATE_KEY, chain_id=137)
 
-        signature, nonce = signer.sign_api_creds_message()
+        signature, timestamp, nonce = signer.sign_api_creds_message()
 
         # Verify signature generated
         assert isinstance(signature, str)
         assert signature.startswith("0x")
 
-        # Verify nonce was auto-generated (timestamp)
-        assert isinstance(nonce, int)
-        assert nonce > 1000000000000  # Should be millisecond timestamp
+        # Verify timestamp was auto-generated (current time)
+        assert isinstance(timestamp, int)
+        assert timestamp > 1000000000  # Should be UNIX timestamp in seconds
+
+        # Verify nonce defaults to 0
+        assert nonce == 0
 
     def test_create_nonce(self):
         """Test nonce generation."""
@@ -368,14 +378,15 @@ class TestSignerConsistency:
     """Test signers produce consistent results."""
 
     def test_auth_signature_deterministic(self):
-        """Test auth signatures are deterministic for same nonce."""
+        """Test auth signatures are deterministic for same timestamp and nonce."""
         signer = AuthSigner(TEST_PRIVATE_KEY, chain_id=137)
-        nonce = 1234567890
+        timestamp = 1234567890
+        nonce = 0
 
-        sig1, _ = signer.sign_api_creds_message(nonce)
-        sig2, _ = signer.sign_api_creds_message(nonce)
+        sig1, _, _ = signer.sign_api_creds_message(timestamp, nonce)
+        sig2, _, _ = signer.sign_api_creds_message(timestamp, nonce)
 
-        # Same nonce should produce same signature
+        # Same timestamp and nonce should produce same signature
         assert sig1 == sig2
 
     def test_order_signature_deterministic(self):

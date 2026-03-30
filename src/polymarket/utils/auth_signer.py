@@ -23,7 +23,7 @@ class AuthSigner:
 
     # EIP-712 domain for authentication
     AUTH_DOMAIN = {
-        "name": "Polymarket",
+        "name": "ClobAuthDomain",  # Must match Polymarket's exact domain name
         "version": "1",
         "chainId": 137,  # Polygon mainnet
     }
@@ -47,19 +47,22 @@ class AuthSigner:
 
         logger.info(f"Initialized AuthSigner for address {self.address}")
 
-    def create_api_creds_message(self, nonce: int) -> Dict[str, Any]:
+    def create_api_creds_message(self, timestamp: int, nonce: int) -> Dict[str, Any]:
         """
         Create the EIP-712 message for API credentials request.
 
         Args:
-            nonce: Unique nonce for this request (typically current timestamp)
+            timestamp: Current UNIX timestamp (seconds)
+            nonce: Unique nonce for this request
 
         Returns:
             EIP-712 typed data structure
         """
         message = {
-            "account": self.address,
+            "address": self.address,
+            "timestamp": str(timestamp),  # Must be string per Polymarket spec
             "nonce": nonce,
+            "message": "This message attests that I control the given wallet",
         }
 
         typed_data = {
@@ -70,8 +73,10 @@ class AuthSigner:
                     {"name": "chainId", "type": "uint256"},
                 ],
                 "ClobAuth": [
-                    {"name": "account", "type": "address"},
+                    {"name": "address", "type": "address"},
+                    {"name": "timestamp", "type": "string"},
                     {"name": "nonce", "type": "uint256"},
+                    {"name": "message", "type": "string"},
                 ],
             },
             "primaryType": "ClobAuth",
@@ -85,20 +90,24 @@ class AuthSigner:
 
         return typed_data
 
-    def sign_api_creds_message(self, nonce: int | None = None) -> tuple[str, int]:
+    def sign_api_creds_message(self, timestamp: int | None = None, nonce: int | None = None) -> tuple[str, int, int]:
         """
         Sign an API credentials request message.
 
         Args:
-            nonce: Optional nonce (defaults to current timestamp)
+            timestamp: Optional UNIX timestamp in seconds (defaults to current time)
+            nonce: Optional nonce (defaults to 0)
 
         Returns:
-            Tuple of (signature, nonce)
+            Tuple of (signature, timestamp, nonce)
         """
-        if nonce is None:
-            nonce = int(time.time() * 1000)  # Millisecond timestamp
+        if timestamp is None:
+            timestamp = int(time.time())  # UNIX timestamp in seconds
 
-        typed_data = self.create_api_creds_message(nonce)
+        if nonce is None:
+            nonce = 0  # Default nonce per Polymarket spec
+
+        typed_data = self.create_api_creds_message(timestamp, nonce)
 
         # Encode and sign the message
         encoded_message = encode_typed_data(full_message=typed_data)
@@ -107,9 +116,9 @@ class AuthSigner:
         # Add 0x prefix to signature
         signature = "0x" + signed_message.signature.hex()
 
-        logger.debug(f"Signed API creds message with nonce {nonce}")
+        logger.debug(f"Signed API creds message with timestamp {timestamp}, nonce {nonce}")
 
-        return signature, nonce
+        return signature, timestamp, nonce
 
     def create_hmac_signature(
         self,

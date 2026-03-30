@@ -10,6 +10,8 @@ Provides LLM-accessible tools for:
 Phase 1: 12 tools for core trading functionality
 """
 
+import os
+import time
 from typing import Optional, List
 
 from fastmcp import FastMCP, Context
@@ -19,6 +21,17 @@ from loguru import logger
 from .gamma_client import GammaClient
 from .clob_client import ClobClient
 from .models import OrderSide, OrderParams, OrderType, SignatureType
+
+# Performance logging
+SHOW_TIMING_LOGS = os.getenv("SHOW_TIMING_LOGS", "true").lower() in ("true", "1", "yes")
+
+
+def format_timing(elapsed: float) -> str:
+    """Format elapsed time for logging. Returns empty string if timing disabled."""
+    if not SHOW_TIMING_LOGS:
+        return ""
+    return f" in {elapsed:.2f}s"
+
 
 # Initialize FastMCP server
 mcp = FastMCP(
@@ -222,7 +235,7 @@ async def polymarket_search_markets(
     query: str = Field(default="", description="Search query (searches title and description)"),
     active: bool = Field(default=True, description="Include active markets"),
     closed: bool = Field(default=False, description="Include closed markets"),
-    limit: int = Field(default=20, ge=1, le=100, description="Maximum number of results"),
+    limit: int = Field(default=20, ge=1, le=50, description="Maximum number of results (recommended: 20 or less)"),
     ctx: Context = None
 ) -> List[dict]:
     """
@@ -232,11 +245,15 @@ async def polymarket_search_markets(
     Returns detailed market information including current prices,
     volume, and outcome tokens.
 
+    Note: For performance and to avoid response size limits, limit is capped at 50.
+    Large result sets may approach MCP token limits. Use smaller limits (≤20) for
+    best performance.
+
     Args:
         query: Search query (e.g., "election", "Bitcoin", "Trump")
         active: Include active/tradeable markets
         closed: Include closed/settled markets
-        limit: Maximum number of results (1-100)
+        limit: Maximum number of results (1-50, recommended: 20 or less)
 
     Returns:
         List of matching markets with prices, volume, and metadata
@@ -245,8 +262,16 @@ async def polymarket_search_markets(
         markets = await polymarket_search_markets("election", limit=5)
         # Returns list of election-related markets with current odds
     """
+    start_time = time.time()
+
     if ctx:
         await ctx.info(f"Searching for markets matching '{query}'...")
+
+    # Warn about large limits
+    if limit > 20:
+        logger.warning(f"Large limit ({limit}) may approach response size limits")
+        if ctx:
+            await ctx.warning(f"Limit={limit} may be slow and approach token limits. Consider using limit ≤ 20.")
 
     try:
         async with get_gamma_client() as gamma:
@@ -260,8 +285,10 @@ async def polymarket_search_markets(
             # Convert to dict for JSON serialization
             results = [market.model_dump() for market in markets]
 
+            elapsed = time.time() - start_time
+
             if ctx:
-                await ctx.info(f"Found {len(results)} markets")
+                await ctx.info(f"Found {len(results)} markets{format_timing(elapsed)}")
                 if results:
                     # Show top 3 market summaries
                     for i, market in enumerate(markets[:3]):
@@ -405,6 +432,8 @@ async def polymarket_get_market_trades(
         trades = await polymarket_get_market_trades(market_id="0x...", limit=50)
         # Returns list of your trades
     """
+    start_time = time.time()
+
     if ctx:
         await ctx.info(f"Fetching your trade history (limit={limit})...")
 
@@ -417,9 +446,11 @@ async def polymarket_get_market_trades(
 
             results = [trade.model_dump() for trade in trades]
 
+            elapsed = time.time() - start_time
+
             if ctx:
                 if trades:
-                    await ctx.info(f"Retrieved {len(results)} trades")
+                    await ctx.info(f"Retrieved {len(results)} trades{format_timing(elapsed)}")
                     # Show most recent trade
                     latest = trades[0]
                     await ctx.info(
@@ -462,6 +493,8 @@ async def polymarket_list_events(
         events = await polymarket_list_events(limit=10)
         # Returns list of events with market counts
     """
+    start_time = time.time()
+
     if ctx:
         await ctx.info(f"Fetching events (limit={limit})...")
 
@@ -475,8 +508,10 @@ async def polymarket_list_events(
 
             results = [event.model_dump() for event in events]
 
+            elapsed = time.time() - start_time
+
             if ctx:
-                await ctx.info(f"Retrieved {len(results)} events")
+                await ctx.info(f"Retrieved {len(results)} events{format_timing(elapsed)}")
                 if events:
                     for i, event in enumerate(events[:3]):
                         await ctx.info(f"{i+1}. {event.title} ({event.market_count} markets)")

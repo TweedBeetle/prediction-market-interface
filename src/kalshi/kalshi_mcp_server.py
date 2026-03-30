@@ -1,6 +1,7 @@
 """Kalshi MCP Server - FastMCP-based prediction market trading interface."""
 
 import os
+import time
 from typing import Annotated
 
 from fastmcp import FastMCP, Context
@@ -30,6 +31,9 @@ env = os.getenv("KALSHI_ENVIRONMENT", "unknown")
 MAX_ORDER_SIZE = int(os.getenv("KALSHI_MAX_ORDER_SIZE", "100"))
 LARGE_ORDER_THRESHOLD = int(os.getenv("KALSHI_LARGE_ORDER_THRESHOLD", "50"))
 
+# Performance logging
+SHOW_TIMING_LOGS = os.getenv("SHOW_TIMING_LOGS", "true").lower() in ("true", "1", "yes")
+
 # Create FastMCP server with environment-specific name
 mcp = FastMCP(
     name=f"Kalshi Trading ({env.upper()})",
@@ -50,6 +54,18 @@ mcp = FastMCP(
 )
 
 logger.info(f"Initializing Kalshi MCP server - Environment: {env}")
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+
+def format_timing(elapsed: float) -> str:
+    """Format elapsed time for logging. Returns empty string if timing disabled."""
+    if not SHOW_TIMING_LOGS:
+        return ""
+    return f" in {elapsed:.2f}s"
 
 
 # ============================================================================
@@ -412,6 +428,11 @@ async def kalshi_search_markets(
     **Text Search**: Kalshi's API has no native text search. This tool uses client-side
     filtering - fetches pages of markets and checks if your query appears in titles/subtitles.
 
+    **⚠️ Limitation**: This searches only the general market listing and may miss MVE
+    (Mutually Exclusive Event) markets like Fed rate decisions, election outcomes, etc.
+    If this returns no results for a topic you expect to exist, use
+    kalshi_search_markets_comprehensive() instead.
+
     Args:
         query: Text to search for in market titles (case-insensitive, e.g., "Bitcoin", "election")
         limit: Maximum number of RESULTS to return (1-1000). Fetches multiple API pages automatically.
@@ -427,7 +448,10 @@ async def kalshi_search_markets(
         - Get 200 open markets: kalshi_search_markets(limit=200)  # Fetches 2 pages automatically
         - Find settled election markets: kalshi_search_markets("election", status="settled")
         - Find Trump-related markets: kalshi_search_markets("Trump", limit=50)
+        - No results? Try: kalshi_search_markets_comprehensive("Fed") for MVE markets
     """
+    start_time = time.time()
+
     if ctx:
         search_desc = f"'{query}'" if query else "all markets"
         if query:
@@ -440,11 +464,101 @@ async def kalshi_search_markets(
     async with KalshiClient.from_env() as client:
         markets = await client.search_markets(query=query, limit=limit, status=status)
 
+    elapsed = time.time() - start_time
+
     if ctx:
-        await ctx.info(f"Found {len(markets)} matching markets")
+        await ctx.info(f"Found {len(markets)} matching markets{format_timing(elapsed)}")
         if markets:
             top_market = markets[0]
             await ctx.info(f"Top result: {top_market.ticker} - {top_market.title}")
+
+    return markets
+
+
+@mcp.tool
+async def kalshi_search_markets_comprehensive(
+    query: Annotated[
+        str,
+        Field(description="Text to search in market, series, and event titles (e.g., 'Bitcoin', 'Fed', 'election')")
+    ],
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of RESULTS to return", ge=1, le=1000)
+    ] = 20,
+    status: Annotated[
+        str,
+        Field(description="Filter by market status: 'open', 'closed', or 'settled'")
+    ] = "open",
+    include_mve: Annotated[
+        bool,
+        Field(description="Whether to search series/events for MVE (Mutually Exclusive) markets (slower but more complete)")
+    ] = True,
+    ctx: Context | None = None,
+) -> list[Market]:
+    """
+    Comprehensive search across markets, series, and events to find ALL matching markets.
+
+    **Why This Tool Exists**: Kalshi's MVE (Mutually Exclusive Event) markets don't appear in
+    the general market listing. They ONLY appear when filtered by series_ticker or event_ticker.
+    This tool solves that by searching three levels:
+    1. Regular markets (direct listing)
+    2. Series titles → fetch markets for matching series
+    3. Event titles → fetch markets for matching events
+
+    **Use Cases**:
+    - Finding Fed rate markets (MVE): "Fed", "rate cuts"
+    - Finding election markets (MVE): "Senate", "House"
+    - Finding economic indicators (MVE): "GDP", "inflation"
+    - Any search where regular search returns no results
+
+    **Performance Note**: With include_mve=True, this searches multiple API endpoints
+    (markets, series, events) and may take 2-3 seconds vs <1s for regular search.
+    Set include_mve=False if you only need non-MVE markets.
+
+    Args:
+        query: Text to search (case-insensitive)
+        limit: Maximum total results to return (1-1000)
+        status: Filter by status - "open" for active markets, "closed" for settled
+        include_mve: Whether to search series/events (finds MVE markets)
+
+    Returns:
+        List of matching markets (deduplicated by ticker)
+
+    Examples:
+        - Find Fed rate markets: kalshi_search_markets_comprehensive("Fed")
+        - Find election markets: kalshi_search_markets_comprehensive("election", limit=50)
+        - Fast search (no MVE): kalshi_search_markets_comprehensive("Bitcoin", include_mve=False)
+    """
+    start_time = time.time()
+
+    if ctx:
+        search_type = "comprehensive" if include_mve else "regular"
+        await ctx.info(f"🔍 {search_type.capitalize()} search for '{query}' (up to {limit} results, status={status})")
+        if include_mve:
+            await ctx.info("Searching: Markets → Series → Events (finds MVE markets)")
+        else:
+            await ctx.info("Searching: Markets only (faster, may miss MVE markets)")
+
+    async with KalshiClient.from_env() as client:
+        markets = await client.search_markets_comprehensive(
+            query=query,
+            limit=limit,
+            status=status,
+            include_mve=include_mve
+        )
+
+    elapsed = time.time() - start_time
+
+    if ctx:
+        await ctx.info(f"✅ Found {len(markets)} matching markets{format_timing(elapsed)}")
+        if markets:
+            top_market = markets[0]
+            await ctx.info(f"Top result: {top_market.ticker} - {top_market.title}")
+
+            # Check if any are MVE markets (hint: they have T1, T2, etc in ticker)
+            mve_markets = [m for m in markets if "-T" in m.ticker]
+            if mve_markets:
+                await ctx.info(f"💡 {len(mve_markets)}/{len(markets)} are MVE markets (would not appear in regular search)")
 
     return markets
 
@@ -1289,6 +1403,8 @@ async def kalshi_get_positions(
 
         positions = kalshi_get_positions(limit=400)  # Fetches 4 pages automatically
     """
+    start_time = time.time()
+
     if ctx:
         filter_desc = f" for {ticker}" if ticker else ""
         pages_needed = (limit + 99) // 100  # Round up
@@ -1297,11 +1413,13 @@ async def kalshi_get_positions(
     async with KalshiClient.from_env() as client:
         positions = await client.get_positions(ticker=ticker, limit=limit)
 
+    elapsed = time.time() - start_time
+
     if ctx:
         if positions:
             total_pnl = sum(p.pnl_dollars for p in positions)
             await ctx.info(
-                f"Found {len(positions)} position(s) | "
+                f"Found {len(positions)} position(s){format_timing(elapsed)} | "
                 f"Total P&L: ${total_pnl:.2f}"
             )
             # Show top 3 positions by absolute P&L
@@ -1358,6 +1476,8 @@ async def kalshi_get_fills(
 
         fills = kalshi_get_fills(limit=350)  # Fetches 4 pages automatically
     """
+    start_time = time.time()
+
     if ctx:
         filters = []
         if ticker:
@@ -1371,12 +1491,14 @@ async def kalshi_get_fills(
     async with KalshiClient.from_env() as client:
         fills = await client.get_fills(ticker=ticker, order_id=order_id, limit=limit)
 
+    elapsed = time.time() - start_time
+
     if ctx:
         if fills:
             total_volume = sum(f.cost_dollars for f in fills)
             total_fees = sum(f.fees_dollars for f in fills)
             await ctx.info(
-                f"Found {len(fills)} fill(s) | "
+                f"Found {len(fills)} fill(s){format_timing(elapsed)} | "
                 f"Total volume: ${total_volume:.2f} | "
                 f"Total fees: ${total_fees:.2f}"
             )
@@ -1434,6 +1556,8 @@ async def kalshi_get_orders(
 
         orders = kalshi_get_orders(status="filled", limit=250)  # Fetches 3 pages automatically
     """
+    start_time = time.time()
+
     if ctx:
         filter_desc = f" for {ticker}" if ticker else ""
         pages_needed = (limit + 99) // 100  # Round up
@@ -1442,9 +1566,11 @@ async def kalshi_get_orders(
     async with KalshiClient.from_env() as client:
         orders = await client.get_orders(ticker=ticker, status=status, limit=limit)
 
+    elapsed = time.time() - start_time
+
     if ctx:
         if orders:
-            await ctx.info(f"Found {len(orders)} order(s)")
+            await ctx.info(f"Found {len(orders)} order(s){format_timing(elapsed)}")
             # Show up to 3 orders
             for i, order in enumerate(orders[:3], 1):
                 status_emoji = "📋" if order.is_active else "✅" if order.is_filled else "❌"
@@ -1500,6 +1626,8 @@ async def kalshi_get_events(
 
         events = kalshi_get_events(limit=500)  # Fetches 5 pages automatically
     """
+    start_time = time.time()
+
     if ctx:
         pages_needed = (limit + 99) // 100  # Round up
         await ctx.info(f"Fetching {limit} {status} events (~{pages_needed} API pages)...")
@@ -1507,9 +1635,11 @@ async def kalshi_get_events(
     async with KalshiClient.from_env() as client:
         events = await client.get_events(limit=limit, status=status)
 
+    elapsed = time.time() - start_time
+
     if ctx:
         if events:
-            await ctx.info(f"Found {len(events)} event(s)")
+            await ctx.info(f"Found {len(events)} event(s){format_timing(elapsed)}")
             # Show up to 3 events
             for i, event in enumerate(events[:3], 1):
                 await ctx.info(f"{i}. {event.event_ticker}: {event.title}")
@@ -1646,6 +1776,8 @@ async def kalshi_get_trades(
 
         trades = kalshi_get_trades(limit=300)  # Fetches 3 pages automatically
     """
+    start_time = time.time()
+
     if ctx:
         filter_desc = f" for {ticker}" if ticker else ""
         pages_needed = (limit + 99) // 100  # Round up
@@ -1654,11 +1786,13 @@ async def kalshi_get_trades(
     async with KalshiClient.from_env() as client:
         trades = await client.get_trades(ticker=ticker, limit=limit)
 
+    elapsed = time.time() - start_time
+
     if ctx:
         if trades:
             total_volume = sum(t.volume_dollars for t in trades)
             await ctx.info(
-                f"Found {len(trades)} trade(s) | "
+                f"Found {len(trades)} trade(s){format_timing(elapsed)} | "
                 f"Total volume: ${total_volume:.2f}"
             )
             # Show 3 most recent trades
